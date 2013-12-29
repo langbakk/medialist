@@ -1,6 +1,7 @@
 <?php
 	require_once('functions.php'); 
 	require_once('language.php');
+
 ?>
 <!DOCTYPE html>
 <head>
@@ -31,10 +32,10 @@
 							}
 							natsort ($filelist);
 							reset ($filelist);
-							$allowed_extensions = array('jpg','jpeg','png','gif','avi','mpeg','mpg','mp3','wmv','mkv','flv');
+							//$allowed_extensions = array('jpg','jpeg','png','gif','avi','mpeg','mpg','mp3','wmv','mkv','flv');
 							while (list ($key, $val) = each ($filelist)) {
-								if ($val != "." && $val != ".." && in_array(getExtension($val),$allowed_extensions)) {
-									echo '<li><a href="'.$folder.$val.'">'.removeExtension($val).'</a></li>';
+								if ($val != "." && $val != ".." && in_array(getExtension($val),allowedExtensions('allowed_extensions'))) {
+									echo '<li><a href="'.$folder.'/'.$val.'">'.removeExtension($val).'</a></li>';
 								}
 							}
 						closedir ($handle);
@@ -61,17 +62,17 @@
 			$folder = 'video';
 		}
   		if ($_FILES['file']['error'] > 0) {
-    		echo '<p class="error">Return Code: '.$_FILES["file"]["error"].'</p>';
+    		echo '<p class=" messagebox error">Return Code: '.$_FILES["file"]["error"].'</p>';
     	} else {
-    		echo '<p>Du lastet opp: '.$_FILES['file']['name'].'</p>';
     		if (file_exists(''.$folder.'/'. $_FILES["file"]["name"])) {
-      			echo '<p class="error">'.$_FILES['file']['name'].' already exists</p>';
+      			echo '<p class="messagebox error">'.$_FILES['file']['name'].' already exists</p>';
       		} else {
       			move_uploaded_file($_FILES['file']['tmp_name'],''.$folder.'/'.$_FILES['file']['name']);
+      			echo '<p class="messagebox success">Du lastet opp: '.$_FILES['file']['name'].'</p>';
       		}
     	}
   	} else {
-  		echo '<p class="error">Du kan laste opp mp3, mpeg, avi og jpg-filer</p>';
+  		echo '<p class="messagebox warning">Du kan laste opp mp3, mpeg, avi og jpg-filer</p>';
   	}
   	}
 ?>

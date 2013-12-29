@@ -9,6 +9,21 @@
     font-style: normal;
 }
 
+$border-radius: 4px;
+
+// info, success, error and warning-boxes colors
+$info-color: #00529B;
+$info-background: #BDE5F8;
+$success-color: #4F8A10;
+$success-background: #DFF2BF;
+$warning-color: #9F6000;
+$warning-background: #FEEFB3;
+$error-color: #D8000C;
+$error-background: #F78181;
+
+// folders
+$webgfxfolder: "../webgfx/";
+
 a {
 	color: #00a0c6;
 
@@ -75,3 +90,54 @@ p {
 label {
 	color: #00a0c6;
 	}
+//message-boxes
+.messagebox {
+    border: 1px solid;
+    margin: 10px 0px;
+    padding: 10px 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    position: relative;
+    overflow: hidden;
+    input[type=checkbox] {
+		margin-top: 10px;
+		margin-left: 20px;
+    }
+	&.error {
+		color: $error-color !important;
+		background-color: $error-background !important;
+	    background-image: url(#{$webgfxfolder}error.png);
+		   a {
+		    	color: $error-color;
+		    }
+	}
+	&.success {
+		color: $success-color !important;
+		background-color: $success-background !important;
+		background-image:url(#{$webgfxfolder}success.png);
+			a {
+				color: $success-color;
+			}
+	}
+	&.info {
+		color: $info-color !important;
+		background-color: $info-background !important;
+		background-image: url(#{$webgfxfolder}info.png);
+			a {
+				color: $info-color;
+			}
+	}
+	&.warning {
+		color: $warning-color !important;
+		background-color: $warning-background !important;
+	    background-image: url(#{$webgfxfolder}warning.png);
+			a {
+				color: $warning-color;
+			}
+	}
+	.error, .success, .info, .warning {
+		border: 2px solid;
+		padding: 5px 5px 7px 5px;
+		border-radius: $border-radius;
+		}
+}

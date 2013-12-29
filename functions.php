@@ -14,4 +14,8 @@
 
 			return $ext;
 		}
+		function allowedExtensions($filename) {
+			$filetype = file($filename, FILE_IGNORE_NEW_LINES);
+			return $filetype;
+		}
 ?>

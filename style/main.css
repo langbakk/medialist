@@ -63,3 +63,43 @@ p {
 
 label {
   color: #00a0c6; }
+
+.messagebox {
+  border: 1px solid;
+  margin: 10px 0px;
+  padding: 10px 10px 15px 50px;
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  position: relative;
+  overflow: hidden; }
+  .messagebox input[type=checkbox] {
+    margin-top: 10px;
+    margin-left: 20px; }
+  .messagebox.error {
+    color: #d8000c !important;
+    background-color: #f78181 !important;
+    background-image: url(../webgfx/error.png); }
+    .messagebox.error a {
+      color: #d8000c; }
+  .messagebox.success {
+    color: #4f8a10 !important;
+    background-color: #dff2bf !important;
+    background-image: url(../webgfx/success.png); }
+    .messagebox.success a {
+      color: #4f8a10; }
+  .messagebox.info {
+    color: #00529b !important;
+    background-color: #bde5f8 !important;
+    background-image: url(../webgfx/info.png); }
+    .messagebox.info a {
+      color: #00529b; }
+  .messagebox.warning {
+    color: #9f6000 !important;
+    background-color: #feefb3 !important;
+    background-image: url(../webgfx/warning.png); }
+    .messagebox.warning a {
+      color: #9f6000; }
+  .messagebox .error, .messagebox .success, .messagebox .info, .messagebox .warning {
+    border: 2px solid;
+    padding: 5px 5px 7px 5px;
+    border-radius: 4px; }
