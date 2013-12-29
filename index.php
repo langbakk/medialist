@@ -31,9 +31,10 @@
 							}
 							natsort ($filelist);
 							reset ($filelist);
+							$allowed_extensions = array('jpg','jpeg','png','gif','avi','mpeg','mpg','mp3','wmv','mkv','flv');
 							while (list ($key, $val) = each ($filelist)) {
-								if ($val != "." && $val != "..") {
-									echo '<li><a href="'.$folder.$val.'">'.RemoveExtension($val).'</a></li>';
+								if ($val != "." && $val != ".." && in_array(getExtension($val),$allowed_extensions)) {
+									echo '<li><a href="'.$folder.$val.'">'.removeExtension($val).'</a></li>';
 								}
 							}
 						closedir ($handle);
@@ -44,9 +45,9 @@
 			<?php include 'random_song.php' ?>
 
 <form id="upload" action="index.php" method="post" enctype="multipart/form-data">
-	<label for="file">Choose file:</label>
+	<label for="file"><?php echo __UPLOADLABEL; ?>:</label>
 	<input type="file" name="file" id="file">
-	<input type="submit" name="submit" value="Upload">
+	<input type="submit" name="submit" value="<?php echo __UPLOADSUBMIT; ?>">
 </form>
 
 <?php
