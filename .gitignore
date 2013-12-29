@@ -228,6 +228,7 @@ css/new_*.*
 video/*.mpg
 video/*.avi
 video/*.mpeg
+video/*.wmv
 pictures/*.jpg
 pictures/*.jpeg
 pictures/*.gif
