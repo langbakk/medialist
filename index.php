@@ -1,4 +1,6 @@
 <?php
+ob_start();
+session_start();
 	require_once('config.php');
 	require_once('functions.php'); 
 	require_once('language.php');
@@ -18,7 +20,7 @@
 	</header>
 		<div id="main">
 			<?php
-
+				$allempty = 0;
 				$dir_array = array(1 => 'music', 2 => 'pictures', 3 => 'video');
 					foreach ($dir_array as $key => $folder) {
 						if ($handle = opendir ($folder)) {
@@ -32,6 +34,7 @@
 							natsort ($filelist);
 							reset ($filelist);
 							if (count($filelist) != 3) {
+									$allempty = 1;
 									echo '<div class="container">
 									<h2>'.ucfirst($folder).'</h2>
 									<ul>';
@@ -49,6 +52,11 @@
 					}
 			?>
 			<?php 
+				if ($allempty == 0) {
+					echo '<div class="container">
+						<p>No files were found on the server matching the configured criteria. Choose files to upload below</p>
+						</div>';
+				}
 				if ($allow_quotes == true) { // this setting can be changed in config.php
 					include 'quotes.php';
 				}
@@ -79,6 +87,7 @@
       		} else {
       			move_uploaded_file($_FILES['file']['tmp_name'],''.$folder.'/'.strtolower($_FILES['file']['name']));
       			echo '<p class="messagebox success">Du lastet opp: '.$_FILES['file']['name'].'</p>';
+      			header('refresh: 5');
       		}
     	}
   	} else {
