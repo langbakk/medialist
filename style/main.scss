@@ -1,0 +1,77 @@
+@font-face {
+    font-family: 'mission_gothicregular';
+    src: url('mission_gothic_regular-webfont.eot');
+    src: url('mission_gothic_regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('mission_gothic_regular-webfont.woff') format('woff'),
+         url('mission_gothic_regular-webfont.ttf') format('truetype'),
+         url('mission_gothic_regular-webfont.svg#mission_gothicregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+a {
+	color: #00a0c6;
+
+	&:visited {
+		color: #0066c6;
+	}
+	&:hover {
+		color: red;
+	}
+}
+
+
+body,html {
+	background: #000;
+	color: #fff;
+	font-family: sans-serif;
+	width: 100%;
+	}
+h1,h2,h3,h4 {
+	text-align: center;
+	margin: 0;
+	padding: 0;
+	font-family: 'mission_gothicregular';
+	}
+#main {
+	margin: 0 auto;
+	width: 800px;
+	}
+.container {
+	margin: 0 auto 20px auto;
+	width: 780px;
+	border: 2px solid #00a0c6;
+	border-radius: 5px;
+	background: url("../webgfx/tree.gif") no-repeat bottom left;
+	h2 {
+		background: #00a0c6;	
+	}
+	}
+header {
+	height: 200px;
+	h1 {
+		text-align: center;
+		padding-top: 50px;
+	}
+}
+ul {
+	margin: 0 5px;
+	padding: 5px;
+	text-align: right;
+	}
+li {
+	list-style-type: none;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	}
+p {
+	text-align: center;
+	color: #0066c6;
+	}
+#upload {
+	text-align: center;
+	margin-top: 10px;
+	}
+label {
+	color: #00a0c6;
+	}
