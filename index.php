@@ -1,4 +1,5 @@
 <?php
+	require_once('config.php');
 	require_once('functions.php'); 
 	require_once('language.php');
 
@@ -17,6 +18,7 @@
 	</header>
 		<div id="main">
 			<?php
+
 				$dir_array = array(1 => 'music', 2 => 'pictures', 3 => 'video');
 					foreach ($dir_array as $key => $folder) {
 						if ($handle = opendir ($folder)) {
@@ -46,7 +48,11 @@
 						}
 					}
 			?>
-			<?php include 'random_song.php' ?>
+			<?php 
+				if ($allow_quotes == true) { // this setting can be changed in config.php
+					include 'quotes.php';
+				}
+			?>
 
 <form id="upload" action="index.php" method="post" enctype="multipart/form-data">
 	<label for="file"><?php echo __UPLOADLABEL; ?>:</label>
