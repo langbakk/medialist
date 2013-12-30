@@ -5,6 +5,8 @@ session_start();
 	require_once('functions.php'); 
 	require_once('language.php');
 
+
+
 ?>
 <!DOCTYPE html>
 <head>
@@ -19,6 +21,9 @@ session_start();
 		<h1><?php echo __MAINHEADING; ?></h1>
 	</header>
 		<div id="main">
+<?php
+if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+?>
 			<?php
 				$allempty = 0;
 				$dir_array = array(1 => 'music', 2 => 'pictures', 3 => 'video');
@@ -94,6 +99,12 @@ session_start();
   		echo '<p class="messagebox warning">Du kan laste opp mp3, mpeg, avi og jpg-filer</p>';
   	}
   	}
+
+} 
+
+if ($use_login == true) {
+		include 'login.php';
+	}
 ?>
 
 	</div>
