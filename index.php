@@ -68,7 +68,6 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 			?>
 
 <form id="upload" action="index.php" method="post" enctype="multipart/form-data">
-	<label for="file"><?php echo __UPLOADLABEL; ?>:</label>
 	<input type="file" name="file" id="file">
 	<input type="submit" name="submit" value="<?php echo __UPLOADSUBMIT; ?>">
 </form>

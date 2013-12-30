@@ -83,13 +83,42 @@ p {
 	text-align: center;
 	color: #0066c6;
 	}
-#upload {
-	text-align: center;
-	margin-top: 10px;
+form {
+	display: block;
+	margin: 0 auto;
+	border: 1px solid #00a0c6;
+	padding: 15px;
+	border-radius: $border-radius;
+	margin-bottom: 20px;
+	input {
+		text-align: center;
+		margin: 10px auto 0 auto;
+		display: block;
+		border: 1px solid;
+		&:not([type=submit]) {
+			background: #000;
+			color: #fff;
+			height: 50px;
+			width: 400px;
+		}
+		&[type=submit],&[type=button],&[type=file] {
+			padding: 10px 20px;
+			font-size: 16px;
+			margin-top: 10px;
+		}
+		&[type=file] {
+			border: none;
+			float: left;
+			margin-top: -5px;
+			padding-top: 7px;
+		}
+
 	}
-label {
-	color: #00a0c6;
+	label {
+		float: left;
+		color: #00a0c6;
 	}
+}
 //message-boxes
 .messagebox {
     border: 1px solid;

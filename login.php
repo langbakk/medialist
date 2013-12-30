@@ -17,13 +17,13 @@ if (isset($_POST['submit_login']) && $username != '' && $password != '') {
 
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == false) || !isset($_SESSION['loggedin'])) {
 ?>
-<form method="post" action="index.php">
-	<input type="text" name="username" value="<?php echo $username; ?>">
-	<input type="password" name="password" value="<?php echo $password; ?>">
+<form id="loginform" method="post" action="index.php">
+	<input type="text" id="username" name="username" value="<?php echo $username; ?>" placeholder="Please input your username (email)">
+	<input type="password" id="password" name="password" value="<?php echo $password; ?>" placeholder="Please input your password">
 	<input type="submit" name="submit_login" value="Login">
 </form>
 <?php } else { ?>
-<form method="post" action="index.php">
+<form id="loginform" method="post" action="index.php">
 	<input type="submit" name="submit_logout" value="Log out">
 </form>
 <?php } ?>
