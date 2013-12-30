@@ -4,10 +4,12 @@ $password = (isset($_POST['password'])) ? $_POST['password'] : '';
 
 if (isset($_POST['submit_login']) && $username != '' && $password != '') {
 
+if ($use_db === false) {
 	if (in_array_recursive($username,$user_array) && in_array_recursive($password,$user_array)) {
 		$_SESSION['loggedin'] = true;
 		header('refresh: 0');
 	}
+}
 
 } elseif (isset($_POST['submit_logout'])) {
 		session_destroy();

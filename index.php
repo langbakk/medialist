@@ -62,7 +62,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 						<p>No files were found on the server matching the configured criteria. Choose files to upload below</p>
 						</div>';
 				}
-				if ($allow_quotes == true) { // this setting can be changed in config.php
+				if ($show_quotes == true) { // this setting can be changed in config.php
 					include 'quotes.php';
 				}
 			?>
