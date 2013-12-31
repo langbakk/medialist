@@ -36,6 +36,12 @@ h1, h2, h3, h4 {
   background: url("../webgfx/tree.gif") no-repeat bottom left; }
   .container h2 {
     background: #00a0c6; }
+  .container ul {
+    overflow: hidden; }
+    .container ul li {
+      margin-right: 15px; }
+      .container ul li img {
+        vertical-align: bottom; }
 
 header {
   height: 200px; }
@@ -126,3 +132,6 @@ form {
     border: 2px solid;
     padding: 5px 5px 7px 5px;
     border-radius: 4px; }
+
+.left {
+  float: left; }

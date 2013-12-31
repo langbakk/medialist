@@ -1,12 +1,13 @@
 <?php
+ini_set('display_errors',1); // this should be commented out in production environments
+error_reporting(E_ALL); // this should be commented out in production environments
+
+
 ob_start();
 session_start();
 	require_once('config.php');
-	require_once('functions.php'); 
 	require_once('language.php');
-
-
-
+	require_once('functions.php'); 
 ?>
 <!DOCTYPE html>
 <head>
@@ -26,7 +27,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 ?>
 			<?php
 				$allempty = 0;
-				$dir_array = array(1 => 'music', 2 => 'pictures', 3 => 'video');
+				$dir_array = array(1 => 'music', 2 => 'pictures/thumbs', 3 => 'video');
 					foreach ($dir_array as $key => $folder) {
 						if ($handle = opendir ($folder)) {
 							$filelist = array();
@@ -40,14 +41,17 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 							reset ($filelist);
 							if (count($filelist) != 3) {
 									$allempty = 1;
+									if ($folder == 'pictures/thumbs') { $folder = 'pictures'; };
 									echo '<div class="container">
 									<h2>'.ucfirst($folder).'</h2>
 									<ul>';
-
 								//$allowed_extensions = array('jpg','jpeg','png','gif','avi','mpeg','mpg','mp3','wmv','mkv','flv');
 								while (list ($key, $val) = each ($filelist)) {
-									if ($val != "." && $val != ".." && in_array(getExtension($val),allowedExtensions('allowed_extensions'))) {
-										echo '<li><a href="'.$folder.'/'.$val.'">'.ucwords(removeExtension($val)).'</a></li>';
+									if ($val != "." && $val != ".." && in_array(getExtension($val),allowedExtensions('allowed_extensions.php'))) {
+										$display = ($folder == 'pictures') ? '<img src="'.$folder.'/thumbs/'.$val.'">' : ucwords(removeExtension($val));
+										$floatleft = ($folder == 'pictures') ? 'class="left"' : '';
+
+										echo '<li '.$floatleft.'><a href="'.$folder.'/'.$val.'">'.$display.'</a></li>';
 									}
 								}
 							closedir ($handle);
@@ -75,7 +79,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 <?php
 	if (isset($_FILES['file'])) {
 		echo $_FILES['file']['type'];
-	if ($_FILES['file']['type'] == 'audio/mpeg' || $_FILES['file']['type'] == 'image/jpeg' || $_FILES['file']['type'] == 'video/mpeg' || $_FILES['file']['type'] == 'video/avi' || $_FILES['file']['type'] == 'video/x-msvideo' || $_FILES['file']['type'] == 'video/x-ms-wmv') {
+		if ($_FILES['file']['type'] == 'audio/mpeg' || $_FILES['file']['type'] == 'image/jpeg' || $_FILES['file']['type'] == 'video/mpeg' || $_FILES['file']['type'] == 'video/avi' || $_FILES['file']['type'] == 'video/x-msvideo' || $_FILES['file']['type'] == 'video/x-ms-wmv' || $_FILES['file']['type'] == 'image/png' || $_FILES['file']['type'] == 'image/gif') {
 		if ($_FILES['file']['type'] == 'audio/mpeg') {
 			$folder = 'music';
 		} elseif ($_FILES['file']['type'] == 'image/jpeg' || $_FILES['file']['type'] == 'image/png' || $_FILES['file']['type'] == 'image/gif') {
@@ -91,7 +95,8 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
       		} else {
       			move_uploaded_file($_FILES['file']['tmp_name'],''.$folder.'/'.strtolower($_FILES['file']['name']));
       			echo '<p class="messagebox success">Du lastet opp: '.$_FILES['file']['name'].'</p>';
-      			header('refresh: 5');
+      			createThumbs($folder.'/',$_FILES['file']['name'],175);
+      			header('refresh: 3');
       		}
     	}
   	} else {
