@@ -86,20 +86,30 @@ class PageView
 
     function getLogin() {
         $core = Core::getInstance();
-  //      $userrole_name = Config::read('user.role.name');
-    //    $hash = Config::read('hash');
-      //  $todaydate = Config::read('todaydate');
-        // $sessiontimeout = Config::read('user.timeout');
-        $isloggedin = Config::read('isloggedin');
-        //$register_user = Config::read('register_user');
-        //$forgottenpassword = Config::read('forgottenpassword');
-        //$system_user_id = Config::read('system_user_id');
+		$isloggedin = Config::read('isloggedin');
+		$show_quotes = Config::read('showquotes');
+		$use_db = Config::read('usedb');
+		$use_login = Config::read('uselogin');
+		$username = Config::read('username');
+		$domain = Config::read('domain');
+		$rootfolder = Config::read('rootfolder');
+		$baseurl = Config::read('baseurl');
+		$baseurl_page = Config::read('baseurl_page');
+		$scriptpath = Config::read('scriptpath');
+		$imagepath = Config::read('imagepath');
+		$webgfxpath = Config::read('webgfxpath');
+		$userpath = Config::read('userpath');
+		$current_page = Config::read('current_page');
+		$sub_page = Config::read('sub_page');
+		$sub_page_url = Config::read('sub_page_url');
+        $user_array = Config::read('userarray');
         $baseurl_page = Config::read('baseurl_page');
-//        if ($register_user == 1) {
-    //        include 'addusers.php';
-  //      } elseif ($forgottenpassword == 1) {
-      //      include 'forgottenpassword.php';
-        //} else
+        $use_db = Config::read('usedb');
+		//        if ($register_user == 1) {
+		//        include 'addusers.php';
+		//      } elseif ($forgottenpassword == 1) {
+		//      include 'forgottenpassword.php';
+		//} else
         if (empty($isloggedin)) {
             include 'login.php';
         } else {
@@ -247,6 +257,7 @@ Config::write('sub_page', $sub_page);
 Config::write('sub_page_url', $sub_page_url);
 
 Config::write('username',$username);
+Config::write('userarray', $user_array);
 Config::write('showquotes', $show_quotes);
 Config::write('usedb', $use_db);
 Config::write('uselogin', $use_login);

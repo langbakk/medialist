@@ -54,9 +54,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == false) || !isset($
 	<input type="submit" name="submit_login" value="Login">
 </form>
 <?php } else { ?>
-<footer>
 <form id="loginform" method="post" action="index.php">
 	<input type="submit" name="submit_logout" value="Log out">
 </form>
-</footer>
 <?php } ?>

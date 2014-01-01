@@ -2,7 +2,7 @@
 
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 ?>
-<form id="upload" action="upload.php" method="post" enctype="multipart/form-data">
+<form id="upload" action="<?php echo $baseurl_page; ?>upload" method="post" enctype="multipart/form-data">
 	<input type="file" name="file" id="file">
 	<input type="submit" name="submit" value="<?php echo __UPLOADSUBMIT; ?>">
 </form>
@@ -32,7 +32,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
     		if (file_exists(''.$userpath.$username.'/'.$folder.'/'. $_FILES["file"]["name"])) {
       			echo '<p class="messagebox error">'.$_FILES['file']['name'].' already exists</p>';
       		} else {
-      			move_uploaded_file($_FILES['file']['tmp_name'],''.$userpath.$username.'/'.$folder.'/'.strtolower($_FILES['file']['name']));
+      			move_uploaded_file($_FILES['file']['tmp_name'],''.$userpath.$username.'/'.$folder.'/'.urlencode(strtolower($_FILES['file']['name'])));
       			echo '<p class="messagebox success">You uploaded: '.$_FILES['file']['name'].'</p>';
             $movedfile = pathinfo($_FILES['file']['name']);
             if (in_array($movedfile['extension'],allowedExtensions('allowed_image_extensions.php'))) {

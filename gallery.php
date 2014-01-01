@@ -24,10 +24,10 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 								//$allowed_extensions = array('jpg','jpeg','png','gif','avi','mpeg','mpg','mp3','wmv','mkv','flv');
 								while (list ($key, $val) = each ($filelist)) {
 									if ($val != "." && $val != ".." && in_array(getExtension($val),allowedExtensions('allowed_extensions.php'))) {
-										$display = ($folder == 'pictures') ? '<img src="'.$userpath.$username.'/'.$folder.'/thumbs/'.$val.'">' : ucwords(removeExtension($val));
+										$display = ($folder == 'pictures') ? '<img src="'.$userpath.$username.'/'.$folder.'/thumbs/'.$val.'">' : urldecode(ucwords(removeExtension($val)));
 										$floatleft = ($folder == 'pictures') ? 'class="left pictures"' : '';
 
-										echo '<li '.$floatleft.'><a href="'.$userpath.$username.'/'.$folder.'/'.$val.'">'.$display.'</a><span class="right"><a href="'.$baseurl.'sharefile.php"><img src="'.$baseurl.$webgfxpath.'share.png" alt="share file"></a><a href="'.$baseurl.'deletefile.php"><img src="'.$baseurl.$webgfxpath.'delete_icon.png" alt="delete file"></a></span></li>';
+										echo '<li '.$floatleft.'><a href="'.$userpath.$username.'/'.$folder.'/'.$val.'">'.$display.'</a><span class="usercontrols"><a href="'.$baseurl.'sharefile.php"><img src="'.$baseurl.$webgfxpath.'share.png" alt="share file"></a><a class="deletefile" href="'.$baseurl.'deletefile.php"><img src="'.$baseurl.$webgfxpath.'delete_icon.png" alt="delete file"></a></span></li>';
 									}
 								}
 							closedir ($handle);
@@ -39,7 +39,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 			<?php 
 				if ($allempty == 0) {
 					echo '<div class="container">
-						<p>No files were found on the server matching the configured criteria. Choose files to upload below</p>
+						<p>No files were found on the server matching the configured criteria. <a href="'.$baseurl_page.'upload">Choose files to upload</a></p>
 						</div>';
 				}
 				if ($show_quotes == true) { // this setting can be changed in config.php

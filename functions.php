@@ -91,4 +91,36 @@ error_reporting(E_ALL); // this should be commented out in production environmen
 				return $returncontent;
 			}
   		}
+  		function loadFiles($filetype, $path, $recursive = 0, $testfileallow = 0) {
+		    $results = array();     // create an array to hold directory list
+		    $handler = opendir($path);     // create a handler for the directory
+
+		    while ($file = readdir($handler)) {
+		    	$ext = pathinfo($file, PATHINFO_EXTENSION);     // open directory and walk through the filenames
+		            $testfile = substr($file,0,4);
+		            if ($file != "." && $file != ".." && $ext == $filetype && $testfileallow == 1) {
+		                if ($testfile == 'new_') {
+		                    $results[] = $file;     // if file is a test-file (prefixed with new_) add it to the results
+		                }
+		                $results[] = $file; // add the rest of the files, unless it's a directory
+		            } elseif ($file != "." && $file != ".." && $ext == $filetype && ($testfile != 'new_' && $testfileallow == 0)) {
+		                    $results[] = $file;     // add all results apart from test-files (prefixed with new_) to the results, unless it's a directory
+		            }
+		    }
+		    closedir($handler);     // tidy up: close the handler
+		    natsort($results);
+		        $recursive = ($recursive == 1 || $recursive = '') ? '../' : '';
+		    	if ($filetype == 'js') {
+		    		foreach ($results as $key => $value) {
+		    			echo '<script src="'.$recursive.$path.$value.'" type="text/javascript"></script>', PHP_EOL;
+		    		}
+		    	} elseif ($filetype == 'css') {
+		            foreach ($results as $key => $value) {
+		                echo '<link type="text/css" href="'.$recursive.$path.$value.'" rel="stylesheet" media="screen, projection">', PHP_EOL;
+		            }
+		        }
+		}
+
+
+  		
 ?>

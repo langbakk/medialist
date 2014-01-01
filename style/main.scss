@@ -33,6 +33,10 @@ a {
 	&:hover {
 		color: red;
 	}
+	& + .usercontrols {
+		display: block;
+		background: rgba(0,0,0,0.7);
+	}
 }
 
 
@@ -122,10 +126,10 @@ form {
 	margin-bottom: 20px;
 	input {
 		text-align: center;
-		margin: 10px auto 0 auto;
+		margin: 0 auto;
 		display: block;
 		border: 1px solid;
-		&:not([type=submit]) {
+		&:not([type=submit],&:not([type=file])) {
 			background: #000;
 			color: #fff;
 			height: 50px;
@@ -133,14 +137,37 @@ form {
 		}
 		&[type=submit],&[type=button],&[type=file] {
 			padding: 10px 20px;
-			font-size: 16px;
-			margin-top: 10px;
+			border: 1px solid #7eb9d0; 
+			border-radius: 3px;
+			font-size: 12px;
+			font-family: helvetica, sans-serif; 
+			text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
+			color: #fff;
+			background-color: #a7cfdf; 
+			background-image: -webkit-gradient(linear, left top, left bottom, from(#a7cfdf), to(#23538a));
+			background-image: -webkit-linear-gradient(top, #a7cfdf, #23538a);
+			background-image: -moz-linear-gradient(top, #a7cfdf, #23538a);
+			background-image: -ms-linear-gradient(top, #a7cfdf, #23538a);
+			background-image: -o-linear-gradient(top, #a7cfdf, #23538a);
+			background-image: linear-gradient(to bottom, #a7cfdf, #23538a);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#a7cfdf, endColorstr=#23538a);
+			&:hover {
+				border: 1px solid #5ca6c4;
+				background-color: #82bbd1; 
+				background-image: -webkit-gradient(linear, left top, left bottom, from(#82bbd1), to(#193b61));
+				background-image: -webkit-linear-gradient(top, #82bbd1, #193b61);
+				background-image: -moz-linear-gradient(top, #82bbd1, #193b61);
+				background-image: -ms-linear-gradient(top, #82bbd1, #193b61);
+				background-image: -o-linear-gradient(top, #82bbd1, #193b61);
+				background-image: linear-gradient(to bottom, #82bbd1, #193b61);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#82bbd1, endColorstr=#193b61);
+			}
 		}
 		&[type=file] {
-			border: none;
+//			border: none;
 			float: left;
-			margin-top: -5px;
-			padding-top: 7px;
+//			padding-top: 7px;
+max-width: 625px;
+margin: -3px 10px 0 0;
+overflow: hidden;
 		}
 
 	}
