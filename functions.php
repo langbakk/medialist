@@ -60,14 +60,15 @@ error_reporting(E_ALL); // this should be commented out in production environmen
 	      			}
 	    		}
   			}
-  		function displayMenu($baseurl, $usedb = false) {
+  		function displayMenu($baseurl, $baseurl_page, $usedb = false) {
   			if ($usedb == false) {
-  				$menuArray = array(1 => 'index.php', 2 => 'upload.php', 3 => 'userprofile.php');
+  				$menuArray = array(1 => 'index.php', 2 => 'gallery.php', 3 => 'upload.php', 4 => 'userprofile.php');
   				$main_menu = '<nav id="mainmenu">
   								<ul>';
   					foreach ($menuArray as $key => $value) {
   						$menutext = pathinfo($value);
-  						$main_menu .= '<li><a href="'.$baseurl.$menutext['basename'].'">'.ucfirst((($menutext['filename'] == 'index') ? 'home' : $menutext['filename'])).'</a></li>';
+  						$useurl = ($menutext['basename'] == 'index.php') ? $baseurl.$menutext['basename'] : $baseurl_page.$menutext['filename'];
+  						$main_menu .= '<li><a href="'.$useurl.'">'.ucfirst((($menutext['filename'] == 'index') ? 'home' : $menutext['filename'])).'</a></li>';
   					}
   				$main_menu .= '</ul>
   							</nav>';

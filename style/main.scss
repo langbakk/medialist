@@ -76,6 +76,9 @@ h1,h2,h3,h4 {
 					display: block;
 					float: right;
 					margin: 2px 0 0 20px;
+					a:first-of-type {
+						margin-right: 10px;
+					}
 				}
 				&.pictures span {
 					display: none;

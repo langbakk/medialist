@@ -50,6 +50,8 @@ h1, h2, h3, h4 {
         display: block;
         float: right;
         margin: 2px 0 0 20px; }
+        .container ul li span a:first-of-type {
+          margin-right: 10px; }
       .container ul li.pictures span {
         display: none; }
       .container ul li.pictures:hover span {
