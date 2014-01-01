@@ -1,13 +1,13 @@
 <?php
 ini_set('display_errors',1); // this should be commented out in production environments
 error_reporting(E_ALL); // this should be commented out in production environments
-
-
+file_put_contents('current_uploads.php','');
 ob_start();
 session_start();
 	require_once('config.php');
 	require_once('language.php');
 	require_once('functions.php'); 
+
 ?>
 <!DOCTYPE html>
 <head>
@@ -21,13 +21,13 @@ session_start();
 	<header>
 		<h1><?php echo __MAINHEADING; ?></h1>
 	</header>
+	<?php echo displayMenu($baseurl); ?>
 		<div id="main">
 <?php
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
-?>
-			<?php
+
 				$allempty = 0;
-				$dir_array = array(1 => 'music', 2 => 'pictures/thumbs', 3 => 'video');
+				$dir_array = array(1 => $userpath.$username.'/music', 2 => $userpath.$username.'/pictures/thumbs', 3 => $userpath.$username.'/video');
 					foreach ($dir_array as $key => $folder) {
 						if ($handle = opendir ($folder)) {
 							$filelist = array();
@@ -41,17 +41,17 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 							reset ($filelist);
 							if (count($filelist) != 3) {
 									$allempty = 1;
-									if ($folder == 'pictures/thumbs') { $folder = 'pictures'; };
+									if ($folder == $userpath.$username.'/pictures/thumbs') { $folder = 'pictures'; };
 									echo '<div class="container">
 									<h2>'.ucfirst($folder).'</h2>
 									<ul>';
 								//$allowed_extensions = array('jpg','jpeg','png','gif','avi','mpeg','mpg','mp3','wmv','mkv','flv');
 								while (list ($key, $val) = each ($filelist)) {
 									if ($val != "." && $val != ".." && in_array(getExtension($val),allowedExtensions('allowed_extensions.php'))) {
-										$display = ($folder == 'pictures') ? '<img src="'.$folder.'/thumbs/'.$val.'">' : ucwords(removeExtension($val));
-										$floatleft = ($folder == 'pictures') ? 'class="left"' : '';
+										$display = ($folder == 'pictures') ? '<img src="'.$userpath.$username.'/'.$folder.'/thumbs/'.$val.'">' : ucwords(removeExtension($val));
+										$floatleft = ($folder == 'pictures') ? 'class="left pictures"' : '';
 
-										echo '<li '.$floatleft.'><a href="'.$folder.'/'.$val.'">'.$display.'</a></li>';
+										echo '<li '.$floatleft.'><a href="'.$userpath.$username.'/'.$folder.'/'.$val.'">'.$display.'</a><span class="right"><a href="'.$baseurl.'deletefile.php"><img src="'.$baseurl.$webgfxpath.'delete_icon.png" alt="delete file"></a></span></li>';
 									}
 								}
 							closedir ($handle);
@@ -69,47 +69,14 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 				if ($show_quotes == true) { // this setting can be changed in config.php
 					include 'quotes.php';
 				}
+			}
 			?>
-
-<form id="upload" action="index.php" method="post" enctype="multipart/form-data">
-	<input type="file" name="file" id="file">
-	<input type="submit" name="submit" value="<?php echo __UPLOADSUBMIT; ?>">
-</form>
-
 <?php
-	if (isset($_FILES['file'])) {
-		echo $_FILES['file']['type'];
-		if ($_FILES['file']['type'] == 'audio/mpeg' || $_FILES['file']['type'] == 'image/jpeg' || $_FILES['file']['type'] == 'video/mpeg' || $_FILES['file']['type'] == 'video/avi' || $_FILES['file']['type'] == 'video/x-msvideo' || $_FILES['file']['type'] == 'video/x-ms-wmv' || $_FILES['file']['type'] == 'image/png' || $_FILES['file']['type'] == 'image/gif') {
-		if ($_FILES['file']['type'] == 'audio/mpeg') {
-			$folder = 'music';
-		} elseif ($_FILES['file']['type'] == 'image/jpeg' || $_FILES['file']['type'] == 'image/png' || $_FILES['file']['type'] == 'image/gif') {
-			$folder = 'pictures';
-		} elseif ($_FILES['file']['type'] == 'video/mpeg' || $_FILES['file']['type'] == 'video/avi' || $_FILES['file']['type'] == 'video/x-msvideo' || $_FILES['file']['type'] == 'video/x-ms-wmv') {
-			$folder = 'video';
-		}
-  		if ($_FILES['file']['error'] > 0) {
-    		echo '<p class=" messagebox error">Return Code: '.$_FILES["file"]["error"].'</p>';
-    	} else {
-    		if (file_exists(''.$folder.'/'. $_FILES["file"]["name"])) {
-      			echo '<p class="messagebox error">'.$_FILES['file']['name'].' already exists</p>';
-      		} else {
-      			move_uploaded_file($_FILES['file']['tmp_name'],''.$folder.'/'.strtolower($_FILES['file']['name']));
-      			echo '<p class="messagebox success">Du lastet opp: '.$_FILES['file']['name'].'</p>';
-      			createThumbs($folder.'/',$_FILES['file']['name'],175);
-      			header('refresh: 3');
-      		}
-    	}
-  	} else {
-  		echo '<p class="messagebox warning">Du kan laste opp mp3, mpeg, avi og jpg-filer</p>';
-  	}
-  	}
-
-} 
-
 if ($use_login == true) {
 		include 'login.php';
 	}
 ?>
+
 
 	</div>
 </body>

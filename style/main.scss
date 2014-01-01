@@ -48,10 +48,13 @@ h1,h2,h3,h4 {
 	padding: 0;
 	font-family: 'mission_gothicregular';
 	}
-#main {
+#main,footer {
 	margin: 0 auto;
 	width: 800px;
 	}
+#main {
+	margin-bottom: 150px;
+}
 .container {
 	margin: 0 auto 20px auto;
 	width: 780px;
@@ -64,9 +67,24 @@ h1,h2,h3,h4 {
 		ul {
 			overflow: hidden;
 			li {
-				margin-right: 15px;
-				img {
+				margin-right: 8px;
+				overflow: hidden;
+				> img {
 					vertical-align: bottom;
+				}
+				span {
+					display: block;
+					float: right;
+					margin: 2px 0 0 20px;
+				}
+				&.pictures span {
+					display: none;
+				}
+				&.pictures:hover span {
+					display: block;
+					margin-left: -60px;
+					position: relative;
+					z-index: 1000;
 				}
 			}
 		}
@@ -181,4 +199,23 @@ form {
 }
 .left {
 	float: left;
+}
+#loginform {
+	width: 770px;
+	margin: 0 auto;
+	border: none;
+}
+#mainmenu {
+	position: fixed;
+	top: 0;
+	left: 35px;
+	ul {
+		li {
+			display: inline;
+			margin-right: 20px;
+			a {
+				text-decoration: none;
+			}
+		}
+	}
 }

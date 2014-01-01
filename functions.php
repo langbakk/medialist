@@ -13,10 +13,8 @@ error_reporting(E_ALL); // this should be commented out in production environmen
 			return $strName;
 		}
 		function getExtension($strName) {
-			$ext = explode('.',$strName);
-			$ext = array_reverse($ext);
-			$ext = str_replace('.','',$ext[0]);
-
+			$info = pathinfo($strName);
+			$ext = $info['extension'];
 			return $ext;
 		}
 		function allowedExtensions($filename) {
@@ -38,11 +36,8 @@ error_reporting(E_ALL); // this should be commented out in production environmen
 		    return false;
 		}
 		function createThumbs($path, $imageName, $thumbWidth) {
-  			//$dir = opendir( $pathToImages ); // open the directory
-			//while (false !== ($imageName = readdir( $dir ))) {   // loop through it, looking for any/all JPG files:
     		$info = pathinfo($path . $imageName); // parse path for the extension
-			    if (in_array(strtolower($info['extension']),allowedExtensions('allowed_extensions.php')))  { // continue only if this is a JPEG image
-//			    	echo "Creating thumbnail for {$imageName} <br>";
+			    if (in_array(strtolower($info['extension']),allowedExtensions('allowed_extensions.php')))  {
 			    	if ($info['extension'] == 'jpg' || $info['extension'] == 'jpeg') {
 			    		$img = imagecreatefromjpeg( "{$path}{$imageName}" );
 			    	} elseif ($info['extension'] == 'png') {
@@ -54,19 +49,45 @@ error_reporting(E_ALL); // this should be commented out in production environmen
 	      			$width = imagesx( $img );
 	      			$height = imagesy( $img );
 
-	      			// calculate thumbnail size
 	      			$new_width = $thumbWidth;
 	      			$new_height = floor( $height * ( $thumbWidth / $width ) );
 
-	      			// create a new temporary image
 	      			$tmp_img = imagecreatetruecolor( $new_width, $new_height );
 
-	      			// copy and resize old image into new image
 	      			imagecopyresized( $tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height );
 
-	      			// save thumbnail into a file
-	      				imagejpeg( $tmp_img, "{$path}thumbs/{$imageName}" );
+	   				imagejpeg( $tmp_img, "{$path}thumbs/{$imageName}" );
 	      			}
 	    		}
   			}
+  		function displayMenu($baseurl, $usedb = false) {
+  			if ($usedb == false) {
+  				$menuArray = array(1 => 'index.php', 2 => 'upload.php', 3 => 'userprofile.php');
+  				$main_menu = '<nav id="mainmenu">
+  								<ul>';
+  					foreach ($menuArray as $key => $value) {
+  						$menutext = pathinfo($value);
+  						$main_menu .= '<li><a href="'.$baseurl.$menutext['basename'].'">'.ucfirst((($menutext['filename'] == 'index') ? 'home' : $menutext['filename'])).'</a></li>';
+  					}
+  				$main_menu .= '</ul>
+  							</nav>';
+  			}
+  			return $main_menu;
+  		}
+  		function updateCurrentUploads($filename, $adduploadfile) {
+  			$handle = file_put_contents($filename, "'".$adduploadfile."'".PHP_EOL, FILE_APPEND);
+  		}
+  		function returnCurrentUploads($filename) {
+  			$handle = file_get_contents($filename);
+			$lines = explode(PHP_EOL,$handle);
+			$count = count($lines);
+			if ($count != 1) {
+				$returncontent = '<div><h3>You\'ve uploaded the following files:</h3><ul>';
+			foreach ($lines as $line) {
+				$returncontent .= '<li>'.str_replace('\'','',$line).'</li>';
+			}
+				$returncontent .= '</ul></div>';
+				return $returncontent;
+			}
+  		}
 ?>
