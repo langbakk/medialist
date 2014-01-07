@@ -18,6 +18,15 @@
 
 //audio
 'audio/mpeg3'
+'audio/mpeg'
 'audio/x-mpeg-3'
+
+//documents
+'application/msword'
+'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+'application/pdf'
+'application/vnd.ms-excel'
+'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+'application/vnd.ms-powerpoint'
 
 ?>

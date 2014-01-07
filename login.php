@@ -15,13 +15,19 @@ if (isset($_POST['submit_login']) && $username != '' && $password != '') {
 				$foldercreated = false;
 				if (!is_dir($userpath.$username)) {
 					mkdir($userpath.$username, 0744, true);
-						mkdir($userpath.$username.'/pictures', 0744, true);
-						mkdir($userpath.$username.'/pictures/thumbs', 0744, true);
-						mkdir($userpath.$username.'/video', 0744, true);
-						mkdir($userpath.$username.'/music', 0744, true);
+					file_put_contents($userpath.$username.'/index.html','<p>Placeholder</p>');					
+				}
+				$directories = array(1 => '/images', 2 => '/images/thumbs', 3 => '/video', 4 => '/music', 5 => '/documents');
+				if (is_dir($userpath.$username)) {
+					foreach ($directories as $key => $dir) {
+						if (!is_dir($userpath.$username.$dir)) {
+							mkdir($userpath.$username.$dir, 0744, true);
+							file_put_contents($userpath.$username.$dir.'/index.html','');
+						}
+					}
 					$folderexist = true;
 					$foldercreated = true;
-					echo '<p class="messagebox success">User-folder created!</p>';
+					echo '<p class="messagebox success">User-folders created!</p>';
 				} else {
 					$folderexist = true;
 					$foldercreated = false;

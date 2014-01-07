@@ -17,15 +17,41 @@ error_reporting(E_ALL); // this should be commented out in production environmen
 			$ext = $info['extension'];
 			return $ext;
 		}
-		function allowedExtensions($filename) {
+		function allowedExtensions($type, $filename = 'allowed_extensions.php') {
 			$filetype = file($filename, FILE_IGNORE_NEW_LINES);
 			$allowedfiletypes = array();
 			foreach ($filetype as $key => $value) {
-				if (stripos($value, "//") === false && stripos($value, '?>') === false && stripos($value, '<?php') === false) {
-					$allowedfiletypes[] = str_replace('\'','',$value);
+				if (stripos($value, "//") === false && stripos($value, '?>') === false && stripos($value, '<?php') === false && !empty($value)) {
+					$value = str_replace('\'','',$value);
+					$get_type = explode('/',$value);
+					if (!empty($type) && $type == $get_type[0]) {
+						$allowedfiletypes[] = $get_type[1];
+					} elseif (empty($type)) {
+						$allowedfiletypes[] = $get_type[1];
+					} 
 				}
 			}
 			return $allowedfiletypes;
+		}
+		function allowedMimeTypes($type, $filename = 'allowed_mimetypes.php') {
+			$mimetype = file($filename, FILE_IGNORE_NEW_LINES);
+			$allowedmimetypes = array();
+			foreach ($mimetype as $key => $value) {
+				if (stripos($value, "//") === false && stripos($value, '?>') === false && stripos($value, '<?php') === false) {
+					$allowedmimetypes[] = str_replace('\'','',$value);
+				}
+			}
+			if (!empty($type)) {
+				$allowedmimetypes_replace = array();
+				foreach ($allowedmimetypes as $key => $value) {
+					$value = explode('/',$value);
+					if ($type == $value[0]) {
+						$allowedmimetypes_replace[] = $value[0].'/'.$value[1];
+					}
+				}
+				$allowedmimetypes = $allowedmimetypes_replace;
+			}
+			return $allowedmimetypes;
 		}
 		function in_array_recursive($needle, $haystack, $strict = false) {
     		foreach ($haystack as $item) {
@@ -37,7 +63,7 @@ error_reporting(E_ALL); // this should be commented out in production environmen
 		}
 		function createThumbs($path, $imageName, $thumbWidth) {
     		$info = pathinfo($path . $imageName); // parse path for the extension
-			    if (in_array(strtolower($info['extension']),allowedExtensions('allowed_extensions.php')))  {
+			    if (in_array(strtolower($info['extension']),allowedExtensions('image')))  {
 			    	if ($info['extension'] == 'jpg' || $info['extension'] == 'jpeg') {
 			    		$img = imagecreatefromjpeg( "{$path}{$imageName}" );
 			    	} elseif ($info['extension'] == 'png') {
@@ -82,6 +108,7 @@ error_reporting(E_ALL); // this should be commented out in production environmen
   			$handle = file_get_contents($filename);
 			$lines = explode(PHP_EOL,$handle);
 			$count = count($lines);
+			natsort($lines);
 			if ($count != 1) {
 				$returncontent = '<div><h3>You\'ve uploaded the following files:</h3><ul>';
 			foreach ($lines as $line) {
@@ -122,5 +149,5 @@ error_reporting(E_ALL); // this should be commented out in production environmen
 		}
 
 
-  		
+
 ?>

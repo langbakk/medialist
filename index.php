@@ -10,9 +10,13 @@ if ($current_page != 'upload') {
 	file_put_contents('current_uploads.php','');
 }
 
+// print_r(allowedMimeTypes('allowed_mimetypes.php','video'));
+
 ?>
 <!DOCTYPE html>
-<head>
+<html lang="nb">
+	<head>
+		<meta charset="UTF-8">
 	<title>Medialist</title>
 
 		<link type="text/css" href="style/main.css" rel="stylesheet" media="screen, projection">
@@ -28,7 +32,32 @@ if ($current_page != 'upload') {
 					// alert(thisFile[1] + '/' + thisFile[0]);
 
 				})
-			})
+				$("input[type=file]").on('change',function() {
+					//console.log($(this));
+					var thisContent = $(this).val();
+					if (thisContent != 'No file selected') {
+						$(this).removeClass('inactive').addClass('active');
+						$.post('retrieve_folder.php',{ currentfile:thisContent }, function(data) { 
+							if (data != '') {
+								data = $.parseJSON(data);
+								for (var key in data) {
+									var optionText = ucfirst(data[key]);
+									$("#folderchoicecontainer").show();
+									$('#folderchoice').append('<option value="'+data[key]+'">'+optionText+'</option>').removeAttr('disabled');
+								}
+							}
+						});
+						$('#createfolder').removeClass('hidden');
+					};
+				})
+				$("#uploadreset").click(function() {
+					$("#file").val('');
+					$("#file").removeClass('active').addClass('inactive');
+				})
+			});
+			function ucfirst(text) {
+ 			   return text.substr(0, 1).toUpperCase() + text.substr(1);    
+			}
 		</script>
 </head>
 

@@ -1,51 +1,104 @@
 <?php
-
-if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+	if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 ?>
-<form id="upload" action="<?php echo $baseurl_page; ?>upload" method="post" enctype="multipart/form-data">
-	<input type="file" name="file" id="file">
-	<input type="submit" name="submit" value="<?php echo __UPLOADSUBMIT; ?>">
-</form>
+<h3>Upload files:</h3>
+	<form id="upload" action="<?php echo $baseurl_page; ?>upload" method="post" enctype="multipart/form-data">
+		<input class="inactive" type="file" name="file" id="file">
+		<p id="folderchoicecontainer" class="hidden"><label for="folderchoice">Choose folder (if uploading to base-folder, or creating a new folder, leave blank): </label><select id="folderchoice" name="folderchoice" disabled>
+			<option>
+		</select></p>
+		<p id="createfolder" class="hidden"><input type="text" name="createfolder" placeholder="Create folder"></p>
+		<p id="fileupload_buttons">
+			<input class="left reset" type="button" id="uploadreset" name="reset" value="<?php echo __UPLOADRESET; ?>">
+			<input class="right" type="submit" name="submit" value="<?php echo __UPLOADSUBMIT; ?>">
+		</p>
+	</form>
 
 <?php
-  echo returnCurrentUploads('current_uploads.php');
 
-	if (isset($_FILES['file'])) {
-      $allowed = '';
-      $allowed_extensions = allowedExtensions('allowed_extensions.php');
-      $totalentries = count(allowedExtensions('allowed_extensions.php')) -1;
-      for ($i = 0; $i <= $totalentries; $i++) {
-        $allowed .= (($i == $totalentries) ? $allowed_extensions[$i] : $allowed_extensions[$i].', ');
-      }
+		if (isset($_POST['submit'])) {
+			if (in_array('error', $_FILES['file'])) {
+				switch ($_FILES['file']['error']) {
+					case 0:
+					$returnerror = false;
+					$returnerrorcontent = '';
+					break;
+					case 1:
+					$returnerror = true;
+					$returnerrorcontent = 'The uploaded file exceeds the upload_max_filesize directive in php.ini';
+					break;
+					case 2:
+					$returnerror = true;        
+					$returnerrorcontent = 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form';
+					break;
+					case 3:
+					$returnerror = true;        
+					$returnerrorcontent = 'The uploaded file was only partially uploaded';
+					break;
+					case 4:
+					$returnerror = true;        
+					$returnerrorcontent = 'No file was selected';
+					break;
+					case 6:
+					$returnerror = true;        
+					$returnerrorcontent = 'Missing a temporary folder. Introduced in PHP 4.3.10 and PHP 5.0.3';
+					break;
+					case 7:
+					$returnerror = true;      
+					$returnerrorcontent = 'Failed to write file to disk. Introduced in PHP 5.1.0';
+					break;
+					case 8:
+					$returnerror = true;        
+					$returnerrorcontent = 'A PHP extension stopped the file upload. Introduced in PHP 5.2.0';
+					break;
+					default:
+					$returnerror = false;
+					$returnerrorcontent = '';
+					break;
+				}
+			}
+			if (isset($_FILES['file']) && $returnerror == false) {
+				$allowed = '';
+				$allowed_extensions = allowedExtensions('');
+				$totalentries = count(allowedExtensions('')) -1;
+				for ($i = 0; $i <= $totalentries; $i++) {
+					$allowed .= (($i == $totalentries) ? $allowed_extensions[$i] : $allowed_extensions[$i].', ');
+				}
 
-		if ($_FILES['file']['type'] == 'audio/mpeg' || $_FILES['file']['type'] == 'image/jpeg' || $_FILES['file']['type'] == 'video/mpeg' || $_FILES['file']['type'] == 'video/avi' || $_FILES['file']['type'] == 'video/x-msvideo' || $_FILES['file']['type'] == 'video/x-ms-wmv' || $_FILES['file']['type'] == 'image/png' || $_FILES['file']['type'] == 'image/gif') {
-		if ($_FILES['file']['type'] == 'audio/mpeg') {
-			$folder = 'music';
-		} elseif ($_FILES['file']['type'] == 'image/jpeg' || $_FILES['file']['type'] == 'image/png' || $_FILES['file']['type'] == 'image/gif') {
-			$folder = 'pictures';
-		} elseif ($_FILES['file']['type'] == 'video/mpeg' || $_FILES['file']['type'] == 'video/avi' || $_FILES['file']['type'] == 'video/x-msvideo' || $_FILES['file']['type'] == 'video/x-ms-wmv') {
-			$folder = 'video';
+				if (in_array($_FILES['file']['type'], allowedMimeTypes(''))) {
+					if (in_array($_FILES['file']['type'], allowedMimeTypes('audio'))) {
+						$folder = 'music';
+					} elseif (in_array($_FILES['file']['type'], allowedMimeTypes('image'))) {
+						$folder = 'images';
+					} elseif (in_array($_FILES['file']['type'], allowedMimeTypes('video'))) {
+						$folder = 'video';
+					} elseif (in_array($_FILES['file']['type'], allowedMimeTypes('application'))) {
+						$folder = 'documents';
+					}
+
+					if (file_exists(''.$userpath.$username.'/'.$folder.'/'. urlencode(strtolower($_FILES["file"]["name"])))) {
+						echo '<p class="messagebox error">'.$_FILES['file']['name'].' already exists</p>';
+					} else {
+						move_uploaded_file($_FILES['file']['tmp_name'],''.$userpath.$username.'/'.$folder.'/'.urlencode(strtolower($_FILES['file']['name'])));
+						echo '<p class="messagebox success">You uploaded: '.$_FILES['file']['name'].'</p>';
+						$movedfile = pathinfo($_FILES['file']['name']);
+						if (in_array(strtolower($movedfile['extension']),allowedExtensions('image'))) {
+							createThumbs($userpath.$username.'/'.$folder.'/',urlencode(strtolower($_FILES['file']['name'])),87);
+						}
+						updateCurrentUploads('current_uploads.php',$_FILES['file']['name']);
+						header('refresh: 3');
+					}
+				} else {
+					echo '<p class="messagebox error">The filetype you tried to upload is not allowed</p>';
+					echo '<p class="messagebox warning">You can upload the following file-types: '.$allowed.'</p>';
+				}
+			} elseif ($returnerror == true) {
+				echo '<p class="messagebox error">'.$returnerrorcontent.'</p>';
+			} else {
+				echo '<p class="messagebox error">The filetype you tried to upload is not allowed</p>';
+				echo '<p class="messagebox warning">You can upload the following file-types: '.$allowed.'</p>';
+			}
 		}
-  		if ($_FILES['file']['error'] > 0) {
-    		echo '<p class=" messagebox error">Return Code: '.$_FILES["file"]["error"].'</p>';
-    	} else {
-    		if (file_exists(''.$userpath.$username.'/'.$folder.'/'. $_FILES["file"]["name"])) {
-      			echo '<p class="messagebox error">'.$_FILES['file']['name'].' already exists</p>';
-      		} else {
-      			move_uploaded_file($_FILES['file']['tmp_name'],''.$userpath.$username.'/'.$folder.'/'.urlencode(strtolower($_FILES['file']['name'])));
-      			echo '<p class="messagebox success">You uploaded: '.$_FILES['file']['name'].'</p>';
-            $movedfile = pathinfo($_FILES['file']['name']);
-            if (in_array($movedfile['extension'],allowedExtensions('allowed_image_extensions.php'))) {
-      			 createThumbs($userpath.$username.'/'.$folder.'/',$_FILES['file']['name'],87);
-            }
-            updateCurrentUploads('current_uploads.php',$_FILES['file']['name']);
-      			header('refresh: 3');
-      		}
-    	}
-  	} else {
-      echo '<p class="messagebox error">The filetype you tried to upload is not allowed</p>';
-  		echo '<p class="messagebox warning">You can upload the following file-types: '.$allowed.'</p>';
-  	}
-  	}
-}
+	echo returnCurrentUploads('current_uploads.php');
+	}
 ?>

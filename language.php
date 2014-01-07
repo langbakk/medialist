@@ -3,7 +3,8 @@
 	$chosenlanguage = array (
 							'mainheading' 			=> 'Medialist',
 							'uploadlabel'			=> 'Choose file',
-							'uploadsubmit'			=> 'Upload'
+							'uploadsubmit'			=> 'Upload',
+							'uploadreset'			=> 'Reset form'
 							);
 
 foreach($chosenlanguage as $key => $value) {

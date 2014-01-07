@@ -29,7 +29,7 @@ h1, h2, h3, h4 {
 
 #main, footer {
   margin: 0 auto;
-  width: 800px; }
+  width: 900px; }
 
 #main {
   margin-bottom: 150px; }
@@ -86,7 +86,6 @@ p {
 form {
   display: block;
   margin: 0 auto;
-  border: 1px solid #00a0c6;
   padding: 15px;
   border-radius: 4px;
   margin-bottom: 20px; }
@@ -95,42 +94,86 @@ form {
     margin: 0 auto;
     display: block;
     border: 1px solid; }
-    form input:not([type=submit],&:not([type=file])) {
+    form input:not([type=submit]), form input:not([type=file]) {
       background: #000;
       color: #fff;
       height: 50px;
       width: 400px; }
+    form input#username, form input#password {
+      margin-bottom: 10px; }
     form input[type=submit], form input[type=button], form input[type=file] {
+      width: auto;
       padding: 10px 20px;
       border: 1px solid #7eb9d0;
       border-radius: 3px;
       font-size: 12px;
       font-family: helvetica, sans-serif;
       text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
+      margin-top: 5px;
+      margin-bottom: 5px;
       color: #fff;
       background-color: #a7cfdf;
-      background-image: -webkit-gradient(linear, left top, left bottom, from(#a7cfdf), to(#23538a));
       background-image: -webkit-linear-gradient(top, #a7cfdf, #23538a);
       background-image: -moz-linear-gradient(top, #a7cfdf, #23538a);
       background-image: -ms-linear-gradient(top, #a7cfdf, #23538a);
       background-image: -o-linear-gradient(top, #a7cfdf, #23538a);
-      background-image: linear-gradient(to bottom, #a7cfdf, #23538a);
-      filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#a7cfdf, endColorstr=#23538a); }
+      background-image: linear-gradient(to bottom, #a7cfdf, #23538a); }
+      form input[type=submit].reset, form input[type=button].reset, form input[type=file].reset {
+        border: 1px solid red;
+        background-color: red;
+        background-image: -webkit-linear-gradient(top, #edeaea, #ee0000);
+        background-image: -moz-linear-gradient(top, #edeaea, #ee0000);
+        background-image: -ms-linear-gradient(top, #edeaea, #ee0000);
+        background-image: -o-linear-gradient(top, #edeaea, #ee0000);
+        background-image: linear-gradient(to bottom, #edeaea, #ee0000); }
+        form input[type=submit].reset:hover, form input[type=button].reset:hover, form input[type=file].reset:hover {
+          border: 1px solid #c00;
+          background-color: #c00;
+          background-image: -moz-linear-gradient(top, #ffdbdb, #cc0000); }
       form input[type=submit]:hover, form input[type=button]:hover, form input[type=file]:hover {
         border: 1px solid #5ca6c4;
         background-color: #82bbd1;
-        background-image: -webkit-gradient(linear, left top, left bottom, from(#82bbd1), to(#193b61));
         background-image: -webkit-linear-gradient(top, #82bbd1, #193b61);
         background-image: -moz-linear-gradient(top, #82bbd1, #193b61);
         background-image: -ms-linear-gradient(top, #82bbd1, #193b61);
         background-image: -o-linear-gradient(top, #82bbd1, #193b61);
-        background-image: linear-gradient(to bottom, #82bbd1, #193b61);
-        filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#82bbd1, endColorstr=#193b61); }
+        background-image: linear-gradient(to bottom, #82bbd1, #193b61); }
+    form input[type=file].inactive {
+      border: 1px solid #454545;
+      background-color: #cecece;
+      background-image: -webkit-linear-gradient(top, #cecece, #373737);
+      background-image: -moz-linear-gradient(top, #cecece, #373737);
+      background-image: -ms-linear-gradient(top, #cecece, #373737);
+      background-image: -o-linear-gradient(top, #cecece, #373737);
+      background-image: linear-gradient(to bottom, #cecece, #373737); }
+      form input[type=file].inactive:hover {
+        border: 1px solid #252525;
+        background-color: #a3a3a3;
+        background-image: -webkit-linear-gradient(top, #a3a3a3, #161616);
+        background-image: -moz-linear-gradient(top, #a3a3a3, #161616);
+        background-image: -ms-linear-gradient(top, #a3a3a3, #161616);
+        background-image: -o-linear-gradient(top, #a3a3a3, #161616);
+        background-image: linear-gradient(top, #a3a3a3, #161616); }
+    form input[type=file].active {
+      border: 1px solid #7eb9d0;
+      background-color: #a7cfdf;
+      background-image: -webkit-linear-gradient(top, #a7cfdf, #23538a);
+      background-image: -moz-linear-gradient(top, #a7cfdf, #23538a);
+      background-image: -ms-linear-gradient(top, #a7cfdf, #23538a);
+      background-image: -o-linear-gradient(top, #a7cfdf, #23538a);
+      background-image: linear-gradient(to bottom, #a7cfdf, #23538a); }
+      form input[type=file].active:hover {
+        border: 1px solid #5ca6c4;
+        background-color: #82bbd1;
+        background-image: -webkit-linear-gradient(top, #82bbd1, #193b61);
+        background-image: -moz-linear-gradient(top, #82bbd1, #193b61);
+        background-image: -ms-linear-gradient(top, #82bbd1, #193b61);
+        background-image: -o-linear-gradient(top, #82bbd1, #193b61);
+        background-image: linear-gradient(to bottom, #82bbd1, #193b61); }
     form input[type=file] {
-      float: left;
-      max-width: 625px;
-      margin: -3px 10px 0 0;
-      overflow: hidden; }
+      margin: -6px auto 0 auto;
+      overflow: hidden;
+      margin-bottom: 10px; }
   form label {
     float: left;
     color: #00a0c6; }
@@ -178,6 +221,9 @@ form {
 .left {
   float: left; }
 
+.right {
+  float: right; }
+
 #loginform {
   width: 770px;
   margin: 0 auto;
@@ -192,3 +238,11 @@ form {
     margin-right: 20px; }
     #mainmenu ul li a {
       text-decoration: none; }
+
+#fileupload_buttons {
+  width: 220px;
+  overflow: hidden;
+  margin: 0 auto; }
+
+.hidden {
+  display: none; }

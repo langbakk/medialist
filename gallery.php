@@ -3,9 +3,9 @@
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 
 				$allempty = 0;
-				$dir_array = array(1 => $userpath.$username.'/music', 2 => $userpath.$username.'/pictures/thumbs', 3 => $userpath.$username.'/video');
+				$dir_array = array(1 => 'music', 2 => 'images/thumbs', 3 => 'video', 4 => 'documents');
 					foreach ($dir_array as $key => $folder) {
-						if ($handle = opendir ($folder)) {
+						if ($handle = opendir ($userpath.$username.'/'.$folder)) {
 							$filelist = array();
 							while (false !== ($file = readdir ($handle))) {
 								$file = str_replace ("&", "&amp;",$file);
@@ -14,18 +14,18 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 								$filelist[] = $file;
 							}
 							natsort ($filelist);
-							reset ($filelist);
+							// reset ($filelist);
 							if (count($filelist) != 3) {
 									$allempty = 1;
-									if ($folder == $userpath.$username.'/pictures/thumbs') { $folder = 'pictures'; };
+									if ($folder == 'images/thumbs') { $folder = 'images'; };
 									echo '<div class="container">
 									<h2>'.ucfirst($folder).'</h2>
 									<ul>';
 								//$allowed_extensions = array('jpg','jpeg','png','gif','avi','mpeg','mpg','mp3','wmv','mkv','flv');
 								while (list ($key, $val) = each ($filelist)) {
-									if ($val != "." && $val != ".." && in_array(getExtension($val),allowedExtensions('allowed_extensions.php'))) {
-										$display = ($folder == 'pictures') ? '<img src="'.$userpath.$username.'/'.$folder.'/thumbs/'.$val.'">' : urldecode(ucwords(removeExtension($val)));
-										$floatleft = ($folder == 'pictures') ? 'class="left pictures"' : '';
+									if ($val != "." && $val != ".." && in_array(getExtension($val),allowedExtensions(''))) {
+										$display = ($folder == 'images') ? '<img src="'.$userpath.$username.'/'.$folder.'/thumbs/'.$val.'">' : urldecode(ucwords(removeExtension($val)));
+										$floatleft = ($folder == 'images') ? 'class="left pictures"' : '';
 
 										echo '<li '.$floatleft.'><a href="'.$userpath.$username.'/'.$folder.'/'.$val.'">'.$display.'</a><span class="usercontrols"><a href="'.$baseurl.'sharefile.php"><img src="'.$baseurl.$webgfxpath.'share.png" alt="share file"></a><a class="deletefile" href="'.$baseurl.'deletefile.php"><img src="'.$baseurl.$webgfxpath.'delete_icon.png" alt="delete file"></a></span></li>';
 									}
