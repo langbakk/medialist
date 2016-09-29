@@ -8,41 +8,39 @@ error_reporting(E_ALL); // this should be commented out in production environmen
 			$ext = explode('.',$strName);
 			$ext = array_reverse($ext);
 			$ext = $ext[0];
-					$strName = substr($strName, 0, -strlen($ext) -1);
-
-			return $strName;
+			return $strName = substr($strName, 0, -strlen($ext) -1);
 		}
 		function getExtension($strName) {
 			$info = pathinfo($strName);
-			$ext = $info['extension'];
-			return $ext;
+			return $info['extension'];
 		}
-		function allowedExtensions($type, $filename = 'allowed_extensions.php') {
+		function allowedExtensions($type, $filename = 'conf/.allowed_extensions') {
 			$filetype = file($filename, FILE_IGNORE_NEW_LINES);
-			$allowedfiletypes = array();
+			$allowedfiletypes = [];
 			foreach ($filetype as $key => $value) {
-				if (stripos($value, "//") === false && stripos($value, '?>') === false && stripos($value, '<?php') === false && !empty($value)) {
-					$value = str_replace('\'','',$value);
-					$get_type = explode('/',$value);
-					if (!empty($type) && $type == $get_type[0]) {
-						$allowedfiletypes[] = $get_type[1];
-					} elseif (empty($type)) {
-						$allowedfiletypes[] = $get_type[1];
-					} 
+				if (stripos($value, "//") === false && !empty($value)) {
+					// $value = str_replace('\'','',$value);
+					// $get_type = explode('/',$value);
+					// if (!empty($type) && $type == $get_type[0]) {
+						// $allowedfiletypes[] = $get_type[1];
+					// } elseif (empty($type)) {
+						// $allowedfiletypes[] = $get_type[1];
+					// } 
+					$allowedfiletypes[] = $value;
 				}
 			}
 			return $allowedfiletypes;
 		}
-		function allowedMimeTypes($type, $filename = 'allowed_mimetypes.php') {
+		function allowedMimeTypes($type, $filename = 'conf/.allowed_mimetypes') {
 			$mimetype = file($filename, FILE_IGNORE_NEW_LINES);
-			$allowedmimetypes = array();
+			$allowedmimetypes = [];
 			foreach ($mimetype as $key => $value) {
-				if (stripos($value, "//") === false && stripos($value, '?>') === false && stripos($value, '<?php') === false) {
+				if (stripos($value, "//") === false) {
 					$allowedmimetypes[] = str_replace('\'','',$value);
 				}
 			}
 			if (!empty($type)) {
-				$allowedmimetypes_replace = array();
+				$allowedmimetypes_replace = [];
 				foreach ($allowedmimetypes as $key => $value) {
 					$value = explode('/',$value);
 					if ($type == $value[0]) {
@@ -88,13 +86,22 @@ error_reporting(E_ALL); // this should be commented out in production environmen
   			}
   		function displayMenu($baseurl, $baseurl_page, $usedb = false) {
   			if ($usedb == false) {
-  				$menuArray = array(1 => 'index.php', 2 => 'gallery.php', 3 => 'upload.php', 4 => 'userprofile.php');
+  				$menuArray = ['index','gallery','upload','login','userprofile'];
   				$main_menu = '<nav id="mainmenu">
   								<ul>';
+  				$allow_public = Config::read('allow_public');
+  				$isloggedin = Config::read('isloggedin');
   					foreach ($menuArray as $key => $value) {
   						$menutext = pathinfo($value);
-  						$useurl = ($menutext['basename'] == 'index.php') ? $baseurl.$menutext['basename'] : $baseurl_page.$menutext['filename'];
+  							$useurl = $menutext['basename'];
+  						if ($allow_public == true && !$isloggedin && $key != 4) {
+  						// $useurl = ($menutext['basename'] == 'index') ? $baseurl.$menutext['basename'] : $baseurl_page.$menutext['filename'];
+
   						$main_menu .= '<li><a href="'.$useurl.'">'.ucfirst((($menutext['filename'] == 'index') ? 'home' : $menutext['filename'])).'</a></li>';
+  						} elseif ($isloggedin && $key != 3) {
+	  						// $useurl = ($menutext['basename'] == 'index') ? $baseurl.$menutext['basename'] : $baseurl_page.$menutext['filename'];
+	  						$main_menu .= '<li><a href="'.$useurl.'">'.ucfirst((($menutext['filename'] == 'index') ? 'home' : $menutext['filename'])).'</a></li>';  							
+  						}
   					}
   				$main_menu .= '</ul>
   							</nav>';
@@ -104,6 +111,19 @@ error_reporting(E_ALL); // this should be commented out in production environmen
   		function updateCurrentUploads($filename, $adduploadfile) {
   			$handle = file_put_contents($filename, "'".$adduploadfile."'".PHP_EOL, FILE_APPEND);
   		}
+  		function isEnabled($func) {
+ 		   return is_callable($func) && false === stripos(ini_get('disable_functions'), $func);
+		}
+
+		function onlyValidChar($filename) {
+		    $filename = htmlentities($filename, ENT_QUOTES, 'UTF-8');
+		    $filename = preg_replace('~&([a-z]{1,2})(acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i', '$1', $filename);
+		    $filename = html_entity_decode($filename, ENT_QUOTES, 'UTF-8');
+		    $filename = preg_replace(array('~[^0-9a-z.]~i', '~[ -]+~'), ' ', $filename);
+		    $filename = str_replace(' ','_',$filename);
+		    return trim($filename, ' -');
+		}
+		
   		function returnCurrentUploads($filename) {
   			$handle = file_get_contents($filename);
 			$lines = explode(PHP_EOL,$handle);
@@ -119,7 +139,7 @@ error_reporting(E_ALL); // this should be commented out in production environmen
 			}
   		}
   		function loadFiles($filetype, $path, $recursive = 0, $testfileallow = 0) {
-		    $results = array();     // create an array to hold directory list
+		    $results = [];     // create an array to hold directory list
 		    $handler = opendir($path);     // create a handler for the directory
 
 		    while ($file = readdir($handler)) {

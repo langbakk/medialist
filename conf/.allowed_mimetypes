@@ -1,20 +1,23 @@
-<?php
 // note: you can find almost any mime-type here: http://www.freeformatter.com/mime-types-list.html
-
 //images
 'image/jpeg'
+'image/jpg'
 'image/png'
 'image/gif'
 
 //video
 'application/x-troff-msvideo'
-'video/avi'
-'video/msvideo'
-'video/x-msvideo'
-'video/x-ms-wmv'
+'application/x-mpegURL'
 'video/x-flv'
-'video/mpeg'
+'video/MP2T'
+'video/3gpp'
 'video/quicktime'
+'video/x-msvideo'
+'video/msvideo'
+'video/avi'
+'video/x-ms-wmv'
+'video/mp4'
+'video/mpeg'
 
 //audio
 'audio/mpeg3'
@@ -28,5 +31,4 @@
 'application/vnd.ms-excel'
 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 'application/vnd.ms-powerpoint'
-
-?>
+'text/plain'

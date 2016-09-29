@@ -26,7 +26,6 @@ $webgfxfolder: "../webgfx/";
 
 a {
 	color: #00a0c6;
-
 	&:visited {
 		color: #0066c6;
 	}
@@ -44,7 +43,6 @@ body,html {
 	background: #000;
 	color: #fff;
 	font-family: sans-serif;
-	width: 100%;
 	}
 h1,h2,h3,h4 {
 	text-align: center;
@@ -84,10 +82,10 @@ h1,h2,h3,h4 {
 						margin-right: 10px;
 					}
 				}
-				&.pictures span {
+				&.pictures span,&.video span {
 					display: none;
 				}
-				&.pictures:hover span {
+				&.pictures:hover span,&.video:hover span {
 					display: block;
 					margin-left: -60px;
 					position: relative;

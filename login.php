@@ -4,9 +4,8 @@ $password = (isset($_POST['password'])) ? $_POST['password'] : '';
 
 if (isset($_POST['submit_login']) && $username != '' && $password != '') {
 	if ($use_db === false) {
-		$countusers = count($user_array);
 		$success = false;
-		for ($i = 1; $i <= $countusers; $i++) {
+		for ($i = 0; $i < count($user_array); $i++) {
 			if (in_array($username,$user_array[$i]) && in_array($password,$user_array[$i])) {
 				$_SESSION['loggedin'] = true;
 				$_SESSION['username'] = $user_array[$i]['username'];
@@ -17,7 +16,7 @@ if (isset($_POST['submit_login']) && $username != '' && $password != '') {
 					mkdir($userpath.$username, 0744, true);
 					file_put_contents($userpath.$username.'/index.html','<p>Placeholder</p>');					
 				}
-				$directories = array(1 => '/images', 2 => '/images/thumbs', 3 => '/video', 4 => '/music', 5 => '/documents');
+				$directories = array(1 => '/pictures', 2 => '/pictures/thumbs', 3 => '/video', 4 => '/video/thumbs', 5 => '/music', 6 => '/documents');
 				if (is_dir($userpath.$username)) {
 					foreach ($directories as $key => $dir) {
 						if (!is_dir($userpath.$username.$dir)) {
@@ -53,14 +52,17 @@ if (isset($_POST['submit_login']) && $username != '' && $password != '') {
 }
 
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == false) || !isset($_SESSION['loggedin'])) {
-?>
-<form id="loginform" method="post" action="index.php">
-	<input type="text" id="username" name="username" value="<?php echo $username; ?>" placeholder="Please input your username">
-	<input type="password" id="password" name="password" value="<?php echo $password; ?>" placeholder="Please input your password">
+		if ($allow_public == true && !$isloggedin) {
+		echo '<p class="messagebox info visible">You can upload files and have them show in the public gallery without logging in, but you will not be able to set uploads as private, nor make your own albums</p>';
+	}
+echo '<form id="loginform" method="post" action="'.$baseurl_page.'login">
+	<input type="text" id="username" name="username" value="'.$username.'" placeholder="Please input your username">
+	<input type="password" id="password" name="password" value="'.$password.'" placeholder="Please input your password">
 	<input type="submit" name="submit_login" value="Login">
-</form>
-<?php } else { ?>
-<form id="loginform" method="post" action="index.php">
+</form>';
+} else {
+echo '<form id="loginform" method="post" action="'.$baseurl_page.'login">
 	<input type="submit" name="submit_logout" value="Log out">
-</form>
-<?php } ?>
+</form>';
+}
+?>

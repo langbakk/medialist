@@ -1,7 +1,7 @@
 <?php
 
 	$chosenlanguage = array (
-							'mainheading' 			=> 'Medialist',
+							'mainheading' 			=> 'Uploadr.io',
 							'uploadlabel'			=> 'Choose file',
 							'uploadsubmit'			=> 'Upload',
 							'uploadreset'			=> 'Reset form'
