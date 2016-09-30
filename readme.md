@@ -1,5 +1,5 @@
-Medialist
-=========
+Uploadr
+=======
 
 Installation:
 -------------
