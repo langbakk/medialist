@@ -37,11 +37,10 @@ $prefix = '';
 $dbprefix = $prefix.'_';
 
 // $_SESSION / user settings  --  DO NOT MODIFY THIS
+$user_array = [0=>['username'=>'admin','password'=>'1234']];
+
 $userpath = 'users/';
 $username = (isset($_SESSION['loggedin'])) ? $_SESSION['username'].'/' : 'public/';
-
-$usergroup_list = (!empty($_SESSION['usergroup'])) ? join(',',$_SESSION['usergroup']) : '';
-$usergroup_namelist = (!empty($_SESSION['usergroup_name'])) ? join(', ',$_SESSION['usergroup_name']) : '';
 
 $allow_public = true;
 
@@ -50,6 +49,11 @@ $countrycode = !empty($_SESSION['userlanguage']) ? $_SESSION['userlanguage'] : 1
 $forgottenpassword = (isset($_GET['page']) && $_GET['page'] == 'forgottenpassword') ? 1 : '';
 $register_user = (isset($_GET['page']) && $_GET['page'] == 'adduser') ? 1 : '';
 $deactivated = 0;
+
+$use_login = true;
+$isloggedin = isset($_SESSION['loggedin']) ? $_SESSION['loggedin'] : false;
+$show_quotes = true;
+$use_db = false;
 
 // Session-control
 // The inactive variable controls how many seconds an active session lasts - if you want another value, replace this with the amount. Value in seconds Take note to change the value in the persdb.js file as well - the value for count
@@ -62,12 +66,6 @@ define('UNIQUE_KEY',$unique_key);
 $method = 'AES-256-CBC';
 
 // Path-configuration
-$use_login = true;
-$isloggedin = isset($_SESSION['loggedin']) ? $_SESSION['loggedin'] : false;
-$show_quotes = true;
-$use_db = false;
-$user_array = [0=>['username'=>'admin','password'=>'1234']];
-
 $document_root = $_SERVER['DOCUMENT_ROOT'];
 $httptype = (isset($_SERVER['HTTPS'])) ? 'https' : 'http';
 $domain = ($_SERVER['SERVER_PORT'] == 80 || $_SERVER["SERVER_PORT"] == 443) ? $_SERVER['SERVER_NAME'] : $_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'];
