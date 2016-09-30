@@ -2,7 +2,7 @@
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_public == true) {
 
 echo '<h3>Upload files:</h3>
-	<form id="upload" action="'.$baseurl_page.'upload" method="post" enctype="multipart/form-data">
+	<form id="upload" action="upload" method="post" enctype="multipart/form-data">
 		<input class="inactive" type="file" name="file" id="file">
 		<p id="folderchoicecontainer" class="hidden">
 			<label for="folderchoice">Choose folder (if uploading to base-folder, or creating a new folder, leave blank): </label>
@@ -85,13 +85,16 @@ echo '<h3>Upload files:</h3>
 						echo '<p class="messagebox success">You uploaded: '.$_FILES['file']['name'].'</p>';
 						$movedfile = pathinfo($_FILES['file']['name']);
 						if (in_array(strtolower($movedfile['extension']),allowedExtensions('')) && in_array($_FILES['file']['type'],allowedMimeTypes('image'))) {
-							createThumbs($userpath.$username.$folder.'/',onlyValidChar($_FILES['file']['name']),200);
+							// createThumbs($userpath.$username.$folder.'/',onlyValidChar($_FILES['file']['name']),200);
+							generate_image_thumbnail($userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']),$userpath.$username.$folder.'/thumbs/'.onlyValidChar($_FILES['file']['name']));
 						}
 						if (in_array(strtolower($movedfile['extension']),allowedExtensions('')) && in_array($_FILES['file']['type'],allowedMimeTypes('video'))) {
 							$video = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']);
 							$thumbnail = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']).'.jpg';
 							$output = shell_exec("/usr/local/bin/ffmpeg -i $video -deinterlace -an -ss 1 -t 00:00:01 -r 1 -y -vcodec mjpeg -f mjpeg $thumbnail 2>&1");
-							createThumbs($userpath.$username.$folder.'/',str_replace('\'','',array_reverse(explode('/',explode(':',explode('to',$output)[1])[0]))[0]),200);
+							// createThumbs($userpath.$username.$folder.'/',str_replace('\'','',array_reverse(explode('/',explode(':',explode('to',$output)[1])[0]))[0]),200);
+							// generate_image_thumbnail($userpath.$username.$folder.'/',str_replace('\'','',array_reverse(explode('/',explode(':',explode('to',$output)[1])[0]))[0]));
+							generate_image_thumbnail($userpath.$username.$folder.'/'.str_replace('\'','',array_reverse(explode('/',explode(':',explode('to',$output)[1])[0]))[0]),$userpath.$username.$folder.'/thumbs/'.str_replace('\'','',array_reverse(explode('/',explode(':',explode('to',$output)[1])[0]))[0]));
 							unlink($userpath.$username.$folder.'/'.str_replace('\'','',array_reverse(explode('/',explode(':',explode('to',$output)[1])[0]))[0]));
 						}
 						updateCurrentUploads('current_uploads.php',$_FILES['file']['name']);

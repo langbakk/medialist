@@ -30,7 +30,24 @@ $(document).ready(function() {
 		$("#file").val('');
 		$("#file").removeClass('active').addClass('inactive');
 	})
+
+	$(function() {
+		equalHeight($('.video'));
+		var elementHeight = $('.video').height();
+		$('.video > a > img').css({'height':elementHeight});
+
+	})
 });
 function ucfirst(text) {
 	   return text.substr(0, 1).toUpperCase() + text.substr(1);    
+}
+function equalHeight(group) {
+   	tallest = 0;
+		group.each(function() {
+   		thisHeight = $(this).height();
+			if(thisHeight > tallest) {
+			tallest = thisHeight;
+        }
+    })
+    group.height(tallest);
 }

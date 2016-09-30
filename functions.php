@@ -61,30 +61,71 @@ error_reporting(E_ALL); // this should be commented out in production environmen
 		}
 		function createThumbs($path, $imageName, $thumbWidth) {
     		$info = pathinfo($path . $imageName); // parse path for the extension
-			    if (in_array(strtolower($info['extension']),allowedExtensions('image')))  {
-			    	if ($info['extension'] == 'jpg' || $info['extension'] == 'jpeg') {
-			    		$img = imagecreatefromjpeg( "{$path}{$imageName}" );
-			    	} elseif ($info['extension'] == 'png') {
-			    		$img = imagecreatefrompng( "{$path}{$imageName}" );
-			    	} elseif ($info['extension'] == 'gif') {
-			    		$img = imagecreatefromgif( "{$path}{$imageName}" );
-			    	}
-			    	if (!file_exists($info['dirname'].'/thumbs/'.$info['basename'])) {
-	      			$width = imagesx( $img );
-	      			$height = imagesy( $img );
+		    if (in_array(strtolower($info['extension']),allowedExtensions('image')))  {
+		    	if ($info['extension'] == 'jpg' || $info['extension'] == 'jpeg') {
+		    		$img = imagecreatefromjpeg( "{$path}{$imageName}" );
+		    	} elseif ($info['extension'] == 'png') {
+		    		$img = imagecreatefrompng( "{$path}{$imageName}" );
+		    	} elseif ($info['extension'] == 'gif') {
+		    		$img = imagecreatefromgif( "{$path}{$imageName}" );
+		    	}
+		    	if (!file_exists($info['dirname'].'/thumbs/'.$info['basename'])) {
+      			$width = imagesx( $img );
+      			$height = imagesy( $img );
 
-	      			$new_width = $thumbWidth;
-	      			$new_height = floor( $height * ( $thumbWidth / $width ) );
+      			$new_width = $thumbWidth;
+      			$new_height = floor( $height * ( $thumbWidth / $width ) );
 
-	      			$tmp_img = imagecreatetruecolor( $new_width, $new_height );
+      			$tmp_img = imagecreatetruecolor( $new_width, $new_height );
 
-	      			imagecopyresized( $tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height );
+      			imagecopyresized( $tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height );
 
-	   				imagejpeg( $tmp_img, "{$path}thumbs/{$imageName}" );
-	      			}
-	    		}
-  			}
-  		function displayMenu($baseurl, $baseurl_page, $usedb = false) {
+   				imagejpeg( $tmp_img, "{$path}thumbs/{$imageName}" );
+      			}
+    		}
+  		}
+  		function generate_image_thumbnail($source_image_path, $thumbnail_image_path, $thumb_width = 200, $thumb_height = 200) {
+    		list($source_image_width, $source_image_height, $source_image_type) = getimagesize($source_image_path);
+    		
+    		$w = $source_image_width;
+    		$h = $source_image_height;
+		    
+		    $source_gd_image = false;
+		    switch ($source_image_type) {
+		        case IMAGETYPE_GIF:  		 
+		            $source_gd_image = imagecreatefromgif($source_image_path);
+		            break;
+		        case IMAGETYPE_JPEG:
+		            $source_gd_image = imagecreatefromjpeg($source_image_path);
+		            break;
+		        case IMAGETYPE_PNG:
+		            $source_gd_image = imagecreatefrompng($source_image_path);
+		            break;
+		    }
+    		
+    		if ($source_gd_image === false) {
+        		return false;
+    		}
+		    
+		    $source_aspect_ratio = $source_image_width / $source_image_height;
+		    $thumbnail_aspect_ratio = $thumb_width / $thumb_height;
+		    
+
+			if ($thumb_width/$thumb_height > $source_aspect_ratio) {
+			   $thumb_width = $height*$source_aspect_ratio;
+			} else {
+			   $thumb_height = $thumb_width/$source_aspect_ratio;
+			}
+
+		    $thumbnail_gd_image = imagecreatetruecolor($thumb_width, $thumb_height);
+		    imagecopyresampled($thumbnail_gd_image, $source_gd_image, 0, 0, 0, 0, $thumb_width, $thumb_height, $w, $h);
+		    imagejpeg($thumbnail_gd_image, $thumbnail_image_path, 100);
+		    imagedestroy($source_gd_image);
+		    imagedestroy($thumbnail_gd_image);
+		    return true;
+		} // end generate_image_thumbnail≤÷z<abs(number)'÷≤ xc1''1'1'11't
+
+  		function displayMenu($baseurl, $usedb = false) {
   			if ($usedb == false) {
   				$menuArray = ['index','gallery','upload','login','userprofile'];
   				$main_menu = '<nav id="mainmenu">

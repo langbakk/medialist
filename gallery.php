@@ -39,7 +39,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 
 	if ($allempty == 0) {
 		echo '<div class="container">
-			<p>No files were found on the server matching the configured criteria. <a href="'.$baseurl_page.'upload">Choose files to upload</a></p>
+			<p>No files were found on the server matching the configured criteria. <a href="upload">Choose files to upload</a></p>
 		</div>';
 	}
 	if ($show_quotes == true) { // this setting can be changed in config.php

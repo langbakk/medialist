@@ -14,14 +14,14 @@ if (isset($_POST['submit_login']) && $username != '' && $password != '') {
 				$foldercreated = false;
 				if (!is_dir($userpath.$username)) {
 					mkdir($userpath.$username, 0744, true);
-					file_put_contents($userpath.$username.'/index.html','<p>Placeholder</p>');					
+					// file_put_contents($userpath.$username.'/index.html','<p>Placeholder</p>');					
 				}
 				$directories = array(1 => '/pictures', 2 => '/pictures/thumbs', 3 => '/video', 4 => '/video/thumbs', 5 => '/music', 6 => '/documents');
 				if (is_dir($userpath.$username)) {
 					foreach ($directories as $key => $dir) {
 						if (!is_dir($userpath.$username.$dir)) {
 							mkdir($userpath.$username.$dir, 0744, true);
-							file_put_contents($userpath.$username.$dir.'/index.html','');
+							file_put_contents($userpath.$username.$dir.'/.gitignore','# Ignore everything in this directory'."\r\n".'*'."\r\n".'# Except this file'."\r\n".'!.gitignore');
 						}
 					}
 					$folderexist = true;
@@ -55,13 +55,13 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == false) || !isset($
 		if ($allow_public == true && !$isloggedin) {
 		echo '<p class="messagebox info visible">You can upload files and have them show in the public gallery without logging in, but you will not be able to set uploads as private, nor make your own albums</p>';
 	}
-echo '<form id="loginform" method="post" action="'.$baseurl_page.'login">
+echo '<form id="loginform" method="post" action="login">
 	<input type="text" id="username" name="username" value="'.$username.'" placeholder="Please input your username">
 	<input type="password" id="password" name="password" value="'.$password.'" placeholder="Please input your password">
 	<input type="submit" name="submit_login" value="Login">
 </form>';
 } else {
-echo '<form id="loginform" method="post" action="'.$baseurl_page.'login">
+echo '<form id="loginform" method="post" action="login">
 	<input type="submit" name="submit_logout" value="Log out">
 </form>';
 }
