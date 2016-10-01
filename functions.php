@@ -112,7 +112,7 @@ error_reporting(E_ALL); // this should be commented out in production environmen
 		    
 
 			if ($thumb_width/$thumb_height > $source_aspect_ratio) {
-			   $thumb_width = $height*$source_aspect_ratio;
+			   $thumb_width = $thumb_height*$source_aspect_ratio;
 			} else {
 			   $thumb_height = $thumb_width/$source_aspect_ratio;
 			}
