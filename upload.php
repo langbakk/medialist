@@ -90,12 +90,10 @@ echo '<h3>Upload files:</h3>
 						}
 						if (in_array(strtolower($movedfile['extension']),allowedExtensions('')) && in_array($_FILES['file']['type'],allowedMimeTypes('video'))) {
 							$video = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']);
-							$thumbnail = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']).'.jpg';
-							$output = shell_exec("/usr/local/bin/ffmpeg -i $video -deinterlace -an -ss 1 -t 00:00:01 -r 1 -y -vcodec mjpeg -f mjpeg $thumbnail 2>&1");
-							// createThumbs($userpath.$username.$folder.'/',str_replace('\'','',array_reverse(explode('/',explode(':',explode('to',$output)[1])[0]))[0]),200);
-							// generate_image_thumbnail($userpath.$username.$folder.'/',str_replace('\'','',array_reverse(explode('/',explode(':',explode('to',$output)[1])[0]))[0]));
-							generate_image_thumbnail($userpath.$username.$folder.'/'.str_replace('\'','',array_reverse(explode('/',explode(':',explode('to',$output)[1])[0]))[0]),$userpath.$username.$folder.'/thumbs/'.str_replace('\'','',array_reverse(explode('/',explode(':',explode('to',$output)[1])[0]))[0]));
-							unlink($userpath.$username.$folder.'/'.str_replace('\'','',array_reverse(explode('/',explode(':',explode('to',$output)[1])[0]))[0]));
+							$thumbnail = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/thumbs/'.onlyValidChar($_FILES['file']['name']).'.jpg';
+    						$get_frames = shell_exec("/usr/local/bin/ffmpeg -nostats -i $video -vcodec copy -f rawvideo -y /dev/null 2>&1 | grep frame | awk '{split($0,a,\"fps\")}END{print a[1]}' | sed 's/.*= *//'");
+    						$stills_number = floor($get_frames / 200);
+    						$output = shell_exec("/usr/local/bin/ffmpeg -y -i $video -frames 1 -q:v 1 -vf 'select=not(mod(n\,$stills_number)),scale=-1:120,tile=100x1' $thumbnail");
 						}
 						updateCurrentUploads('current_uploads.php',$_FILES['file']['name']);
 						// header('refresh: 3');

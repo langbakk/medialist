@@ -26,9 +26,9 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 					<ul>';
 				while (list ($key, $val) = each ($filelist)) {
 					if ($val != "." && $val != ".." && in_array(getExtension($val),allowedExtensions(''))) {
-						$display = (($folder == 'pictures') ? '<img src="'.$userpath.$username.$folder.'/thumbs/'.$val.'">' : (($folder == 'video') ? '<img src="'.$userpath.$username.$folder.'/thumbs/'.$val.'.jpg">' : urldecode(ucwords(removeExtension($val)))));
+						$linkdisplay = (($folder == 'pictures') ? '<a href="'.$userpath.$username.$folder.'/'.$val.'"><img src="'.$userpath.$username.$folder.'/thumbs/'.$val.'"></a>' : (($folder == 'video') ? '<div class="tech-slideshow"><div class="mover-1" style="background: url('.$userpath.$username.$folder.'/thumbs/'.$val.'.jpg);"></div><div class="mover-2" style="background: url('.$userpath.$username.$folder.'/thumbs/'.$val.'.jpg);"></div></div>' : urldecode(ucwords(removeExtension($val)))));
 						$floatleft = (($folder == 'pictures') ? 'class="left pictures"' : ($folder == 'video') ? 'class="left video"' : '');
-						echo '<li '.$floatleft.'><a href="'.$userpath.$username.$folder.'/'.$val.'">'.$display.'</a><span class="usercontrols"><a href="'.$baseurl.'sharefile.php"><img src="'.$webgfxpath.'share.png" alt="share file"></a><a class="deletefile" href="'.$baseurl.'deletefile.php"><img src="'.$webgfxpath.'delete_icon.png" alt="delete file"></a></span></li>';
+						echo '<li '.$floatleft.'>'.$linkdisplay.'<span class="usercontrols"><a href="'.$baseurl.'sharefile.php"><img src="'.$webgfxpath.'share.png" alt="share file"></a><a class="deletefile" href="'.$baseurl.'deletefile.php"><img src="'.$webgfxpath.'delete_icon.png" alt="delete file"></a></span></li>';
 					}
 				}
 				closedir ($handle);

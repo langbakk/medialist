@@ -77,11 +77,16 @@ h1,h2,h3,h4 {
 				// overflow: hidden;
 				flex: 1 1 0;
 				text-align: center;
-				background: gray;
+				// background: gray;
 				margin: 0.3em;
 				position: relative;
+				min-width: 10em;
+				.tech-slideshow {
+					border: 1px solid white;
+				}
 				> img {
 					vertical-align: bottom;
+					border: 1px solid white;
 				}
 				span {
 					display: block;
@@ -107,10 +112,10 @@ h1,h2,h3,h4 {
 		}
 	}
 header {
-	height: 200px;
+	height: 12em;
 	h1 {
 		text-align: center;
-		padding-top: 50px;
+		padding-top: 2em;
 	}
 }
 ul {
@@ -132,9 +137,9 @@ form {
 	display: block;
 	margin: 0 auto;
 //	border: 1px solid #00a0c6;
-	padding: 15px;
+	padding: 1.5em;
 	border-radius: $border-radius;
-	margin-bottom: 20px;
+	margin-bottom: 2em;
 	input {
 		text-align: center;
 		margin: 0 auto;
@@ -143,25 +148,26 @@ form {
 		&:not([type=submit]),&:not([type=file]) {
 			background: #000;
 			color: #fff;
-			height: 50px;
-			width: 400px;
+			height: 4em;
+			width: 20em;
 			//margin-bottom: 10px;
 		}
 		&#username,&#password {
-			margin-bottom: 10px;
+			margin-bottom: 1em;
 		}
 		&[type=submit],&[type=button],&[type=file] {
 			width: auto;
-			padding: 10px 20px;
-			border: 1px solid #7eb9d0; 
-			border-radius: 3px;
-			font-size: 12px;
+			padding: 0.4em 0.8em;
+			border: 0.1em solid #7eb9d0; 
+			border-radius: 0.3em;
+			font-size: 1em;
 			font-family: helvetica, sans-serif; 
 			text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
-			margin-top: 5px;
-			margin-bottom: 5px;
+			// margin-top: 5px;
+			// margin-bottom: 5px;
 			color: #fff;
 			background-color: #a7cfdf; 
+			min-width: 7em;
 			//background-image: -webkit-gradient(linear, left top, left bottom, from(#a7cfdf), to(#23538a));
 			background-image: -webkit-linear-gradient(top, #a7cfdf, #23538a);
 			background-image: -moz-linear-gradient(top, #a7cfdf, #23538a);
@@ -254,12 +260,13 @@ margin-bottom: 10px;
 //message-boxes
 .messagebox {
     border: 1px solid;
-    margin: 10px 0px;
-    padding: 10px 10px 15px 50px;
+    margin: 0.5em auto;
     background-repeat: no-repeat;
-    background-position: 10px center;
+    background-position: 1em center;
     position: relative;
     overflow: hidden;
+    line-height: 0.5em;
+    max-width: 60em;
     input[type=checkbox] {
 		margin-top: 10px;
 		margin-left: 20px;
@@ -328,10 +335,47 @@ margin-bottom: 10px;
 	}
 }
 #fileupload_buttons {
-	width: 220px;
+	width: 15em;
 	overflow: hidden;
 	margin: 0 auto;
 }
 .hidden {
 	display: none;
+}
+.tech-slideshow {
+  height: 120px;
+  max-width: 200px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  transform: translate3d(0, 0, 0);
+}
+
+.tech-slideshow > div {
+  height: 120px;
+  width: 25000px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  transform: translate3d(0, 0, 0);
+}
+.tech-slideshow .mover-1 {
+  animation: moveSlideshow 0s linear infinite;
+}
+.tech-slideshow .mover-2 {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+  background-position: 0 -120px;
+  animation: moveSlideshow 15s linear infinite;
+}
+.tech-slideshow:hover .mover-2 {
+  opacity: 1;
+  animation-duration: 50s;
+}
+
+@keyframes moveSlideshow {
+  100% { 
+    transform: translateX(-66.6666%);  
+  }
 }
