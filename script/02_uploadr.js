@@ -3,26 +3,20 @@ $(document).ready(function() {
 		$this = $(this);
 		e.preventDefault();
         var thisListID = $(this).parents('ul').prop('id');
-        // console.log(thisListID);
 		var thisFile = $(this).parents('li').find('a:first').attr('href').split('/').reverse();
-		$.post('deletefile.php', { filename:thisFile[1]+'/'+thisFile[0] }, function(data) { alert(data); 
-            $this.parents('li').remove();//window.location.reload(true)
+		$.post('deletefile.php', { filename:thisFile[1]+'/'+thisFile[0] }, function(data) { 
+            data = $.parseJSON(data);
+            showUpdateInfo(''+data.content+'',''+data.infotype+'');
+            $this.parents('li').remove();
             if (($('#'+thisListID+' li').length) === 0) {
-                // console.log('this should trigger');
                 $('#'+thisListID).parent('.container').remove();
                 if (($('.container').length) == 1 && $('.container').hasClass('hidden')) {
-                    console.log('blah');
                     $('.container').removeClass('hidden').addClass('visible');
                 }
             }
-            // if (($this.parents('ul').find('li').length) <= 0) {
-            //     $this.parents('.container').remove();
-            // }
         });
-		// alert(thisFile[1] + '/' + thisFile[0]);
 	})
 	$("input[type=file]").on('change',function() {
-		//console.log($(this));
 		var thisContent = $(this).val();
 		if (thisContent != 'No file selected') {
 			$(this).removeClass('inactive').addClass('active');
@@ -58,10 +52,12 @@ $(document).ready(function() {
         })
         
     })
-    
-    
-
 });
+function showUpdateInfo(data,infotype) {
+    $('#updateinfo').removeClass('error success info warning');
+    $('#updateinfo').stop().css({'opacity':'1','display':'block'}).addClass(infotype).text(data).fadeOut(5000);
+}
+
 function ucfirst(text) {
 	   return text.substr(0, 1).toUpperCase() + text.substr(1);    
 }
@@ -75,3 +71,15 @@ function equalHeight(group) {
     })
     group.height(tallest);
 }
+
+Dropzone.options.upload = {
+  paramName: "file", // The name that will be used to transfer the file
+  maxFilesize: 500, // MB
+  dictDefaultMessage: 'Drop files here, or click, to upload',
+  accept: function(file, done) {
+    if (file.name == "justinbieber.jpg") {
+      done("Naha, you don't.");
+    }
+    else { done(); }
+  }
+};

@@ -2,7 +2,7 @@
 ini_set('display_errors',1); // this should be commented out in production environments
 error_reporting(E_ALL); // this should be commented out in production environments
 ob_start();
-session_start();
+if (!session_id()) { session_start(); };
 
 	require_once('conf/config.php');
 	require_once('language.php');
@@ -36,6 +36,7 @@ echo '</head>
 	} 
 echo '
 	</div>
+	<div id="updateinfo" class="messagebox"></div>
 	<footer>';
 	if ($isloggedin && $use_login == true) {
 		echo $display->getLogin();

@@ -2,7 +2,8 @@
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_public == true) {
 
 echo '<h3>Upload files:</h3>
-	<form id="upload" action="upload" method="post" enctype="multipart/form-data">
+	<form id="upload" action="upload" method="post" class="dropzone"></form>
+	<!--<form id="upload" action="upload" method="post" enctype="multipart/form-data">
 		<input class="inactive" type="file" name="file" id="file">
 		<p id="folderchoicecontainer" class="hidden">
 			<label for="folderchoice">Choose folder (if uploading to base-folder, or creating a new folder, leave blank): </label>
@@ -15,9 +16,9 @@ echo '<h3>Upload files:</h3>
 			<input class="left reset" type="button" id="uploadreset" name="reset" value="'.__UPLOADRESET.'">
 			<input class="right" type="submit" name="submit" value="'.__UPLOADSUBMIT.'">
 		</p>
-	</form>';
+	</form>-->';
 
-		if (isset($_POST['submit'])) {
+		if (isset($_FILES['file'])) {
 			if (in_array('error', $_FILES['file'])) {
 				switch ($_FILES['file']['error']) {
 					case 0:

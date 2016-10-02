@@ -1,5 +1,5 @@
 <?php
-session_start();
+if (!session_id()) { session_start(); };
 require_once('conf/config.php');
 require_once('functions.php');
 require_once('language.php');
@@ -49,8 +49,6 @@ if (!empty($currentcontent)) {
 		}
 	}
 	echo json_encode($foldervalue);
-} else {
-	echo 'no folder found';
-}
+} 
 
 ?>
