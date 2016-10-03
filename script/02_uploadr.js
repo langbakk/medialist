@@ -2,9 +2,13 @@ $(document).ready(function() {
 	$(".deletefile").click(function(e) {
 		$this = $(this);
 		e.preventDefault();
+		var userName = '';
+		if (GetURLParameter('user')) {
+			userName = GetURLParameter('user');
+		}
         var thisListID = $(this).parents('ul').prop('id');
 		var thisFile = $(this).parents('li').find('a:first').attr('href').split('/').reverse();
-		$.post('deletefile.php', { filename:thisFile[1]+'/'+thisFile[0] }, function(data) { 
+		$.post('deletefile.php', { filename:thisFile[1]+'/'+thisFile[0],username:userName }, function(data) { 
             data = $.parseJSON(data);
             showUpdateInfo(''+data.content+'',''+data.infotype+'');
             $this.parents('li').remove();
@@ -71,15 +75,48 @@ function equalHeight(group) {
     })
     group.height(tallest);
 }
+function GetURLParameter(sParam) {
+	if (sParam != undefined && sParam.length > 0) {
+		var sPageHref = window.location.href;
+    	var sPageURL = window.location.search.substring(1);
+    	var sURLVariables = (sPageURL.length != '') ? sPageURL.split('&') : sPageHref.split('&');
+    	for (var i = 0; i < sURLVariables.length; i++) {
+      	  var sParameterName = sURLVariables[i].split('=');
+        	if (sParameterName[0] == sParam) {
+            return sParameterName[1];
+        	}
+    	}
+  } else {
+  	var sPageURL = document.location.pathname.split('&');
+  	var sParameterName = sPageURL[0];
+  	return sParameterName;
+  }
+}
+
 
 Dropzone.options.upload = {
   paramName: "file", // The name that will be used to transfer the file
   maxFilesize: 500, // MB
   dictDefaultMessage: 'Drop files here, or click, to upload',
-  accept: function(file, done) {
-    if (file.name == "justinbieber.jpg") {
-      done("Naha, you don't.");
-    }
-    else { done(); }
+  // init: function() {
+  //   this.on("addedfile", function(file) {
+  //   	if (this.files.length) {
+  //  			var _i, _len;
+  //  			for (_i = 0, _len = this.files.length; _i < _len; _i++) {
+  //     			if(this.files[_i].name === file.name && this.files[_i].size === file.size) {
+  //       			return false;
+  //     			}
+  //   		}
+  // 		}
+  // 	});
+  // },
+  success: function(file, response) {
+  	var data = $.parseJSON(response);
+  	if (file.name+' already exist' == data.content) {
+  		if ($('.dz-filename').text() == file.name) {
+  			$('.dz-filename').parents('.dz-preview').remove();
+  		}
+   	}
+  	showUpdateInfo(''+data.content+'',''+data.infotype+'');
   }
 };

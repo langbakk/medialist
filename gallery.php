@@ -1,5 +1,9 @@
 <?php
 
+if (isset($_GET['user'])) {
+	$username = $_GET['user'].'/';
+}
+
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_public == true) {
 	$allempty = 0;
 	$dir_array = [1 => 'music', 2 => 'pictures/thumbs', 3 => 'video', 4 => 'documents'];
@@ -27,7 +31,10 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 					<ul id="'.$folder.'_list">';
 				while (list ($key, $val) = each ($filelist)) {
 					if ($val != "." && $val != ".." && in_array(getExtension($val),allowedExtensions(''))) {
-						$usercontrols = '<span class="usercontrols"><a href="'.$baseurl.'sharefile.php"><img src="'.$webgfxpath.'share.png" alt="share file"></a><a class="deletefile" href="'.$baseurl.'deletefile.php"><img src="'.$webgfxpath.'delete_icon.png" alt="delete file"></a></span>';
+						$usercontrols = '';
+						if ($isloggedin) {
+							$usercontrols = '<span class="usercontrols"><a href="'.$baseurl.'sharefile.php"><img src="'.$webgfxpath.'share.png" alt="share file"></a><a class="deletefile" href="'.$baseurl.'deletefile.php"><img src="'.$webgfxpath.'delete_icon.png" alt="delete file"></a></span>';
+						}
 						$linkdisplay = (($folder == 'pictures') ? '<a href="'.$userpath.$username.$folder.'/'.$val.'"><img src="'.$userpath.$username.$folder.'/thumbs/'.$val.'"></a>'.$usercontrols.'' : (($folder == 'video') ? '<div class="tech-slideshow"><a href="'.$userpath.$username.$folder.'/'.$val.'"><div class="mover-1" style="background: url('.$userpath.$username.$folder.'/thumbs/'.$val.'.jpg);"></div><div class="mover-2" style="background: url('.$userpath.$username.$folder.'/thumbs/'.$val.'.jpg);"></div></a>'.$usercontrols.'</div>' : urldecode(ucwords(removeExtension($val)))));
 						$floatleft = (($folder == 'pictures') ? 'class="left pictures"' : (($folder == 'video') ? 'class="left video"' : ''));
 						echo '<li '.$floatleft.'>'.$linkdisplay.'</li>';
