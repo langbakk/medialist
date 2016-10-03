@@ -2,6 +2,7 @@
 if (!session_id()) { session_start(); };
 require_once('conf/config.php');
 require_once('functions.php');
+$returnmessage = '';
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_public == true) {
 		if (isset($_FILES['file'])) {
 			if (in_array('error', $_FILES['file'])) {
@@ -65,10 +66,14 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 					}
 					$filename = $_FILES['file']['name'];
 					if (file_exists(''.$userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']))) {
-						echo json_encode(["content"=>"$filename already exist","infotype"=>"error"]);
+						if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+							$returnmessage = json_encode(["content"=>"$filename already exist","infotype"=>"error"]);
+						}						
 					} else {
 						move_uploaded_file($_FILES['file']['tmp_name'],''.$userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']));
-						echo json_encode(["content"=>"You uploaded $filename","infotype"=>"success"]);
+						if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+							$returnmessage = json_encode(["content"=>"You uploaded $filename","infotype"=>"success"]);
+						}
 						$movedfile = pathinfo($_FILES['file']['name']);
 						if (in_array(strtolower($movedfile['extension']),allowedExtensions('')) && in_array($_FILES['file']['type'],allowedMimeTypes('image'))) {
 							// createThumbs($userpath.$username.$folder.'/',onlyValidChar($_FILES['file']['name']),200);
@@ -82,17 +87,27 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
     						$output = shell_exec("/usr/local/bin/ffmpeg -y -i $video -frames 1 -q:v 1 -vf 'select=not(mod(n\,$stills_number)),scale=-1:120,tile=100x1' $thumbnail");
 						}
 						updateCurrentUploads('current_uploads.php',$_FILES['file']['name']);
-						// header('refresh: 3');
 					}
 				} else {
-					echo json_encode(["content"=>"The filetype you tried to upload is not allowed","infotype"=>"error"]);
+					if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {			
+						$returnmessage = json_encode(["content"=>"The filetype you tried to upload is not allowed","infotype"=>"error"]);
+					}
 				}
 			} elseif ($returnerror == true) {
-				echo json_encode(["content"=>"$returnerrorcontent","infotype"=>"error"]);
+				if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+					$returnmessage = json_encode(["content"=>"$returnerrorcontent","infotype"=>"error"]);
+				}
 			} else {
-				echo json_encode(["content"=>"The filetype you tried to upload is not allowed","infotype"=>"error"]);
+				if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+					$returnmessage = json_encode(["content"=>"The filetype you tried to upload is not allowed","infotype"=>"error"]);
+				}
 			}
 		}
 	// echo returnCurrentUploads('current_uploads.php');
+		if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+			echo $returnmessage;
+		} else {
+			header('location: upload');
+		}
 	}
 ?>

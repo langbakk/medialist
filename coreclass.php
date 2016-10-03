@@ -115,7 +115,7 @@ class PageView {
 		if (empty($isloggedin)) {
             include 'login.php';
         } else {
-           include 'login.php';            
+            include 'logout.php';            
         }
     }
 

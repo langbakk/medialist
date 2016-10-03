@@ -60,9 +60,5 @@ echo '<form id="loginform" method="post" action="login">
 	<input type="password" id="password" name="password" value="'.$password.'" placeholder="Please input your password">
 	<input type="submit" name="submit_login" value="Login">
 </form>';
-} else {
-echo '<form id="loginform" method="post" action="login">
-	<input type="submit" name="submit_logout" value="Log out">
-</form>';
 }
 ?>

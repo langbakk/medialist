@@ -115,10 +115,10 @@ h1,h2,h3,h4 {
 		}
 	}
 header {
-	height: 12em;
+	height: 5em;
 	h1 {
 		text-align: center;
-		padding-top: 2em;
+		// padding-top: 2em;
 	}
 }
 li {
@@ -143,8 +143,9 @@ form {
 		&:not([type=submit]),&:not([type=file]) {
 			background: #000;
 			color: #fff;
-			height: 3em;
+			// height: 3em;
 			width: 20em;
+			line-height: 3em;
 		}
 		&#username,&#password {
 			margin-bottom: 1em;
@@ -156,9 +157,11 @@ form {
 			border-radius: .3em;
 			font-size: 1em;
 			font-family: helvetica, sans-serif; 
-			color: #fff;
+			color: #444;
 			background-color: #a7cfdf; 
 			min-width: 7em;
+			cursor: pointer;
+			line-height: 1em;
 			&.reset {
 				background-color: red;
 				&:hover {
@@ -184,7 +187,7 @@ form {
 			}
 		}
 		&[type=file] {
-			margin: -.5em auto 0 auto;
+			// margin: -.5em auto 0 auto;
 			overflow: hidden;
 			margin-bottom: 1em;
 		}
@@ -221,7 +224,7 @@ form {
     position: relative;
     overflow: hidden;
 	line-height: 2em;
-    max-width: 60em;
+    max-width: 40em;
     padding: 0.4em 0.7em 0.5em 3.5em !important;
     input[type=checkbox] {
 		margin-top: 1em;
@@ -275,6 +278,15 @@ form {
 	width: 50em;
 	margin: 0 auto;
 	border: none;
+}
+#logoutform {
+	width: 7em;
+	border: none;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	top: 0;
+	right: 0;
 }
 #mainmenu {
 	position: fixed;

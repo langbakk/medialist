@@ -48,7 +48,7 @@ $(document).ready(function() {
 		$('.video > a > img').css({'height':elementHeight});
 
 	})
-
+	$('#upload > input[type=file],#upload > input[type=submit]').hide();
     $('.pictures > a > img').load(function() {
         $(this).each(function() {
         var getImgDimension = $(this).position();    

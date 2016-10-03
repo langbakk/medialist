@@ -27,7 +27,11 @@ echo '</head>
 	<header>
 		<h1>'.__MAINHEADING.'</h1>
 	</header>
-	'.displayMenu($baseurl).'
+	'.displayMenu($baseurl);
+	if ($isloggedin && $use_login == true) {
+		echo $display->getLogin();
+	}
+echo '
 	<div id="main">';
 	if (!$isloggedin && $use_login == true && (empty($current_page) || $current_page == 'index' || $current_page == 'frontpage' || $current_page == 'login')) {
 		echo $display->getLogin();
@@ -37,11 +41,7 @@ echo '</head>
 echo '
 	</div>
 	<div id="updateinfo" class="messagebox"></div>
-	<footer>';
-	if ($isloggedin && $use_login == true) {
-		echo $display->getLogin();
-	}
-echo '
+	<footer>
 	</footer>
 </body>
 </html>';
