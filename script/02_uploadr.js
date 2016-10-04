@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	$(".deletefile").click(function(e) {
+	$('.deletefile').click(function(e) {
 		$this = $(this);
 		e.preventDefault();
 		var userName = '';
@@ -19,6 +19,20 @@ $(document).ready(function() {
                 }
             }
         });
+	})
+	$('.make_public').click(function(e) {
+		$this = $(this);
+		e.preventDefault();
+		var userName = '';
+		if (GetURLParameter('user')) {
+			userName = GetURLParameter('user');
+		}
+		var thisListID = $(this).parents('ul').prop('id');
+		var thisFile = $(this).parents('li').find('a:first').attr('href').split('/').reverse();
+		$.post('create_public_link.php',{filename:thisFile[1]+'/'+thisFile[0],username:userName}, function(data) {
+			data = $.parseJSON(data);
+			showUpdateInfo(''+data.content+'',''+data.infotype+'');
+		})
 	})
 	$("input[type=file]").on('change',function() {
 		var thisContent = $(this).val();

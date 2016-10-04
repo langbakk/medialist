@@ -209,6 +209,38 @@ error_reporting(E_ALL); // this should be commented out in production environmen
 		        }
 		}
 
+		function foldersize($path) {
+			$total_size = 0;
+			$files = scandir($path);
+			$cleanPath = rtrim($path, '/'). '/';
+
+			foreach($files as $t) {
+				if ($t <> '.' && $t <> '..') {
+					$currentFile = $cleanPath . $t;
+					if (is_dir($currentFile)) {
+						$total_size += foldersize($currentFile);
+						// $total_size += $size;
+					} else {
+						$total_size += filesize($currentFile);
+						// $total_size += $size;
+					}
+				}  	 
+			}
+			return $total_size;
+		}
+
+		function format_size($size) {
+			$units = Config::read('filesize_units');			
+			$mod = 1024;
+			for ($i = 0; $size > $mod; $i++) {
+				$size /= $mod;
+			}
+			$endIndex = strpos($size, '.')+3;
+			return substr( $size, 0, $endIndex).' '.$units[$i];
+		}
+
+
+
 
 
 ?>
