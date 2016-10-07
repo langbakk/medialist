@@ -55,7 +55,7 @@ $isloggedin = isset($_SESSION['loggedin']) ? $_SESSION['loggedin'] : false;
 $show_quotes = true;
 $use_db = false;
 $filesize_units = explode(' ', 'B KB MB GB TB PB');
-$total_filesize_limit = 5368709120; // 5 GB
+$total_filesize_limit = 536870912; //0; 512MB //GB
 // Session-control
 // The inactive variable controls how many seconds an active session lasts - if you want another value, replace this with the amount. Value in seconds Take note to change the value in the persdb.js file as well - the value for count
 $inactive = '600';

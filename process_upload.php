@@ -52,46 +52,50 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 				for ($i = 0; $i <= $totalentries; $i++) {
 					$allowed .= (($i == $totalentries) ? $allowed_extensions[$i] : $allowed_extensions[$i].', ');
 				}
-				if (in_array($_FILES['file']['type'], allowedMimeTypes(''))) {
-					if (in_array($_FILES['file']['type'], allowedMimeTypes('audio'))) {
-						$folder = 'music';
-					} elseif (in_array($_FILES['file']['type'], allowedMimeTypes('image'))) {
-						$folder = 'pictures';
-					} elseif (in_array($_FILES['file']['type'], allowedMimeTypes('video'))) {
-						$folder = 'video';
-					} elseif (in_array($_FILES['file']['type'], allowedMimeTypes('application'))) {
-						$folder = 'documents';
-					} elseif (in_array($_FILES['file']['type'], allowedMimeTypes('text'))) {
-						$folder = 'documents';
-					}
-					$filename = $_FILES['file']['name'];
-					if (file_exists(''.$userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']))) {
-						if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-							$returnmessage = json_encode(["content"=>"$filename already exist","infotype"=>"error"]);
-						}						
+				if (($_FILES['file']['size'] + foldersize($userpath.$username) < Config::read('total_filesize_limit'))) {
+					if (in_array($_FILES['file']['type'], allowedMimeTypes(''))) {
+						if (in_array($_FILES['file']['type'], allowedMimeTypes('audio'))) {
+							$folder = 'music';
+						} elseif (in_array($_FILES['file']['type'], allowedMimeTypes('image'))) {
+							$folder = 'pictures';
+						} elseif (in_array($_FILES['file']['type'], allowedMimeTypes('video'))) {
+							$folder = 'video';
+						} elseif (in_array($_FILES['file']['type'], allowedMimeTypes('application'))) {
+							$folder = 'documents';
+						} elseif (in_array($_FILES['file']['type'], allowedMimeTypes('text'))) {
+							$folder = 'documents';
+						}
+						$filename = $_FILES['file']['name'];
+						if (file_exists(''.$userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']))) {
+							if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+								$returnmessage = json_encode(["content"=>"$filename already exist","infotype"=>"error"]);
+							}						
+						} else {
+							move_uploaded_file($_FILES['file']['tmp_name'],''.$userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']));
+							if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+								$returnmessage = json_encode(["content"=>"You uploaded $filename","infotype"=>"success"]);
+							}
+							$movedfile = pathinfo($_FILES['file']['name']);
+							if (in_array(strtolower($movedfile['extension']),allowedExtensions('')) && in_array($_FILES['file']['type'],allowedMimeTypes('image'))) {
+								// createThumbs($userpath.$username.$folder.'/',onlyValidChar($_FILES['file']['name']),200);
+								generate_image_thumbnail($userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']),$userpath.$username.$folder.'/thumbs/'.onlyValidChar($_FILES['file']['name']));
+							}
+							if (in_array(strtolower($movedfile['extension']),allowedExtensions('')) && in_array($_FILES['file']['type'],allowedMimeTypes('video'))) {
+								$video = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']);
+								$thumbnail = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/thumbs/'.onlyValidChar($_FILES['file']['name']).'.jpg';
+	    						$get_frames = shell_exec("/usr/local/bin/ffmpeg -nostats -i $video -vcodec copy -f rawvideo -y /dev/null 2>&1 | grep frame | awk '{split($0,a,\"fps\")}END{print a[1]}' | sed 's/.*= *//'");
+	    						$stills_number = floor($get_frames / 200);
+	    						$output = shell_exec("/usr/local/bin/ffmpeg -y -i $video -frames 1 -q:v 1 -vf 'select=not(mod(n\,$stills_number)),scale=-1:120,tile=100x1' $thumbnail");
+							}
+							updateCurrentUploads('current_uploads.php',$_FILES['file']['name']);
+						}
 					} else {
-						move_uploaded_file($_FILES['file']['tmp_name'],''.$userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']));
-						if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-							$returnmessage = json_encode(["content"=>"You uploaded $filename","infotype"=>"success"]);
+						if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {			
+							$returnmessage = json_encode(["content"=>"The filetype you tried to upload is not allowed","infotype"=>"error"]);
 						}
-						$movedfile = pathinfo($_FILES['file']['name']);
-						if (in_array(strtolower($movedfile['extension']),allowedExtensions('')) && in_array($_FILES['file']['type'],allowedMimeTypes('image'))) {
-							// createThumbs($userpath.$username.$folder.'/',onlyValidChar($_FILES['file']['name']),200);
-							generate_image_thumbnail($userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']),$userpath.$username.$folder.'/thumbs/'.onlyValidChar($_FILES['file']['name']));
-						}
-						if (in_array(strtolower($movedfile['extension']),allowedExtensions('')) && in_array($_FILES['file']['type'],allowedMimeTypes('video'))) {
-							$video = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']);
-							$thumbnail = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/thumbs/'.onlyValidChar($_FILES['file']['name']).'.jpg';
-    						$get_frames = shell_exec("/usr/local/bin/ffmpeg -nostats -i $video -vcodec copy -f rawvideo -y /dev/null 2>&1 | grep frame | awk '{split($0,a,\"fps\")}END{print a[1]}' | sed 's/.*= *//'");
-    						$stills_number = floor($get_frames / 200);
-    						$output = shell_exec("/usr/local/bin/ffmpeg -y -i $video -frames 1 -q:v 1 -vf 'select=not(mod(n\,$stills_number)),scale=-1:120,tile=100x1' $thumbnail");
-						}
-						updateCurrentUploads('current_uploads.php',$_FILES['file']['name']);
 					}
 				} else {
-					if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {			
-						$returnmessage = json_encode(["content"=>"The filetype you tried to upload is not allowed","infotype"=>"error"]);
-					}
+					$returnmessage = json_encode(["content"=>"The file will exceed your available diskspace. Delete some of the files already uploaded to make room","infotype"=>"error"]);
 				}
 			} elseif ($returnerror == true) {
 				if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {

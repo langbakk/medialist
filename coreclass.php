@@ -92,6 +92,24 @@ class Config {
     }
 }
 
+class MyRecursiveFilterIterator extends RecursiveFilterIterator {
+    public static $FILTERS = array(
+        '__MACOSX',
+        '.DS_Store',
+        '.gitignore',
+        '.htaccess',
+        'thumbs'
+    );
+
+    public function accept() {
+        return !in_array(
+            $this->current()->getFilename(),
+            self::$FILTERS,
+            true
+        );
+    }
+}
+
 class PageView {
     function __construct() {
         $this->page = !empty($_GET['page']);

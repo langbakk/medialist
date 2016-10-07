@@ -128,24 +128,20 @@ error_reporting(E_ALL); // this should be commented out in production environmen
   		function displayMenu($baseurl, $usedb = false) {
   			if ($usedb == false) {
   				$menuArray = ['index','gallery','upload','login','userprofile'];
-  				$main_menu = '<nav id="mainmenu">
-  								<ul>';
+  				$main_menu = '<ul id="mainmenu" class="flexlist">';
   				$allow_public = Config::read('allow_public');
   				$isloggedin = Config::read('isloggedin');
   					foreach ($menuArray as $key => $value) {
   						$menutext = pathinfo($value);
-  							$useurl = $menutext['basename'];
+  						$useurl = $menutext['basename'];
+  						$page = (isset($_GET['page'])) ? $_GET['page'] : 'index'; 
   						if ($allow_public == true && !$isloggedin && $key != 4) {
-  						// $useurl = ($menutext['basename'] == 'index') ? $baseurl.$menutext['basename'] : $baseurl_page.$menutext['filename'];
-
-  						$main_menu .= '<li><a href="'.$useurl.'">'.ucfirst((($menutext['filename'] == 'index') ? 'home' : $menutext['filename'])).'</a></li>';
+  							$main_menu .= '<li '.(($page == strtolower($menutext['filename'])) ? 'class="active"' : '').'><a href="'.$useurl.'">'.ucfirst((($menutext['filename'] == 'index') ? 'home' : $menutext['filename'])).'</a></li>';
   						} elseif ($isloggedin && $key != 3) {
-	  						// $useurl = ($menutext['basename'] == 'index') ? $baseurl.$menutext['basename'] : $baseurl_page.$menutext['filename'];
-	  						$main_menu .= '<li><a href="'.$useurl.'">'.ucfirst((($menutext['filename'] == 'index') ? 'home' : $menutext['filename'])).'</a></li>';  							
+	  						$main_menu .= '<li '.(($page == strtolower($menutext['filename'])) ? 'class="active"' : '').'><a href="'.$useurl.'">'.ucfirst((($menutext['filename'] == 'index') ? 'home' : $menutext['filename'])).'</a></li>';
   						}
   					}
-  				$main_menu .= '</ul>
-  							</nav>';
+  				$main_menu .= '</ul>';
   			}
   			return $main_menu;
   		}
@@ -215,14 +211,12 @@ error_reporting(E_ALL); // this should be commented out in production environmen
 			$cleanPath = rtrim($path, '/'). '/';
 
 			foreach($files as $t) {
-				if ($t <> '.' && $t <> '..') {
+				if ($t <> '.' && $t <> '..' && $t <> '.DS_Store' && $t <> '.gitignore') {
 					$currentFile = $cleanPath . $t;
 					if (is_dir($currentFile)) {
 						$total_size += foldersize($currentFile);
-						// $total_size += $size;
 					} else {
 						$total_size += filesize($currentFile);
-						// $total_size += $size;
 					}
 				}  	 
 			}
@@ -238,9 +232,4 @@ error_reporting(E_ALL); // this should be commented out in production environmen
 			$endIndex = strpos($size, '.')+3;
 			return substr( $size, 0, $endIndex).' '.$units[$i];
 		}
-
-
-
-
-
 ?>

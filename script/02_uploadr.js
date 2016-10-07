@@ -70,6 +70,19 @@ $(document).ready(function() {
         })
         
     })
+    $('#showhidefilelist').click(function() {
+    	$(this).val(function(i, val){
+          $('[id^=filelist_]').toggleClass('hidden');
+          return val === "Show filelist" ? "Hide filelist" : "Show filelist";
+      })
+    })
+    $('[id^=filelist_] li').each(function() {
+    	if ($(this).hasClass('heading')) {
+    		if ($(this).next().hasClass('heading')) {
+    			$(this).remove();
+    		}
+    	}
+    })
 });
 function showUpdateInfo(data,infotype) {
     $('#updateinfo').removeClass('error success info warning');
@@ -109,9 +122,23 @@ function GetURLParameter(sParam) {
 
 
 Dropzone.options.upload = {
-  paramName: "file", // The name that will be used to transfer the file
-  maxFilesize: 500, // MB
-  dictDefaultMessage: 'Drop files here, or click, to upload',
+	paramName: 'file', // The name that will be used to transfer the file
+	maxFilesize: 500, // MB
+	dictDefaultMessage: 'Drop files here, or click, to upload',
+	init: function () {
+		this.on('uploadprogress', function(file, progress, response) {
+			if (progress == 100) {
+				this.on('success', function(file, response) {
+					var data = $.parseJSON(response);
+					showUpdateInfo(''+data.content+'',''+data.infotype+'');
+				});
+			};
+		});
+	}
+// success: function(file, response) {
+// var data = $.parseJSON(response);
+// showUpdateInfo(''+data.content+'',''+data.infotype+'');
+// }
   // init: function() {
   //   this.on("addedfile", function(file) {
   //   	if (this.files.length) {
@@ -124,13 +151,13 @@ Dropzone.options.upload = {
   // 		}
   // 	});
   // },
-  success: function(file, response) {
-  	var data = $.parseJSON(response);
-  	if (file.name+' already exist' == data.content) {
-  		if ($('.dz-filename').text() == file.name) {
-  			$('.dz-filename').parents('.dz-preview').remove();
-  		}
-   	}
-  	showUpdateInfo(''+data.content+'',''+data.infotype+'');
-  }
+  // success: function(file, response) {
+  	// var data = $.parseJSON(response);
+  	// if (file.name+' already exist' == data.content) {
+  	// 	if ($('.dz-filename').text() == file.name) {
+  	// 		$('.dz-filename').parents('.dz-preview').remove();
+  	// 	}
+   // 	}
+  	// showUpdateInfo(''+data.content+'',''+data.infotype+'');
+  // }
 };
