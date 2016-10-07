@@ -11,6 +11,10 @@ require_once('conf/config.php');
 			$checkthumbs[1] = ($checkthumbs[0] == 'video') ? $checkthumbs[1].'.jpg' : $checkthumbs[1];
 			$thumbs = ($checkthumbs[0] == 'pictures' || $checkthumbs[0] == 'video') ? unlink($userpath.$username.$checkthumbs[0].'/thumbs/'.$checkthumbs[1]) : false;
 			unlink($userpath.$username.$deletefile);
+			if (is_link($userpath.'public/'.$deletefile)) {
+				unlink($userpath.'public/'.$deletefile);
+				unlink($userpath.'public/'.$checkthumbs[0].'/thumbs/'.$checkthumbs[1]);
+			}
 			if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 				echo json_encode(["content"=>"File deleted","infotype"=>"success"]);
 			} else {

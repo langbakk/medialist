@@ -12,8 +12,12 @@ $(document).ready(function() {
             data = $.parseJSON(data);
             showUpdateInfo(''+data.content+'',''+data.infotype+'');
             $this.parents('li').remove();
+            $('.pictures > a > img').each(function() {
+    			var getImgDimension = $(this).position();    
+    			$(this).parent('a').next('span').css({'width':'4em','position':'absolute','left':getImgDimension.left});  
+        	}) 
             if (($('#'+thisListID+' li').length) === 0) {
-                $('#'+thisListID).parent('.container').remove();
+                $('#'+thisListID).parent('.container').remove();       
                 if (($('.container').length) == 1 && $('.container').hasClass('hidden')) {
                     $('.container').removeClass('hidden').addClass('visible');
                 }
@@ -62,20 +66,23 @@ $(document).ready(function() {
 		$('.video > a > img').css({'height':elementHeight});
 
 	})
+	
 	$('#upload > input[type=file],#upload > input[type=submit]').hide();
+    
     $('.pictures > a > img').load(function() {
         $(this).each(function() {
         var getImgDimension = $(this).position();    
         $(this).parent('a').next('span').css({'width':'4em','position':'absolute','left':getImgDimension.left});  
-        })
-        
-    })
+        })        
+    })    
+
     $('#showhidefilelist').click(function() {
     	$(this).val(function(i, val){
           $('[id^=filelist_]').toggleClass('hidden');
           return val === "Show filelist" ? "Hide filelist" : "Show filelist";
       })
     })
+    
     $('[id^=filelist_] li').each(function() {
     	if ($(this).hasClass('heading')) {
     		if ($(this).next().hasClass('heading')) {
