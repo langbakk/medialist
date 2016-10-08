@@ -221,6 +221,13 @@ li span a {
 	display: inline-block;
 	padding: .1em .3em 0 .3em;
 }
+li .hovername {
+	top: initial;
+	bottom: .4em;
+	width: 100%;
+	display: block;
+	position: absolute;
+}
 li.pictures span,li.video span {
 	display: none;
 }

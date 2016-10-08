@@ -1,12 +1,11 @@
 <?php
 if (!session_id()) { session_start(); };
-$returnmessage = [];
+$returnmessage = json_encode([]);
 require_once('conf/config.php');
 	$deletefile = (isset($_POST['filename']) ? $_POST['filename'] : '');
+	$username = ((isset($_POST['username']) && !empty($_POST['username'])) ? $_POST['username'].'/' : $username);
 	if (file_exists($userpath.$username.$deletefile)) {
 		if (!empty($deletefile)) {
-			$username = ((isset($_POST['username']) && !empty($_POST['username'])) ? $_POST['username'].'/' : $username);
-
 			$checkthumbs = explode('/',$deletefile);
 			$checkthumbs[1] = ($checkthumbs[0] == 'video') ? $checkthumbs[1].'.jpg' : $checkthumbs[1];
 			$thumbs = ($checkthumbs[0] == 'pictures' || $checkthumbs[0] == 'video') ? unlink($userpath.$username.$checkthumbs[0].'/thumbs/'.$checkthumbs[1]) : false;
@@ -16,12 +15,15 @@ require_once('conf/config.php');
 				unlink($userpath.'public/'.$checkthumbs[0].'/thumbs/'.$checkthumbs[1]);
 			}
 			if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-				echo json_encode(["content"=>"File deleted","infotype"=>"success"]);
+				$returnmessage = json_encode(["content"=>"File deleted","infotype"=>"success"]);
 			} else {
 				header('location: gallery');
 			}
 		}
+	} else if (is_link($userpath.$username.$deletefile)) {
+		$returnmessage = json_encode(["content"=>"it's a link","infotype"=>"info"]);
 	}
+	echo $returnmessage;
 ?>
 
 
