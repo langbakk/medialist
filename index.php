@@ -26,8 +26,9 @@ echo '</head>
 <body>
 	<header>
 		<h1>'.__MAINHEADING.'</h1>
+		'.displayMenu($baseurl).'
 	</header>
-	'.displayMenu($baseurl);
+	<div id="top">';
 	if ($isloggedin && $use_login == true) {
 		echo $display->getLogin();
 	}
@@ -41,6 +42,7 @@ echo '
 echo '
 	</div>
 	<div id="updateinfo" class="messagebox"></div>
+	</div>
 	<footer>
 	</footer>
 </body>
