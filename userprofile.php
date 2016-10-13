@@ -30,7 +30,7 @@ echo '<div class="container">
 		// $get_dirname = '';
 		foreach ($objects as $file) {
 			if ($file->isDir()) {
-				echo '<li class="heading">'.$file->getFileName().'</li>';
+				echo '<li class="heading">'.ucfirst($file->getFileName()).'</li>';
 			} elseif (!$file->isDir()) {
 				echo '<li>'.$file->getFileName().'</li>';
 			}

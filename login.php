@@ -16,26 +16,24 @@ if (isset($_POST['submit_login']) && $username != '' && $password != '') {
 					mkdir($userpath.$username, 0744, true);
 					// file_put_contents($userpath.$username.'/index.html','<p>Placeholder</p>');					
 				}
-				$directories = array(1 => '/pictures', 2 => '/pictures/thumbs', 3 => '/video', 4 => '/video/thumbs', 5 => '/music', 6 => '/documents');
+				$directories = [1 => '/pictures', 2 => '/pictures/thumbs', 3 => '/video', 4 => '/video/thumbs', 5 => '/music', 6 => '/documents'];
 				if (is_dir($userpath.$username)) {
+					$foldercreated = false;
 					foreach ($directories as $key => $dir) {
 						if (!is_dir($userpath.$username.$dir)) {
 							mkdir($userpath.$username.$dir, 0744, true);
 							file_put_contents($userpath.$username.$dir.'/.gitignore','# Ignore everything in this directory'."\r\n".'*'."\r\n".'# Except this file'."\r\n".'!.gitignore');
+							$foldercreated = true;
 						}
 					}
 					$folderexist = true;
-					$foldercreated = true;
-					echo '<p class="messagebox success">User-folders created!</p>';
-				} else {
-					$folderexist = true;
-					$foldercreated = false;
-					echo '<p class="messagebox info">User-folder exists</p>';
-				}
+				} 
 				if ($folderexist == true && $foldercreated == true) {
-					header('refresh: 3');
+					echo '<p class="messagebox success">User-folders created!</p>';
+					header('refresh: 2; url=upload');
 				} elseif ($folderexist == true && $foldercreated == false) {
-					header('refresh: 3');
+					echo '<p class="messagebox info">User-folders already exists</p>';
+					header('refresh: 2; url=upload');
 				} else {
 					header('refresh: 0');
 				}

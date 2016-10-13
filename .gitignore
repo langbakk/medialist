@@ -1,5 +1,4 @@
 .DS_Store
-images/*
 setup_/*
 *2.php
 new_*.php
@@ -8,12 +7,3 @@ __*.*
 *_test.php
 css/.sass-cache/16dc101967c8e49cbe457774a3ec5af30ce5345f/**
 css/new_*.*
-video/*.mpg
-video/*.avi
-video/*.mpeg
-video/*.wmv
-pictures/*.jpg
-pictures/*.jpeg
-pictures/*.gif
-pictures/*.png
-music/*.mp3

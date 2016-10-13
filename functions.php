@@ -156,7 +156,7 @@ error_reporting(E_ALL); // this should be commented out in production environmen
 		    $filename = htmlentities($filename, ENT_QUOTES, 'UTF-8');
 		    $filename = preg_replace('~&([a-z]{1,2})(acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i', '$1', $filename);
 		    $filename = html_entity_decode($filename, ENT_QUOTES, 'UTF-8');
-		    $filename = preg_replace(array('~[^0-9a-z.]~i', '~[ -]+~'), ' ', $filename);
+		    $filename = preg_replace(['~[^0-9a-z.]~i', '~[ -]+~'], ' ', $filename);
 		    $filename = str_replace(' ','_',$filename);
 		    return trim($filename, ' -');
 		}

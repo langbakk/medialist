@@ -26,13 +26,12 @@ echo '</head>
 <body>
 	<header>
 		<h1>'.__MAINHEADING.'</h1>
-		'.displayMenu($baseurl).'
-	</header>
-	<div id="top">';
-	if ($isloggedin && $use_login == true) {
-		echo $display->getLogin();
-	}
-echo '
+		'.displayMenu($baseurl);
+		if ($isloggedin && $use_login == true) {
+			echo $display->getLogin();
+		}
+echo '</header>
+	<div id="top">
 	<div id="main">';
 	if (!$isloggedin && $use_login == true && (empty($current_page) || $current_page == 'index' || $current_page == 'frontpage' || $current_page == 'login')) {
 		echo $display->getLogin();

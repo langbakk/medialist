@@ -2,7 +2,3 @@
 *
 # Except this file
 !.gitignore
-!pictures/*
-!video/*
-!documents/*
-!music/*

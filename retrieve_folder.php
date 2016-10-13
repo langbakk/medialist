@@ -13,7 +13,7 @@ if (!empty($currentcontent)) {
 		if (in_array($ext,allowedExtensions('audio'))) {
 			$folder = $userpath.$username.'/music/';
 			$getcontent = opendir($folder);
-			$foldervalue = array();
+			$foldervalue = [];
 			while (false !== ($file = readdir($getcontent))) {
 				if (is_dir($folder.$file) && $file != '.' && $file != '..') {
 					$foldervalue[] = $file;
@@ -22,7 +22,7 @@ if (!empty($currentcontent)) {
 		} elseif (in_array($ext,allowedExtensions('video'))) {
 			$folder = $userpath.$username.'/video/';
 			$getcontent = opendir($folder);
-			$foldervalue = array();
+			$foldervalue = [];
 			while (false !== ($file = readdir($getcontent))) {
 				if (is_dir($folder.$file) && $file != '.' && $file != '..') {
 					$foldervalue[] = $file;
@@ -31,7 +31,7 @@ if (!empty($currentcontent)) {
 		} elseif (in_array($ext,allowedExtensions('image'))) {
 			$folder = $userpath.$username.'/images/';
 			$getcontent = opendir($folder);
-			$foldervalue = array();
+			$foldervalue = [];
 			while (false !== ($file = readdir($getcontent))) {
 				if (is_dir($folder.$file) && $file != '.' && $file != '..') {
 					$foldervalue[] = $file;
@@ -40,7 +40,7 @@ if (!empty($currentcontent)) {
 		} elseif (in_array($ext,allowedExtensions('document'))) {
 			$folder = $userpath.$username.'/documents/';
 			$getcontent = opendir($folder);
-			$foldervalue = array();
+			$foldervalue = [];
 			while (false !== ($file = readdir($getcontent))) {
 				if (is_dir($folder.$file) && $file != '.' && $file != '..') {
 					$foldervalue[] = $file;

@@ -93,13 +93,13 @@ class Config {
 }
 
 class MyRecursiveFilterIterator extends RecursiveFilterIterator {
-    public static $FILTERS = array(
+    public static $FILTERS = [
         '__MACOSX',
         '.DS_Store',
         '.gitignore',
         '.htaccess',
         'thumbs'
-    );
+    ];
 
     public function accept() {
         return !in_array(
@@ -212,4 +212,5 @@ $lines_in_configfile = (file_exists($_SERVER['DOCUMENT_ROOT'].'/conf/config.php'
             }
         }
     }
+
 ?>

@@ -212,7 +212,7 @@ h1,h2,h3,h4 {
 	// min-height: 100%;
 	// height: 100%;
 	// margin-top: 5em;
-	padding: 6em 0;
+	padding: 5em 0 0 0;
 	// background: $main-dark-transparent;
 	h3 {
 		display: none;
@@ -352,16 +352,16 @@ input {
 input[type=submit],input[type=button],input[type=file] {
 	width: auto;
 	padding: .4em .8em;
-	border: none;
+	border: .15em solid $main-dark;
 	border-radius: .3em;
 	font-size: 1em;
-	color: #444;
-	margin: .5em;
-	background-color: #a7cfdf; 
+	color: $main-dark;
+	// margin: .5em;
+	background-color: $main-light;
 	cursor: pointer;
 	line-height: 1em;
 	&:hover {
-		background-color: #82bbd1; 
+		background-color: $hilight-contrast;
 	}
 }
 input[type=file] {
@@ -392,7 +392,7 @@ label {
 	// margin-top: 1em;
 	// min-height: 10em;
 	overflow: hidden;
-	margin-top: 7.5em;
+	margin-top: 2em;
 	// min-height: 100%;
 }
 //message-boxes
@@ -462,7 +462,7 @@ label {
 #logoutform {
 	width: 7em;
 	border: none;
-	margin: 0;
+	margin: 1.5em 0.5em 0.5em 0.5em;
 	padding: 0;
 	position: fixed;
 	top: 0;
@@ -753,7 +753,7 @@ label {
 }
 .dropzone .dz-message {
 	text-align: center;
-	margin: 15% 0 0 0; 
+	margin: 20% 0 0 0; 
 }
 .dropzone .dz-preview {
 	position: relative;
