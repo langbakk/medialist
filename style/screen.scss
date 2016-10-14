@@ -162,6 +162,13 @@ a {
 	color: $main-dark-transparent;
 }
 
+.usercontrols a img {
+	height: 1em;
+}
+.usercontrols .make_public {
+	padding-bottom: 0.2em;
+	text-decoration: none;
+}
 html,body {
 	color: $main-light;
 	// background: black;
@@ -251,8 +258,8 @@ li > img {
 li span {
 	display: block;
 	position: absolute;
-	top: .1em;
-	right: .1em;
+	top: 0;
+	right: 0;
 }
 li span a {
 	display: inline-block;
@@ -265,13 +272,26 @@ li .hovername {
 	display: block;
 	position: absolute;
 }
-li.pictures span,li.video span {
+[id$='_list'] li span {
 	display: none;
 }
-li.pictures:hover span,li.video:hover span {
+[id$='_list'] li:hover span {
 	display: block;
 	z-index: 1000;
 }
+#documents_list li:hover {
+	background: #666;
+}
+#documents_list form {
+	display: inline-block;
+}
+// li.pictures span,li.video span {
+// 	display: none;
+// }
+// li.pictures:hover span,li.video:hover span {
+// 	display: block;
+// 	z-index: 1000;
+// }
 li.pictures {
 	margin: auto 0.5em;
 }
@@ -321,7 +341,9 @@ li {
 .flexlist {
 	@include flex_list;
 }
-
+#documents_list li {
+	line-height: 2em;
+}
 p {
 	text-align: center;
 	// color: #0066c6;
@@ -339,7 +361,7 @@ input {
 	margin: 0 auto;
 	display: block;
 	border: .1em solid;
-	&:not([type=submit]),&:not([type=file]) {
+	&:not([type=submit]),&:not([type=file]),&:not([type=checkbox]) {
 		background: #000;
 		color: #fff;
 		width: 20em;
@@ -379,6 +401,10 @@ input[type=file] {
 			background-color: #82bbd1; 
 		}
 	}
+}
+input[type=checkbox] {
+	width: initial;
+	line-height: initial;
 }
 label {
 	float: left;
