@@ -356,6 +356,10 @@ form {
 	// border-radius: $border-radius-double;
 	// margin-bottom: 2em;
 }
+#user_registration_form, #loginform {
+	max-width: 20em;
+	margin-top: 2em;
+}
 input {
 	text-align: center;
 	margin: 0 auto;
@@ -408,7 +412,8 @@ input[type=checkbox] {
 }
 label {
 	float: left;
-	color: #00a0c6;
+	color: $main-light;
+	line-height: 2.5em;
 }
 #upload {
 	// border: 0.3em $header-background dashed;

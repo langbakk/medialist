@@ -49,7 +49,7 @@ if (isset($_POST['submit_login']) && $username != '' && $password != '') {
 		session_unset();
 		header('refresh: 0');
 }
-
+echo '<div class="container">';
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == false) || !isset($_SESSION['loggedin'])) {
 		if ($allow_public == true && !$isloggedin) {
 		echo '<p class="messagebox info visible">You can upload files and have them show in the public gallery without logging in, but you will not be able to set uploads as private, nor make your own albums</p>';
@@ -60,4 +60,5 @@ echo '<form id="loginform" method="post" action="login">
 	<input type="submit" name="submit_login" value="Login">
 </form>';
 }
+echo '</div>';
 ?>
