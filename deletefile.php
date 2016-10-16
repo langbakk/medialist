@@ -14,7 +14,9 @@ require_once('conf/config.php');
 				unlink($userpath.'public/'.$deletefile);
 				unlink($userpath.'public/'.$checkthumbs[0].'/thumbs/'.$checkthumbs[1]);
 			}
-			if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+			if((isset($_POST['deletepublic']) == true) && !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+				$returnmessage = json_encode(["content"=>"File removed from public","infotype"=>"success"]);
+			} elseif(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 				$returnmessage = json_encode(["content"=>"File deleted","infotype"=>"success"]);
 			} else {
 				header('location: gallery');

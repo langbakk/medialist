@@ -41,7 +41,7 @@ $(document).ready(function() {
 				$this.prop('checked',true).val(1);
 			})	
 		} else {
-			$.post('deletefile.php', { filename:thisFile[2]+'/'+userNameLink+'_'+thisFile[3],username:'public' }, function(data) { 
+			$.post('deletefile.php', { deletepublic:true,filename:thisFile[2]+'/'+userNameLink+'__'+thisFile[3],username:'public' }, function(data) {
             data = $.parseJSON(data);
             showUpdateInfo(''+data.content+'',''+data.infotype+'');
             $this.prop('checked',false).val(0);
@@ -88,6 +88,14 @@ $(document).ready(function() {
 
 	})
 	
+	if (GetURLParameter() == '/gallery') {
+		var totalby2 = (Math.floor($('#pictures_list li').length / 2));
+		var rem = (Math.floor($('#pictures_list li').length % 2));
+		var endResult = ((totalby2 + rem) * 10) + 10;
+		var endResult = (endResult < 70) ? endResult : 70;
+		$('.container').css(({'max-width':endResult+'em'}));
+	}
+
 	$('#upload > input[type=file],#upload > input[type=submit]').hide();
     
     $('.pictures > a > img').load(function() {

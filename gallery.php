@@ -1,8 +1,6 @@
 <?php
 
-if (isset($_GET['user'])) {
-	$username = $_GET['user'].'/';
-}
+$username = (isset($_GET['user'])) ? $_GET['user'].'/' : $username;
 
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_public == true) {
 	$allempty = 0;
@@ -37,9 +35,11 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 							$shared_content = array_reverse(explode('/',readlink($_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/'.$val)))[2];
 						}
 						if ($isloggedin) {
-							$usercontrols = '<span class="usercontrols"><a href="'.$baseurl.'sharefile.php"><img src="'.$webgfxpath.'share.png" alt="share file"></a><a class="deletefile" href="'.$baseurl.'deletefile.php"><img src="'.$webgfxpath.'delete_icon.png" alt="delete file"></a><form method="post" action="create_public_link.php"><input type="checkbox" class="make_public" title="Make public" '.((is_link($userpath.'public/'.$folder.'/thumbs/'.explode('/',$username)[0].'_'.$val) ? 'checked' : '')).' value="'.((is_link($userpath.'public/'.$folder.'/thumbs/'.explode('/',$username)[0].'_'.$val) ? 1 : 0)).'"></form></span>';
+							$usercontrols = '<span class="usercontrols"><a href="'.$baseurl.'sharefile.php"><img src="'.$webgfxpath.'share.png" alt="share file"></a><a class="deletefile" href="'.$baseurl.'deletefile.php"><img src="'.$webgfxpath.'delete_icon.png" alt="delete file"></a>'.((isset($_GET['user']) != 'public') ? '<form method="post" action="create_public_link.php"><input type="checkbox" class="make_public" title="Make public" '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 'checked' : '')).' value="'.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 1 : 0)).'"></form>':'').'</span>';
 						}
-						$linkdisplay = (($folder == 'pictures') ? '<a href="'.$userpath.$username.$folder.'/'.$val.'"><img src="'.$userpath.$username.$folder.'/thumbs/'.$val.'"></a>'.$usercontrols.'' : (($folder == 'video') ? '<div class="tech-slideshow"><a href="'.$userpath.$username.$folder.'/'.$val.'"><div class="mover-1" style="background: url('.$userpath.$username.$folder.'/thumbs/'.$val.'.jpg);"></div><div class="mover-2" style="background: url('.$userpath.$username.$folder.'/thumbs/'.$val.'.jpg);"></div></a>'.$usercontrols.'</div>' : '<a href="'.$userpath.$username.$folder.'/'.$val.'">'.urldecode(ucwords(removeExtension($val))).'</a>'.$usercontrols));
+						$document_name = ((strpos($val,'__') == true) ? explode('__',urldecode(ucwords(removeExtension($val)))) : urldecode(ucwords(removeExtension($val))));
+						$document_name = (is_array($document_name) ? '(Uploaded by '.$document_name[0].') '.$document_name[1] : $document_name);
+						$linkdisplay = (($folder == 'pictures') ? '<a href="'.$userpath.$username.$folder.'/'.$val.'"><img src="'.$userpath.$username.$folder.'/thumbs/'.$val.'"></a>'.$usercontrols.'' : (($folder == 'video') ? '<div class="tech-slideshow"><a href="'.$userpath.$username.$folder.'/'.$val.'"><div class="mover-1" style="background: url('.$userpath.$username.$folder.'/thumbs/'.$val.'.jpg);"></div><div class="mover-2" style="background: url('.$userpath.$username.$folder.'/thumbs/'.$val.'.jpg);"></div></a>'.$usercontrols.'</div>' : '<a href="'.$userpath.$username.$folder.'/'.$val.'">'.$document_name.'</a>'.$usercontrols));
 						$floatleft = (($folder == 'pictures' && !empty($shared_content)) ? 'class="pictures shared"' : (($folder == 'pictures' && empty($shared_folder)) ? 'class="pictures"' : (($folder == 'video') ? 'class="video"' : '')));
 						echo '<li '.$floatleft.'>'.$linkdisplay.'</li>';
 					}

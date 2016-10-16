@@ -110,6 +110,56 @@ class MyRecursiveFilterIterator extends RecursiveFilterIterator {
     }
 }
 
+
+class valueCrypt {
+    private static $instance;
+
+    private function __construct() {
+        $this->valueCrypt = '';
+    }
+
+    public static function vC_encrypt($value) {
+        $key = Config::read('unique_key');
+        $method = Config::read('method');
+        $iv = bin2hex(openssl_random_pseudo_bytes(8));
+        return [openssl_encrypt($value,$method,$key,0,$iv),$iv];
+    }
+
+    public static function vC_decrypt($value,$iv,$name = '',$id = '') {
+        $key = Config::read('unique_key');
+        $method = Config::read('method');
+        $returnvalue = openssl_decrypt($value,$method,$key,0,$iv);
+        if (!empty($returnvalue)) {
+            return $returnvalue;
+        } else {
+            logThis('yourprofile_nin',$name.' -- NIN not found, and not able to extract correct information -- UserID: '.$id);
+        }
+    }
+
+    public static function vC_pwHash($value,$db_value = '') {
+        $key = Config::read('unique_key');
+        $method = Config::read('method');
+        $salt = crypt($value, $key);
+        if (empty($db_value)) {
+            $password = crypt($value, $salt);   
+        } else {
+            $password = crypt($value,$db_value);
+        }
+        return $password;
+    }
+
+    public static function getInstance() {
+        if (!isset(self::$instance)) {
+            $object = __CLASS__;
+            self::$instance = new $object();
+        }
+        if (!empty(self::$error)) {
+            return self::$error;
+        }
+        return self::$instance;
+    } // end getInstance
+}
+
 class PageView {
     function __construct() {
         $this->page = !empty($_GET['page']);

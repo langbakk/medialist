@@ -6,9 +6,10 @@ if (isset($_POST['submit_login']) && $username != '' && $password != '') {
 	if ($use_db === false) {
 		$success = false;
 		for ($i = 0; $i < count($user_array); $i++) {
-			if (in_array($username,$user_array[$i]) && in_array($password,$user_array[$i])) {
+			$exploded_user_array = explode('//',$user_array[$i]);
+			if (($username == trim($exploded_user_array[0])) && (valueCrypt::vC_pwHash($password,trim($exploded_user_array[1])) === trim($exploded_user_array[1]))) {
 				$_SESSION['loggedin'] = true;
-				$_SESSION['username'] = $user_array[$i]['username'];
+				$_SESSION['username'] = trim($exploded_user_array[0]);
 				$success = true;
 				$folderexist = false;
 				$foldercreated = false;

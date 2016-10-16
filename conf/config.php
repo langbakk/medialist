@@ -37,7 +37,7 @@ $prefix = '';
 $dbprefix = $prefix.'_';
 
 // $_SESSION / user settings  --  DO NOT MODIFY THIS
-$user_array = [0=>['username'=>'admin','password'=>'1234']];
+$user_array = file_exists($_SERVER['DOCUMENT_ROOT'].'/conf/.userlist') ? file($_SERVER['DOCUMENT_ROOT'].'/conf/.userlist',FILE_IGNORE_NEW_LINES) : '';
 
 $userpath = 'users/';
 $username = (isset($_SESSION['loggedin'])) ? $_SESSION['username'].'/' : 'public/';
