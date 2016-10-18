@@ -130,27 +130,7 @@ $(document).ready(function() {
     $('.lightbox').click(function(e) {
     	e.preventDefault();
     	var linkName = $(this).attr('href').split('=')[1];
-    	// $.post('showfile.php',{filename:link[1]}, function(data) {
-    	// 	data = $.parseJSON(data);
-    	// 	console.log(data);
-    	// })
-    	// console.log(linkName);
-  //   	var params = {};
-  //   	params['filename'] = linkName;
-  //   	$.ajax({
-		//   url: "showfile.php",
-		//   type: "GET",
-		//   data: "filename="+linkName+"",
-		//  dataType: "binary",
-		//   processData: false,
-		//   success: function(result){
-		//   		// result = $.parseJSON(result);
-		//   		// var blob = new Blob(result,{type: 'image/jpeg'});
-		// 	  // console.log(blob);// do something with binary data
-		// 	  console.log(result);
-		//   }
-		// });
-		$.ajax({
+   		$.ajax({
           url: 'showfile.php',
           type: 'GET',
           dataType: 'binary',
@@ -158,31 +138,19 @@ $(document).ready(function() {
           responseType: 'blob',
           // headers:{'Content-Type':'image/jpeg','X-Requested-With':'XMLHttpRequest'},
           processData: false,
-          success: function(result){
-          	// console.log(result);
+          success: function(result) {
           	var image = new Image();
 			image.src = URL.createObjectURL(result);
-			// document.body.appendChild(image);
 			$('#lightbox_container').append(image).removeClass('hidden').addClass('visible');
 			image.onload = function() { var imageWidth = image.width/2; $('#lightbox_container').css({'margin-left':'-'+imageWidth+'px'}) };
 			$('#overlay').removeClass('hidden').addClass('visible');
           }
 		}); 
-		// var xhr = new XMLHttpRequest();
-		// xhr.onreadystatechange = function(){
-	 //    	if (this.readyState == 4 && this.status == 200){
-	 //        	//this.response is what you're looking for
-	 //        	// handler(this.response);
-	 //        	console.log(this.response, typeof this.response);
-	 //        	var img = document.getElementById('lightbox_image');
-	 //        	var url = window.URL || window.webkitURL;
-	 //        	img.src = url.createObjectURL(this.response);
-	 //        	console.log(img.src);
-	 //  		}
-		// }
-		// xhr.open('GET', 'http://uploadr.loc/users/admin/pictures/'+linkName+'');
-		// xhr.responseType = 'blob';
-		// xhr.send();
+    })
+
+    $('#overlay').on('click',function() {
+    	$('#overlay,#lightbox_container').addClass('hidden').removeClass('visible');
+    	$('#lightbox_container img').remove();
     })
 
     if ($('[id^=filelist_] li:last-of-type').hasClass('heading')) {
