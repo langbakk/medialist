@@ -41,6 +41,8 @@ echo '</header>
 echo '
 	</div>
 	<div id="updateinfo" class="messagebox"></div>
+	<div id="lightbox_container" class="hidden"><img id="lightbox_image"></div>
+	<div id="overlay" class="hidden"></div>
 	</div>
 	<footer>
 	</footer>

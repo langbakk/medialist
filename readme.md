@@ -8,6 +8,7 @@ This is a work in progress, there will be updates coming fairly often in the nex
 Installation:
 -------------
 * Download the repository (or clone it directly)
+* Make sure you're using **PHP > 5.3**, and that you have **mod_xsendfile activated on the server**
 * As soon as all the files are on your server, that's it - navigate to the folder where you copied the files, and start using it
 * You might want to change the user(s) in the [.userlist](conf/.userlist) (currently the admin has password admin1234, encrypted)
 * If you delete the one that is currently there without adding any new users, you will have no logins to the page - that doesn't matter, though, you can still use it as you want, but it might be useful to turn off the $use_login-setting in the [config.php](conf/config.php) (set it to false)

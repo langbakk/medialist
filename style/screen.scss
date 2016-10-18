@@ -1035,3 +1035,25 @@ label {
 // background: gray;
 // border-left: 2em solid $main-light;
 // }
+.center {
+	display: block;
+	margin: 0 auto;
+}
+#lightbox_container.visible {
+	// width: 60%;
+	margin: 0 auto;
+	position: fixed;
+	top: 10em;
+	left: 50%;
+	// margin-left: -30%;
+	z-index: 7000;
+}
+#overlay {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 5050;
+	background: rgba(0,0,0,.6);
+}

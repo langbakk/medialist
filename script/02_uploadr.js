@@ -59,6 +59,7 @@ $(document).ready(function() {
         });
 		}
 	})
+
 	$("input[type=file]").on('change',function() {
 		var thisContent = $(this).val();
 		if (thisContent != 'No file selected') {
@@ -76,6 +77,7 @@ $(document).ready(function() {
 			$('#createfolder').removeClass('hidden');
 		};
 	})
+	
 	$("#uploadreset").click(function() {
 		$("#file").val('');
 		$("#file").removeClass('active').addClass('inactive');
@@ -85,15 +87,16 @@ $(document).ready(function() {
 		equalHeight($('.video'));
 		var elementHeight = $('.video').height();
 		$('.video > a > img').css({'height':elementHeight});
-
 	})
 	
 	if (GetURLParameter() == '/gallery') {
-		var totalby2 = (Math.floor($('#pictures_list li').length / 2));
-		var rem = (Math.floor($('#pictures_list li').length % 2));
-		var endResult = ((totalby2 + rem) * 10) + 10;
-		var endResult = (endResult < 70) ? endResult : 70;
-		$('.container').css(({'max-width':endResult+'em'}));
+		if ($('.container > ul').length > 0) {
+			var totalby2 = (Math.floor($('#pictures_list li').length / 2));
+			var rem = (Math.floor($('#pictures_list li').length % 2));
+			var endResult = ((totalby2 + rem) * 10) + 10;
+			var endResult = (endResult < 70) ? endResult : 70;
+			$('.container').css(({'max-width':endResult+'em'}));
+		}
 	}
 
 	$('#upload > input[type=file],#upload > input[type=submit]').hide();
@@ -123,6 +126,65 @@ $(document).ready(function() {
     		}
     	}
     })
+
+    $('.lightbox').click(function(e) {
+    	e.preventDefault();
+    	var linkName = $(this).attr('href').split('=')[1];
+    	// $.post('showfile.php',{filename:link[1]}, function(data) {
+    	// 	data = $.parseJSON(data);
+    	// 	console.log(data);
+    	// })
+    	// console.log(linkName);
+  //   	var params = {};
+  //   	params['filename'] = linkName;
+  //   	$.ajax({
+		//   url: "showfile.php",
+		//   type: "GET",
+		//   data: "filename="+linkName+"",
+		//  dataType: "binary",
+		//   processData: false,
+		//   success: function(result){
+		//   		// result = $.parseJSON(result);
+		//   		// var blob = new Blob(result,{type: 'image/jpeg'});
+		// 	  // console.log(blob);// do something with binary data
+		// 	  console.log(result);
+		//   }
+		// });
+		$.ajax({
+          url: 'showfile.php',
+          type: 'GET',
+          dataType: 'binary',
+          data: 'file='+linkName+'',
+          responseType: 'blob',
+          // headers:{'Content-Type':'image/jpeg','X-Requested-With':'XMLHttpRequest'},
+          processData: false,
+          success: function(result){
+          	// console.log(result);
+          	var image = new Image();
+			image.src = URL.createObjectURL(result);
+			// document.body.appendChild(image);
+			$('#lightbox_container').append(image).removeClass('hidden').addClass('visible');
+			image.onload = function() { var imageWidth = image.width/2; $('#lightbox_container').css({'margin-left':'-'+imageWidth+'px'}) };
+			$('#overlay').removeClass('hidden').addClass('visible');
+          }
+		}); 
+		// var xhr = new XMLHttpRequest();
+		// xhr.onreadystatechange = function(){
+	 //    	if (this.readyState == 4 && this.status == 200){
+	 //        	//this.response is what you're looking for
+	 //        	// handler(this.response);
+	 //        	console.log(this.response, typeof this.response);
+	 //        	var img = document.getElementById('lightbox_image');
+	 //        	var url = window.URL || window.webkitURL;
+	 //        	img.src = url.createObjectURL(this.response);
+	 //        	console.log(img.src);
+	 //  		}
+		// }
+		// xhr.open('GET', 'http://uploadr.loc/users/admin/pictures/'+linkName+'');
+		// xhr.responseType = 'blob';
+		// xhr.send();
+    })
+
     if ($('[id^=filelist_] li:last-of-type').hasClass('heading')) {
     	$('[id^=filelist_] li:last-of-type').remove();
     }
@@ -204,3 +266,47 @@ Dropzone.options.upload = {
   	// showUpdateInfo(''+data.content+'',''+data.infotype+'');
   // }
 };
+
+ 
+// use this transport for "binary" data type
+$.ajaxTransport("+binary", function(options, originalOptions, jqXHR){
+    // check for conditions and support for blob / arraybuffer response type
+    if (window.FormData && ((options.dataType && (options.dataType == 'binary')) || (options.data && ((window.ArrayBuffer && options.data instanceof ArrayBuffer) || (window.Blob && options.data instanceof Blob)))))
+    {
+        return {
+            // create new XMLHttpRequest
+            send: function(headers, callback){
+		// setup all variables
+                var xhr = new XMLHttpRequest(),
+		url = options.url,
+		type = options.type,
+		async = options.async || true,
+		// blob or arraybuffer. Default is blob
+		dataType = options.responseType || "blob",
+		data = options.data || null,
+		username = options.username || null,
+		password = options.password || null;
+					
+                xhr.addEventListener('load', function(){
+			var data = {};
+			data[options.dataType] = xhr.response;
+			// make callback and send data
+			callback(xhr.status, xhr.statusText, data, xhr.getAllResponseHeaders());
+                });
+ 
+                xhr.open(type, url, async, username, password);
+				
+		// setup custom headers
+		for (var i in headers ) {
+			xhr.setRequestHeader(i, headers[i] );
+		}
+				
+                xhr.responseType = dataType;
+                xhr.send(data);
+            },
+            abort: function(){
+                jqXHR.abort();
+            }
+        };
+    }
+});
