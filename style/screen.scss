@@ -1042,7 +1042,7 @@ label {
 #lightbox_container.visible {
 	// width: 60%;
 	margin: 0 auto;
-	position: fixed;
+	position: absolute;
 	top: 10em;
 	left: 50%;
 	// margin-left: -30%;
@@ -1056,4 +1056,34 @@ label {
 	right: 0;
 	z-index: 5050;
 	background: rgba(0,0,0,.6);
+}
+#overlay.visible {
+		overflow-y: scroll;
+}
+.closebutton,.nextbutton,.prevbutton {
+	display: none;
+}
+#lightbox_container:hover .closebutton, #lightbox_container:hover .nextbutton, #lightbox_container:hover .prevbutton {
+	display: block;
+}
+.closebutton,.nextbutton,.prevbutton {
+		background: black;
+	cursor: pointer; 
+	position: absolute; 
+	top: -.75em; 
+	right: -.75em; 
+	border-radius: 50%; 
+	border: 2px solid white; 
+	height: 1.5em; 
+	width: 1.5em; 
+	text-align: center; 
+	line-height: 1.5em;
+}
+.nextbutton, .prevbutton {
+	top: 50%;
+	left: -.75em;
+}
+.nextbutton {
+	left: initial;
+	right: -.75em;
 }

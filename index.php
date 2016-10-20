@@ -41,7 +41,7 @@ echo '</header>
 echo '
 	</div>
 	<div id="updateinfo" class="messagebox"></div>
-	<div id="lightbox_container" class="hidden"></div>
+	<div id="lightbox_container" class="hidden"><span class="closebutton">X</span><span class="nextbutton">&gt;</span><span class="prevbutton">&lt;</span></div>
 	<div id="overlay" class="hidden"></div>
 	</div>
 	<footer>

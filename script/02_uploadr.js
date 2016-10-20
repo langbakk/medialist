@@ -90,12 +90,12 @@ $(document).ready(function() {
 	})
 	
 	if (GetURLParameter() == '/gallery') {
-		if ($('.container > ul').length > 0) {
+		if ($('.container > #pictures_list').length > 0) {
 			var totalby2 = (Math.floor($('#pictures_list li').length / 2));
 			var rem = (Math.floor($('#pictures_list li').length % 2));
 			var endResult = ((totalby2 + rem) * 10) + 10;
 			var endResult = (endResult < 70) ? endResult : 70;
-			$('.container').css(({'max-width':endResult+'em'}));
+			$('#pictures_list').parents('.container').css(({'max-width':endResult+'em'}));
 		}
 	}
 
@@ -127,9 +127,20 @@ $(document).ready(function() {
     	}
     })
 
-    $('.lightbox').click(function(e) {
+    $('.lightbox,.prevbutton,.nextbutton').click(function(e) {
     	e.preventDefault();
-    	var linkName = $(this).attr('href').split('=')[1];
+    	var $this = $(this);
+    	if ($(e.target).hasClass('prevbutton') && $('a[href$="'+linkName+'"]').parent('.pictures').prev('li.pictures').length == 0) {
+    		linkName = $('.pictures:last-of-type').find('a').attr('href').split('=')[1];
+    	} else if ($(e.target).hasClass('nextbutton') && $('a[href$="'+linkName+'"]').parent('.pictures').next('li.pictures').length == 0) {
+    		linkName = $('.pictures:first-of-type').find('a').attr('href').split('=')[1];
+    	} else if ($(e.target).hasClass('prevbutton')) {
+    		linkName = $('a[href$="'+linkName+'"]').parent('.pictures').prev('li.pictures').find('a').attr('href').split('=')[1];
+    	} else if ($(e.target).hasClass('nextbutton')) {
+    		linkName = $('a[href$="'+linkName+'"]').parent('.pictures').next('li.pictures').find('a').attr('href').split('=')[1];
+    	} else {
+    		linkName = $(this).attr('href').split('=')[1];
+    	}
    		$.ajax({
           url: 'showfile.php',
           type: 'GET',
@@ -142,13 +153,35 @@ $(document).ready(function() {
           	var image = new Image();
 			image.src = URL.createObjectURL(result);
 			$('#lightbox_container').append(image).removeClass('hidden').addClass('visible');
-			image.onload = function() { var imageWidth = image.width/2; $('#lightbox_container').css({'margin-left':'-'+imageWidth+'px'}) };
+			image.onload = function() { var imageWidth = image.width/2; $('#lightbox_container').css({'margin-left':'-'+imageWidth+'px'}); window.URL.revokeObjectURL(image.src);};
 			$('#overlay').removeClass('hidden').addClass('visible');
+			// $('.nextbutton,.prevbutton').click(function(e) {
+				if ($(e.target).hasClass('prevbutton') || $(e.target).hasClass('nextbutton')) {
+					$.ajax({
+						url: 'showfile.php',
+						type: 'GET',
+						dataType: 'binary',
+						data: 'file='+linkName+'',
+						responseType: 'blob',
+						processData: false,
+						success: function(result) {
+							var image = new Image();
+							var binaryData = [];
+							binaryData.push(result);
+							image.src = URL.createObjectURL(new Blob(binaryData));
+							// image.src = URL.createObjectURL(result2);
+							$('#lightbox_container img').remove();
+							$('#lightbox_container').append(image);
+							image.onload = function() { var imageWidth = image.width/2; $('#lightbox_container').css({'margin-left':'-'+imageWidth+'px'}); };
+						}
+					})
+				}
+			// })
           }
 		}); 
     })
 
-    $('#overlay').on('click',function() {
+    $('#overlay,.closebutton').on('click',function() {
     	$('#overlay,#lightbox_container').addClass('hidden').removeClass('visible');
     	$('#lightbox_container img').remove();
     })
@@ -239,42 +272,40 @@ Dropzone.options.upload = {
 // use this transport for "binary" data type
 $.ajaxTransport("+binary", function(options, originalOptions, jqXHR){
     // check for conditions and support for blob / arraybuffer response type
-    if (window.FormData && ((options.dataType && (options.dataType == 'binary')) || (options.data && ((window.ArrayBuffer && options.data instanceof ArrayBuffer) || (window.Blob && options.data instanceof Blob)))))
-    {
+    if (window.FormData && ((options.dataType && (options.dataType == 'binary')) || (options.data && ((window.ArrayBuffer && options.data instanceof ArrayBuffer) || (window.Blob && options.data instanceof Blob))))) {
         return {
-            // create new XMLHttpRequest
-            send: function(headers, callback){
-		// setup all variables
-                var xhr = new XMLHttpRequest(),
-		url = options.url,
-		type = options.type,
-		async = options.async || true,
-		// blob or arraybuffer. Default is blob
-		dataType = options.responseType || "blob",
-		data = options.data || null,
-		username = options.username || null,
-		password = options.password || null;
-					
-                xhr.addEventListener('load', function(){
-			var data = {};
-			data[options.dataType] = xhr.response;
-			// make callback and send data
-			callback(xhr.status, xhr.statusText, data, xhr.getAllResponseHeaders());
-                });
- 
-                xhr.open(type, url, async, username, password);
-				
-		// setup custom headers
-		for (var i in headers ) {
-			xhr.setRequestHeader(i, headers[i] );
-		}
-				
-                xhr.responseType = dataType;
-                xhr.send(data);
-            },
-            abort: function(){
-                jqXHR.abort();
-            }
-        };
+	        // create new XMLHttpRequest
+	        send: function(headers, callback){
+				// setup all variables
+		        var xhr = new XMLHttpRequest(),
+				url = options.url,
+				type = options.type,
+				async = options.async || true,
+				// blob or arraybuffer. Default is blob
+				dataType = options.responseType || 'blob',
+				data = options.data || null,
+				username = options.username || null,
+				password = options.password || null;
+							
+		        xhr.addEventListener('load', function(){
+					var data = {};
+					data[options.dataType] = xhr.response;
+					// make callback and send data
+					callback(xhr.status, xhr.statusText, data, xhr.getAllResponseHeaders());
+		        });
+		        xhr.open(type, url, async, username, password);
+						
+				// setup custom headers
+				for (var i in headers ) {
+					xhr.setRequestHeader(i, headers[i] );
+				}
+						
+		        xhr.responseType = dataType;
+		        xhr.send(data);
+		    },
+	        abort: function(){
+	            jqXHR.abort();
+	        }
+        }
     }
 });
