@@ -147,43 +147,26 @@ $(document).ready(function() {
           dataType: 'binary',
           data: 'file='+linkName+'',
           responseType: 'blob',
-          // headers:{'Content-Type':'image/jpeg','X-Requested-With':'XMLHttpRequest'},
           processData: false,
           success: function(result) {
           	var image = new Image();
 			image.src = URL.createObjectURL(result);
-			$('#lightbox_container').append(image).removeClass('hidden').addClass('visible');
+			if ($('#overlay').length <= 0) {
+				$('#top').append('<div id="overlay" class="visible"></div>');
+			}
+			if ($('#lightbox_container').hasClass('hidden')) {
+				$('#lightbox_container').removeClass('hidden').addClass('visible');
+			}
+			$('#lightbox_container img').remove();
+			$('#lightbox_container').append(image);
 			image.onload = function() { var imageWidth = image.width/2; $('#lightbox_container').css({'margin-left':'-'+imageWidth+'px'}); window.URL.revokeObjectURL(image.src);};
-			$('#overlay').removeClass('hidden').addClass('visible');
-			// $('.nextbutton,.prevbutton').click(function(e) {
-				if ($(e.target).hasClass('prevbutton') || $(e.target).hasClass('nextbutton')) {
-					$.ajax({
-						url: 'showfile.php',
-						type: 'GET',
-						dataType: 'binary',
-						data: 'file='+linkName+'',
-						responseType: 'blob',
-						processData: false,
-						success: function(result) {
-							var image = new Image();
-							var binaryData = [];
-							binaryData.push(result);
-							image.src = URL.createObjectURL(new Blob(binaryData));
-							// image.src = URL.createObjectURL(result2);
-							$('#lightbox_container img').remove();
-							$('#lightbox_container').append(image);
-							image.onload = function() { var imageWidth = image.width/2; $('#lightbox_container').css({'margin-left':'-'+imageWidth+'px'}); };
-						}
-					})
-				}
-			// })
           }
 		}); 
     })
 
     $('#overlay,.closebutton').on('click',function() {
-    	$('#overlay,#lightbox_container').addClass('hidden').removeClass('visible');
-    	$('#lightbox_container img').remove();
+    	$('#overlay,#lightbox_container img').remove();
+    	// $('#lightbox_container img').remove();
     })
 
     if ($('[id^=filelist_] li:last-of-type').hasClass('heading')) {
