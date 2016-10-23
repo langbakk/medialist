@@ -136,9 +136,9 @@ error_reporting(E_ALL); // this should be commented out in production environmen
   						$useurl = $menutext['basename'];
   						$page = (isset($_GET['page'])) ? $_GET['page'] : 'index'; 
   						if ($allow_public == true && !$isloggedin && $key != 4) {
-  							$main_menu .= '<li '.(($page == strtolower($menutext['filename'])) ? 'class="active"' : '').'><a href="'.(($useurl == 'index') ? '/' : $useurl).'">'.ucfirst((($menutext['filename'] == 'index') ? 'home' : $menutext['filename'])).'</a><span class="activearrow">&nbsp;</span></li>';
+  							$main_menu .= '<li '.(($page == strtolower($menutext['filename'])) ? 'class="active"' : '').'><a href="'.(($useurl == 'index') ? '/' : $useurl).'">'.ucfirst((($menutext['filename'] == 'index') ? 'home' : $menutext['filename'])).'<span class="activearrow">&nbsp;</span></a></li>';
   						} elseif ($isloggedin && $key != 3) {
-	  						$main_menu .= '<li '.(($page == strtolower($menutext['filename'])) ? 'class="active"' : '').'><a href="'.(($useurl == 'index') ? '/' : $useurl).'">'.ucfirst((($menutext['filename'] == 'index') ? 'home' : $menutext['filename'])).'</a><span class="activearrow">&nbsp;</span></li>';
+	  						$main_menu .= '<li '.(($page == strtolower($menutext['filename'])) ? 'class="active"' : '').'><a href="'.(($useurl == 'index') ? '/' : $useurl).'">'.ucfirst((($menutext['filename'] == 'index') ? 'home' : $menutext['filename'])).'<span class="activearrow">&nbsp;</span></a></li>';
   						}
   					}
   				$main_menu .= '</ul>';
@@ -158,7 +158,7 @@ error_reporting(E_ALL); // this should be commented out in production environmen
 		    $filename = html_entity_decode($filename, ENT_QUOTES, 'UTF-8');
 		    $filename = preg_replace(['~[^0-9a-z.]~i', '~[ -]+~'], ' ', $filename);
 		    $filename = str_replace(' ','_',$filename);
-		    return trim($filename, ' -');
+		    return trim($filename, ' -_');
 		}
 		
   		function returnCurrentUploads($filename) {
@@ -175,6 +175,13 @@ error_reporting(E_ALL); // this should be commented out in production environmen
 				return $returncontent;
 			}
   		}
+
+		function logThis($filename, $logthis) {
+		    $date = new DateTime();
+		    $date = $date->format('Y m d H:i:s');
+		    file_put_contents(LOG_FOLDER.$filename.'.txt',$date.' '.$logthis."\r\n",FILE_APPEND);
+		}
+
   		function loadFiles($filetype, $path, $recursive = 0, $testfileallow = 0) {
 		    $results = [];     // create an array to hold directory list
 		    $handler = opendir($path);     // create a handler for the directory

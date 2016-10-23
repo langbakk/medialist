@@ -7,8 +7,9 @@ $(document).ready(function() {
 			userName = GetURLParameter('user');
 		}
         var thisListID = $(this).parents('ul').prop('id');
-		var thisFile = $(this).parents('li').find('a:first').attr('href').split('/').reverse();
-		$.post('deletefile.php', { filename:thisFile[1]+'/'+thisFile[0],username:userName }, function(data) { 
+        var thisListFolder = $(this).parents('ul').prop('id').split('_')[0];
+		var thisFile = $(this).parents('li').find('a:first').attr('href').split('=')[1];
+		$.post('deletefile.php', { filename:thisListFolder+'/'+thisFile,username:userName }, function(data) { 
             data = $.parseJSON(data);
             showUpdateInfo(''+data.content+'',''+data.infotype+'');
             $this.parents('li').remove();
@@ -28,35 +29,20 @@ $(document).ready(function() {
 		$this = $(this);
 		e.preventDefault();
 		var userName = '';
-		if (GetURLParameter('user')) {
-			userName = GetURLParameter('user');
-		}
-		var thisListID = $(this).parents('ul').prop('id');
-		var thisFile = $(this).parents('li').find('a:first').attr('href').split('/').reverse();
-		var userNameLink = thisFile.reverse()[1];
+		var thisListFolder = $(this).parents('ul').prop('id').split('_')[0];
+		var thisFile = $(this).parents('li').find('a:first').attr('href').split('=')[1];
 		if ($this.val() == 0) {
-			$.post('create_public_link.php',{filename:thisFile[2]+'/'+thisFile[3],username:userName}, function(data) {
+			$.post('create_public_link.php',{filename:thisListFolder+'/'+thisFile}, function(data) {
 				data = $.parseJSON(data);
 				showUpdateInfo(''+data.content+'',''+data.infotype+'');
 				$this.prop('checked',true).val(1);
 			})	
 		} else {
-			$.post('deletefile.php', { deletepublic:true,filename:thisFile[2]+'/'+userNameLink+'__'+thisFile[3],username:'public' }, function(data) {
-            data = $.parseJSON(data);
-            showUpdateInfo(''+data.content+'',''+data.infotype+'');
-            $this.prop('checked',false).val(0);
-            // $this.parents('li').remove();
-       //      $('.pictures > a > img').each(function() {
-    			// var getImgDimension = $(this).position();    
-    			// $(this).parent('a').next('span').css({'width':'4em','position':'absolute','left':getImgDimension.left});  
-       //  	}) 
-            // if (($('#'+thisListID+' li').length) === 0) {
-            //     $('#'+thisListID).parent('.container').remove();       
-            //     if (($('.container').length) == 1 && $('.container').hasClass('hidden')) {
-            //         $('.container').removeClass('hidden').addClass('visible');
-            //     }
-            // }
-        });
+			$.post('deletefile.php', { deletepublic:true,filename:thisListFolder+'/'+thisFile,username:'public' }, function(data) {
+	            data = $.parseJSON(data);
+	            showUpdateInfo(''+data.content+'',''+data.infotype+'');
+	            $this.prop('checked',false).val(0);
+        	})
 		}
 	})
 

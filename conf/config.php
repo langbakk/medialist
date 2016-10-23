@@ -54,6 +54,7 @@ $use_login = true;
 $isloggedin = isset($_SESSION['loggedin']) ? $_SESSION['loggedin'] : false;
 $show_quotes = true;
 $use_db = false;
+$debug = true;
 $filesize_units = explode(' ', 'B KB MB GB TB PB');
 $total_filesize_limit = 536870912; //0; 512MB //GB
 // Session-control

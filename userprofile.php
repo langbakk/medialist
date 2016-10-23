@@ -28,11 +28,16 @@ echo '<div class="container">
 	} else {
 		// echo '<li class="heading">Filelist</li>';
 		// $get_dirname = '';
+		$dir = '';
 		foreach ($objects as $file) {
 			if ($file->isDir()) {
+				$dir = $file->getFileName();
 				echo '<li class="heading">'.ucfirst($file->getFileName()).'</li>';
 			} elseif (!$file->isDir()) {
-				echo '<li>'.$file->getFileName().'</li>';
+				echo '<li>'.(($dir == 'pictures') ? '<img src="showfile.php?imgfile='.$file->getFileName().'&thumbs=true"> ' : (($dir == 'video') ? '<div class="tech-slideshow">
+						<div class="mover-1" style="background: url(showfile.php?vidfile='.$file->getFileName().'.jpg&thumbs=true);"></div>
+						<div class="mover-2" style="background: url(showfile.php?vidfile='.$file->getFileName().'.jpg&thumbs=true);"></div>
+					</div>' : '')).$file->getFileName().'</li>';
 			}
 		}
 	}
