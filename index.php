@@ -37,6 +37,11 @@ echo '</header>
 		echo $display->getLogin();
 	} elseif ($allow_public == true || $isloggedin) {
 		echo $display->getPage();
+		if (!isset($_GET['page']) || empty($_GET['page'])) {
+			echo '<div class="container">';
+					include_once('index.html');					
+			echo '</div>';
+		}
 	} 
 echo '
 	</div>

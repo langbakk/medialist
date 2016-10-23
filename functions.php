@@ -136,9 +136,9 @@ error_reporting(E_ALL); // this should be commented out in production environmen
   						$useurl = $menutext['basename'];
   						$page = (isset($_GET['page'])) ? $_GET['page'] : 'index'; 
   						if ($allow_public == true && !$isloggedin && $key != 4) {
-  							$main_menu .= '<li '.(($page == strtolower($menutext['filename'])) ? 'class="active"' : '').'><a href="'.$useurl.'">'.ucfirst((($menutext['filename'] == 'index') ? 'home' : $menutext['filename'])).'</a><span class="activearrow">&nbsp;</span></li>';
+  							$main_menu .= '<li '.(($page == strtolower($menutext['filename'])) ? 'class="active"' : '').'><a href="'.(($useurl == 'index') ? '/' : $useurl).'">'.ucfirst((($menutext['filename'] == 'index') ? 'home' : $menutext['filename'])).'</a><span class="activearrow">&nbsp;</span></li>';
   						} elseif ($isloggedin && $key != 3) {
-	  						$main_menu .= '<li '.(($page == strtolower($menutext['filename'])) ? 'class="active"' : '').'><a href="'.$useurl.'">'.ucfirst((($menutext['filename'] == 'index') ? 'home' : $menutext['filename'])).'</a><span class="activearrow">&nbsp;</span></li>';
+	  						$main_menu .= '<li '.(($page == strtolower($menutext['filename'])) ? 'class="active"' : '').'><a href="'.(($useurl == 'index') ? '/' : $useurl).'">'.ucfirst((($menutext['filename'] == 'index') ? 'home' : $menutext['filename'])).'</a><span class="activearrow">&nbsp;</span></li>';
   						}
   					}
   				$main_menu .= '</ul>';
