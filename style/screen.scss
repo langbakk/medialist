@@ -248,6 +248,11 @@ li {
 	min-width: 10em;
 	overflow: hidden;
 }
+[id^='filelist_'] img {
+	display: block;
+	margin: 0 auto .5em auto;
+
+}
 .tech-slideshow {
 	border: .1em solid white;
 }
@@ -255,7 +260,7 @@ li > img {
 	vertical-align: bottom;
 	border: .1em solid white;
 }
-li span:not(.public_sharename),li .usercontrols {
+li span:not(.public_sharename):not(.filename),li .usercontrols {
 	display: block;
 	position: absolute;
 	top: 0;

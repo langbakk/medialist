@@ -37,7 +37,7 @@ echo '<div class="container">
 				echo '<li>'.(($dir == 'pictures') ? '<img src="showfile.php?imgfile='.$file->getFileName().'&thumbs=true"> ' : (($dir == 'video') ? '<div class="tech-slideshow">
 						<div class="mover-1" style="background: url(showfile.php?vidfile='.$file->getFileName().'.jpg&thumbs=true);"></div>
 						<div class="mover-2" style="background: url(showfile.php?vidfile='.$file->getFileName().'.jpg&thumbs=true);"></div>
-					</div>' : '')).$file->getFileName().'</li>';
+					</div>' : '')).'<span class="filename">'.$file->getFileName().'</span></li>';
 			}
 		}
 	}

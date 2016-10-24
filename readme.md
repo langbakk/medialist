@@ -14,6 +14,8 @@ Installation:
 * If you delete the one that is currently there without adding any new users, you will have no logins to the page - that doesn't matter, though, you can still use it as you want, but it might be useful to turn off the $use_login-setting in the [config.php](conf/config.php) (set it to false)
 * The $show_quotes is set to true (on) as default - change this to false (off) if you don't want to show quotes on the gallery-page
 
+* Currently there is no setup, so the only way to create a new admin-user is to use the [register.php](register.php) and register a new user, and then delete other users from the [.userlist](conf/.userlist)
+
 * Remove the .gitignore and .gitattributes-files (they won't do any harm, but they're not needed)
 
 If you want to add or remove allowed files, do that in the [.allowed_extensions](conf/.allowed_extensions) file. Add one extension per line, as those currently in the file. Remember that you also have to add the MIME-type to [.allowed_mimetypes](conf/.allowed_mimetypes) - you can find the correct MIME-types here: [The Complete List of MIME-types](https://www.sitepoint.com/web-foundations/mime-types-complete-list/)
