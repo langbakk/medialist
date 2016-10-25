@@ -41,6 +41,7 @@ $user_array = file_exists($_SERVER['DOCUMENT_ROOT'].'/conf/.userlist') ? file($_
 
 $userpath = 'users/';
 $username = (isset($_SESSION['loggedin'])) ? $_SESSION['username'].'/' : 'public/';
+$usertype = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : 'user';
 
 $allow_public = true;
 
@@ -147,5 +148,8 @@ $todaydate = $date.' '.$time;
 $currentsemesteryear = $currentyear;
 $currentsemestershortcode = ($currentsemesteryear.'-08-01' > $date) ? 'v' : 'h';
 
-require_once($document_root.'/'.$rootfolder.'coreclass.php');
+if (file_exists($document_root.$rootfolder.'coreclass.php')) {
+	require_once($document_root.$rootfolder.'coreclass.php');	
+}
+
 ?>

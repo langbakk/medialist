@@ -9,7 +9,10 @@ $disk_used = foldersize($userpath.$username);
 $disk_remaining = Config::read('total_filesize_limit') - $disk_used;
 
 echo '<div class="container">
-	<h2>'.$username_readable.'</h2>';
+	<h2>'.$username_readable.'</h2>
+	<div class="content">
+	<p>Logged in with '.$usertype.' rigths</p>
+	<p><b>Diskspace used:</b> '.format_size($disk_used).'<br><b>Diskspace left:</b> '.format_size($disk_remaining).'</p>';
 	
 	$path = realpath($_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username);
 
@@ -43,6 +46,5 @@ echo '<div class="container">
 	}
 	echo '</ul>
 	</div>
-	<p><b>Diskspace used:</b> '.format_size($disk_used).'<br><b>Diskspace left:</b> '.format_size($disk_remaining).'</p>
-</div>';
+</div></div>';
 ?>

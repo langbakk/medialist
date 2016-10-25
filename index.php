@@ -1,6 +1,4 @@
 <?php
-ini_set('display_errors',1); // this should be commented out in production environments
-error_reporting(E_ALL); // this should be commented out in production environments
 ob_start();
 if (!session_id()) { session_start(); };
 
@@ -23,7 +21,7 @@ echo '<!DOCTYPE html>
 		loadFiles('js', 'script/');
 echo '</head>
 
-<body>
+<body id="'.$current_page.'_body">
 	<header>
 		<h1>'.__MAINHEADING.'</h1>
 		'.displayMenu($baseurl);

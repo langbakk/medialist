@@ -10,6 +10,7 @@ if (isset($_POST['submit_login']) && $username != '' && $password != '') {
 			if (($username == trim($exploded_user_array[0])) && (valueCrypt::vC_pwHash($password,trim($exploded_user_array[1])) === trim($exploded_user_array[1]))) {
 				$_SESSION['loggedin'] = true;
 				$_SESSION['username'] = trim($exploded_user_array[0]);
+				$_SESSION['usertype'] = trim($exploded_user_array[2]);
 				$success = true;
 				$folderexist = false;
 				$foldercreated = false;

@@ -1,8 +1,7 @@
 <?php
 require_once('conf/config.php');
 if (!session_id()) { session_start(); };
-if ($isloggedin) {
-	$username = (isset($_GET['user'])) ? $_GET['user'].'/' : $username;
+$username = (($isloggedin && isset($_GET['user'])) ? $_GET['user'].'/' : ((!$isloggedin) ? 'public/' : $username));
 	if ($debug == true) {
 		logThis('showfile_processing','Username is set to '.$username.''."\r\n",FILE_APPEND);
 	}
@@ -29,5 +28,4 @@ if ($isloggedin) {
 		}
     }
     exit;
-}
 ?>

@@ -98,7 +98,7 @@ $(document).ready(function() {
     $('.pictures > a > img').load(function() {
         $(this).each(function() {
         var getImgDimension = $(this).position();    
-        $(this).parent('a').next('span').css({'width':'4em','position':'absolute','left':getImgDimension.left});  
+        $(this).parent('a').next('span').not('.public_sharename').css({'width':'4em','position':'absolute','left':getImgDimension.left});  
 	        if ($(this).attr('src').split('/')[1] == 'public') {
 		        var getUploaderName = $(this).attr('src').split('/').reverse()[0].split('_')[0];
 				$(this).parent('a').append('<span class="hovername">Uploaded by: '+getUploaderName+'</span>');
