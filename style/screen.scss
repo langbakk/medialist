@@ -260,7 +260,7 @@ li > img {
 	vertical-align: bottom;
 	border: .1em solid white;
 }
-li span:not(.public_sharename):not(.filename),li .usercontrols {
+li span:not(.public_sharename):not(.filename):not(.filesize):not(.filelist_image),li .usercontrols {
 	display: block;
 	position: absolute;
 	top: 0;
@@ -316,6 +316,18 @@ li .hovername {
 }
 #documents_list li:hover {
 	background: #666;
+}
+#user_filelist li .filename {
+	max-width: 25.6em;
+	padding-right: 1em;
+	word-wrap: break-word;
+}
+#user_filelist li {
+	display: flex;
+}
+#user_filelist li span,#user_filelist li .tech-slideshow {
+	flex: 1 1 0;
+	margin: auto;
 }
 .imagecontainer {
 	max-width: 12.5em; 
@@ -486,7 +498,7 @@ label {
 .error {
 	color: $error-background;
 }
-.messagebox .error {
+.messagebox.error {
 	color: $error-color;
 	background-color: $error-background;
 	background-image: url(#{$webgfxfolder}error.png);
@@ -497,7 +509,7 @@ label {
 .success {
 	color: $success-color;
 }
-.messagebox .success {
+.messagebox.success {
 	background-color: $success-background !important;
 	background-image:url(#{$webgfxfolder}success.png);
 	a {

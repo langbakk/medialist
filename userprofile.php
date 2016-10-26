@@ -25,7 +25,7 @@ echo '<div class="container">
 	echo '<input type="button" id="showhidefilelist" value="Show filelist">
 	<div id="filelist_'.strtolower($username_readable).'" class="hidden">
 		<h3>Filelist</h3>
-	<ul class="alternate">';
+	<ul class="alternate" id="user_filelist">';
 	if ($disk_used == 0) {
 		echo '<li class="messagebox warning">No files uploaded</li>';
 	} else {
@@ -41,10 +41,16 @@ echo '<div class="container">
 			} elseif (!$file->isDir()) {
 				$filesize_array[] = $file->getSize();
 				$filesize_total = $filesize_total + $file->getSize();
-				echo '<li>'.(($dir == 'pictures') ? '<img src="showfile.php?imgfile='.$file->getFileName().'&thumbs=true"> ' : (($dir == 'video') ? '<div class="tech-slideshow">
+				$usercontrols = '<div class="usercontrols">
+					<a href="'.$baseurl.'sharefile.php">
+						<img src="'.$webgfxpath.'share.png" alt="share file">
+					</a>'.((isset($_GET['user']) != 'public' && $username != 'public/') ? '<a class="deletefile" href="'.$baseurl.'deletefile.php">
+						<img src="'.$webgfxpath.'delete_icon.png" alt="delete file">
+					</a><form method="post" action="create_public_link.php"><input type="checkbox" class="make_public" title="Make public" '.((is_link($userpath.'public/'.$dir.'/'.explode('/',$username)[0].'__'.$file->getFileName()) ? 'checked' : '')).' value="'.((is_link($userpath.'public/'.$dir.'/'.explode('/',$username)[0].'__'.$file->getFileName()) ? 1 : 0)).'"></form>':'').'</div>';
+				echo '<li><span class="filename"'.(($dir == 'documents') ? ' style="max-width: initial; word-wrap: none;"':'').'>'.$file->getFileName().'</span>'.(($dir == 'pictures') ? '<span class="filelist_image"><img src="showfile.php?imgfile='.$file->getFileName().'&thumbs=true"></span> ' : (($dir == 'video') ? '<div class="tech-slideshow">
 						<div class="mover-1" style="background: url(showfile.php?vidfile='.$file->getFileName().'.jpg&thumbs=true);"></div>
 						<div class="mover-2" style="background: url(showfile.php?vidfile='.$file->getFileName().'.jpg&thumbs=true);"></div>
-					</div>' : '')).'<span class="filename">'.$file->getFileName().'</span></li>';
+					</div>' : '')).'<span class="filesize">'.format_size($file->getSize()).'</span>'.$usercontrols.'</li>';
 			}
 		}
 	}

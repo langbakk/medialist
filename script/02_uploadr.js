@@ -5,55 +5,94 @@ $(document).ready(function() {
 	// 	console.log(e.target);
 	// }); 
 
-
-	$('.deletefile').click(function(e) {
-		$this = $(this);
-		e.preventDefault();
-		var userName = '';
-		if (GetURLParameter('user')) {
-			userName = GetURLParameter('user');
-		}
-        var thisListID = $(this).parents('ul').prop('id');
-        var thisListFolder = $(this).parents('ul').prop('id').split('_')[0];
-		var thisFile = $(this).parents('li').find('a:first').attr('href').split('=')[1].split('&')[0];
-		console.log(thisFile);
-		$.post('deletefile.php', { filename:thisListFolder+'/'+thisFile,username:userName }, function(data) { 
-            data = $.parseJSON(data);
-            showUpdateInfo(''+data.content+'',''+data.infotype+'');
-            $this.parents('li').remove();
-            $('.pictures > a > img').each(function() {
-    			var getImgDimension = $(this).position();    
-    			$(this).parent('a').next('span').css({'width':'4em','position':'absolute','left':getImgDimension.left});  
-        	}) 
-            if (($('#'+thisListID+' li').length) === 0) {
-                $('#'+thisListID).parent('.container').remove();       
-                if (($('.container').length) == 1 && $('.container').hasClass('hidden')) {
-                    $('.container').removeClass('hidden').addClass('visible');
-                }
-            }
-        });
-	})
-	$('.make_public').click(function(e) {
-		$this = $(this);
-		e.preventDefault();
-		var userName = '';
-		var thisListFolder = $(this).parents('ul').prop('id').split('_')[0];
-		var thisFile = $(this).parents('li').find('a:first').attr('href').split('=')[1];
-		if ($this.val() == 0) {
-			$.post('create_public_link.php',{filename:thisListFolder+'/'+thisFile}, function(data) {
+	if (GetURLParameter() == '/userprofile') {
+		$('.deletefile').click(function(e) {
+			$this = $(this);
+			e.preventDefault();
+			var userName = '';
+			var thisListID = $(this).parents('ul').prop('id');
+			var thisListFolder = $(this).parents('li').prevAll('li.heading:first').text().toLowerCase();
+			var thisFile = $(this).parents('li').find('.filename').text();
+			$.post('deletefile.php', { filename:thisListFolder+'/'+thisFile,username:userName }, function(data) { 
 				data = $.parseJSON(data);
 				showUpdateInfo(''+data.content+'',''+data.infotype+'');
-				$this.prop('checked',true).val(1);
-			})	
-		} else {
-			$.post('deletefile.php', { deletepublic:true,filename:thisListFolder+'/'+thisFile,username:'public' }, function(data) {
+				if (($this.parents('li').prev('li.heading:first') && $this.parents('li').next('li.heading')) || ($this.parents('li').prev('li.heading:first') && ($this.parents('li').next('li').length == 0))) {
+					console.log('blah');
+					$this.parents('li').prev('li.heading:first').remove();
+				}
+				$this.parents('li').remove();
+			})
+		})
+		$('.make_public').click(function(e) {
+			$this = $(this);
+			e.preventDefault();
+			var thisListFolder = $(this).parents('li').prevAll('li.heading:first').text().toLowerCase();
+			var thisFile = $(this).parents('li').find('.filename').text();
+			if ($this.val() == 0) {
+				$.post('create_public_link.php',{filename:thisListFolder+'/'+thisFile}, function(data) {
+					data = $.parseJSON(data);
+					showUpdateInfo(''+data.content+'',''+data.infotype+'');
+					$this.prop('checked',true).val(1);
+				})	
+			} else {
+				$.post('deletefile.php', { deletepublic:true,filename:thisListFolder+'/'+thisFile }, function(data) {
+		            data = $.parseJSON(data);
+		            showUpdateInfo(''+data.content+'',''+data.infotype+'');
+		            $this.prop('checked',false).val(0);
+	        	})
+			}
+		})
+	}
+	if (GetURLParameter() == '/gallery') {
+		$('.deletefile').click(function(e) {
+			$this = $(this);
+			e.preventDefault();
+			var userName = '';
+			if (GetURLParameter('user')) {
+				userName = GetURLParameter('user');
+			}
+	        var thisListID = $(this).parents('ul').prop('id');
+	        var thisListFolder = $(this).parents('ul').prop('id').split('_')[0];
+			var thisFile = $(this).parents('li').find('a:first').attr('href').split('=')[1].split('&')[0];
+			console.log(thisFile);
+			$.post('deletefile.php', { filename:thisListFolder+'/'+thisFile,username:userName }, function(data) { 
 	            data = $.parseJSON(data);
 	            showUpdateInfo(''+data.content+'',''+data.infotype+'');
-	            $this.prop('checked',false).val(0);
-        	})
-		}
-	})
-
+	            $this.parents('li').remove();
+	            $('.pictures > a > img').each(function() {
+	    			var getImgDimension = $(this).position();    
+	    			$(this).parent('a').next('span').css({'width':'4em','position':'absolute','left':getImgDimension.left});  
+	        	}) 
+	            if (($('#'+thisListID+' li').length) === 0) {
+	                $('#'+thisListID).parent('.container').remove();       
+	                if (($('.container').length) == 1 && $('.container').hasClass('hidden')) {
+	                    $('.container').removeClass('hidden').addClass('visible');
+	                }
+	            }
+	        })
+		})
+		$('.make_public').click(function(e) {
+			$this = $(this);
+			e.preventDefault();
+			var userName = '';
+			var thisListFolder = $(this).parents('ul').prop('id').split('_')[0];
+			var thisFile = $(this).parents('li').find('a:first').attr('href').split('=')[1];
+			if ($this.val() == 0) {
+				$.post('create_public_link.php',{filename:thisListFolder+'/'+thisFile}, function(data) {
+					data = $.parseJSON(data);
+					showUpdateInfo(''+data.content+'',''+data.infotype+'');
+					$this.prop('checked',true).val(1);
+				})	
+			} else {
+				$.post('deletefile.php', { deletepublic:true,filename:thisListFolder+'/'+thisFile,username:'public' }, function(data) {
+		            data = $.parseJSON(data);
+		            showUpdateInfo(''+data.content+'',''+data.infotype+'');
+		            $this.prop('checked',false).val(0);
+	        	})
+			}
+		})
+	}
+	
 	$("input[type=file]").on('change',function() {
 		var thisContent = $(this).val();
 		if (thisContent != 'No file selected') {
@@ -89,7 +128,7 @@ $(document).ready(function() {
 			var rem = (Math.floor($('#pictures_list li').length % 2));
 			var endResult = ((totalby2 + rem) * 10) + 10;
 			var endResult = (endResult < 70) ? endResult : 70;
-			$('#pictures_list').parents('.container').css(({'max-width':endResult+'em'}));
+			$('#pictures_list').parents('.container').css(({'max-width':endResult+'em','min-width':'30em'}));
 		}
 	}
 
