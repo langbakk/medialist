@@ -23,7 +23,7 @@ echo '<div class="container">
 	$objects  = new RecursiveIteratorIterator($filter,RecursiveIteratorIterator::SELF_FIRST);
 
 	echo '<input type="button" id="showhidefilelist" value="Show filelist">
-	<div id="filelist_'.strtolower($username_readable).'" class="hidden">
+	<div id="filelist_'.strtolower($username_readable).'" '.(((isset($_COOKIE['showuserfilelist']) && $_COOKIE['showuserfilelist'] == 1) || !isset($_COOKIE['showuserfilelist'])) ? '' : 'class="hidden"').'>
 		<h3>Filelist</h3>
 	<ul class="alternate" id="user_filelist">';
 	if ($disk_used == 0) {

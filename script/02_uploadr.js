@@ -148,6 +148,11 @@ $(document).ready(function() {
     $('#showhidefilelist').click(function() {
     	$(this).val(function(i, val){
           $('[id^=filelist_]').toggleClass('hidden');
+          if (!$('[id^=filelist_]').hasClass('hidden')) {
+			$.cookie('showuserfilelist','1', { expires: 365, path: '/'});
+          } else {
+          	$.cookie('showuserfilelist','');
+          }
           return val === "Show filelist" ? "Hide filelist" : "Show filelist";
       })
     })
