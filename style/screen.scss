@@ -317,6 +317,12 @@ li .hovername {
 #documents_list li:hover {
 	background: #666;
 }
+.imagecontainer {
+	max-width: 12.5em; 
+	margin: 0 auto; 
+	overflow: hidden; 
+	position: relative;
+}
 // li.pictures span,li.video span {
 // 	display: none;
 // }
@@ -417,6 +423,7 @@ input[type=submit],input[type=button],input[type=file] {
 	line-height: 1em;
 	&:hover {
 		background-color: $hilight-contrast;
+		color: $main-light;
 	}
 }
 input[type=file] {
@@ -470,44 +477,50 @@ label {
 		margin-top: 1em;
 		margin-left: 2em;
     }
-	&.error {
-		color: $error-color !important;
-		background-color: $error-background !important;
-	    background-image: url(#{$webgfxfolder}error.png);
-		   a {
-		    	color: $error-color;
-		    }
-	}
-	&.success {
-		color: $success-color !important;
-		background-color: $success-background !important;
-		background-image:url(#{$webgfxfolder}success.png);
-			a {
-				color: $success-color;
-			}
-	}
-	&.info {
-		color: $info-color !important;
-		background-color: $info-background !important;
-		background-image: url(#{$webgfxfolder}info.png);
-			a {
-				color: $info-color;
-			}
-	}
-	&.warning {
-		color: $warning-color !important;
-		background-color: $warning-background !important;
-	    background-image: url(#{$webgfxfolder}warning.png);
-			a {
-				color: $warning-color;
-			}
-	}
-	.error, .success, .info, .warning {
+    .error, .success, .info, .warning {
 		border: .2em solid;
 		padding: .4em .4em .6em .4em;
 		border-radius: $border-radius-double;
-		}
+	}
 }
+.error {
+	color: $error-background;
+}
+.messagebox .error {
+	color: $error-color;
+	background-color: $error-background;
+	background-image: url(#{$webgfxfolder}error.png);
+	a {
+		color: $error-color;
+	}
+}
+.success {
+	color: $success-color;
+}
+.messagebox .success {
+	background-color: $success-background !important;
+	background-image:url(#{$webgfxfolder}success.png);
+	a {
+		color: $success-color;
+	}
+}
+.info {
+	color: $info-color !important;
+	background-color: $info-background !important;
+	background-image: url(#{$webgfxfolder}info.png);
+	a {
+		color: $info-color;
+	}
+}
+.warning {
+	color: $warning-color !important;
+	background-color: $warning-background !important;
+	background-image: url(#{$webgfxfolder}warning.png);
+	a {
+		color: $warning-color;
+	}
+}
+
 .left {
 	float: left;
 }

@@ -121,6 +121,52 @@ $(document).ready(function() {
     	}
     })
 
+    if (GetURLParameter('imgfile') || GetURLParameter('docfile') || GetURLParameter('vidfile')) {
+    	var getFile = ((GetURLParameter('imgfile')) ? 'imgfile='+GetURLParameter('imgfile') : ((GetURLParameter('docfile')) ? 'docfile='+GetURLParameter('docfile') : (GetURLParameter('vidfile')) ? 'vidfile='+GetURLParameter('vidfile') : ''));
+
+    	var fileName = '',
+    		fetchName = '';
+    	if (GetURLParameter('imgfile')) {
+	    	$.ajax({
+	          url: 'showfile.php',
+	          type: 'GET',
+	          dataType: 'binary',
+	          data: getFile,
+	          responseType: 'blob',
+	          processData: false,
+	          success: function(result) {
+	          	var image = new Image();
+				image.src = URL.createObjectURL(result);
+				if ($('#overlay').length <= 0) {
+					$('#top').append('<div id="overlay"></div>');
+				}
+				if ($('#lightbox_container').hasClass('hidden')) {
+					$('#lightbox_container').removeClass('hidden').addClass('visible');
+				}
+				$('#lightbox_container img').remove();
+				$('#lightbox_container').append(image);
+				image.onload = function() { var imageWidth = image.width/2; $('#lightbox_container').css({'margin-left':'-'+imageWidth+'px'}); window.URL.revokeObjectURL(image.src);};
+				$('#lightbox_container .nextbutton, #lightbox_container .prevbutton').remove();
+				 $('#overlay,.closebutton').on('click',function(e) {
+			    	$('#overlay').remove();
+			    	$('#lightbox_container img').remove();
+			    })
+	          }
+			}); 
+		} else if (GetURLParameter('vidfile')) {
+			fileName = GetURLParameter('vidfile');
+			fetchName = 'vidfile';
+		} else if (GetURLParameter('docfile')) {
+			fileName = GetURLParameter('docfile');
+			fetchName = 'docfile';
+		}
+		if (fileName.length > 0) {
+			$('#main').append('<div class="container"><h2>File download</h2><div class="content"><p>You will soon see a download-dialog asking you were you want to save your file</p></div></div>');
+			$('body').append('<a href="showfile.php?'+fetchName+'='+fileName+'" id="directlink" class="hidden">Direct Link</a>');
+			$('#directlink').simulate('click');
+		}
+	}
+
     $('.lightbox,.prevbutton,.nextbutton').click(function(e) {
     	e.preventDefault();
     	var $this = $(this);

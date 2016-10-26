@@ -1,7 +1,17 @@
 <?php
 require_once('conf/config.php');
 if (!session_id()) { session_start(); };
+
 $username = (($isloggedin && isset($_GET['user'])) ? $_GET['user'].'/' : ((!$isloggedin) ? 'public/' : $username));
+if (!empty($_SERVER['QUERY_STRING']) && $username != 'public/') {
+	$potential_public_file = explode('__',explode('=',$_SERVER['QUERY_STRING'])[1])[0];
+	for ($i = 0; $i < count($user_array); $i++) {
+		$exploded_user_array = explode('//',$user_array[$i]);
+		if (($potential_public_file == trim($exploded_user_array[0]))) {
+			$username = 'public/';
+		}
+	}
+}
 	if ($debug == true) {
 		logThis('showfile_processing','Username is set to '.$username.''."\r\n",FILE_APPEND);
 	}
@@ -23,6 +33,9 @@ $username = (($isloggedin && isset($_GET['user'])) ? $_GET['user'].'/' : ((!$isl
     		header('Content-type: image/jpeg');
 			header('X-Sendfile: '.$_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.'video/thumbs/'.$_GET['vidfile']);
 		} else {
+			if ($debug == true) {
+				logThis('showfile_processing','Video returned '.$_GET['vidfile']."\r\n",FILE_APPEND);
+			}
 			header('Content-Disposition: attachment; filename='.$_GET['vidfile'].'');
 			header('X-Sendfile: '.$_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.'video/'.$_GET['vidfile'].'');
 		}

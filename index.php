@@ -31,7 +31,9 @@ echo '</head>
 echo '</header>
 	<div id="top">
 	<div id="main">';
-	if (!$isloggedin && $use_login == true && (empty($current_page) || $current_page == 'index' || $current_page == 'frontpage' || $current_page == 'login')) {
+	if (isset($_GET['imgfile']) || isset($_GET['vidfile']) || isset($_GET['docfile'])) {
+		echo $display->getPage();
+	} elseif (!$isloggedin && $use_login == true && (empty($current_page) || $current_page == 'index' || $current_page == 'frontpage' || $current_page == 'login')) {
 		echo $display->getLogin();
 	} elseif ($allow_public == true || $isloggedin) {
 		echo $display->getPage();
