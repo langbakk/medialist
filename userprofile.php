@@ -22,6 +22,30 @@ echo '<div class="container">
 
 	$objects  = new RecursiveIteratorIterator($filter,RecursiveIteratorIterator::SELF_FIRST);
 
+// foreach($files as $file) {
+//     $time = DateTime::createFromFormat('U', filemtime($file->getPathname()));
+//     // no need to explode the time, just make it a datetime object
+//     if(in_array($file->getExtension(), $display) && $time > new DateTime('2014-01-15')) { // is PHP and is greater than jan 15 2014
+//         $data[] = array('filename' => $file->getPathname(), 'time' => $time->getTimestamp()); // push inside
+//     }
+
+// }
+// usort($data, function($a, $b){ // sort by time latest
+//     return $b['time'] - $a['time'];
+// });
+
+
+// foreach ($data as $key => $value) {
+//     $time = date('Y-m-d', $value['time']);
+//     echo "
+//         <span style='color: red;'>
+//             <b style='color: green;'>$time</b>$value[filename]
+//         </span>
+//         <br/>
+//     ";
+// }
+
+
 	echo '<input type="button" id="showhidefilelist" value="Show filelist">
 	<div id="filelist_'.strtolower($username_readable).'" '.(((isset($_COOKIE['showuserfilelist']) && $_COOKIE['showuserfilelist'] == 1) || !isset($_COOKIE['showuserfilelist'])) ? '' : 'class="hidden"').'>
 		<h3>Filelist</h3>
@@ -34,23 +58,73 @@ echo '<div class="container">
 		$dir = '';
 		$filesize_array = [];
 		$filesize_total = 0;
-		foreach ($objects as $file) {
-			if ($file->isDir()) {
-				$dir = $file->getFileName();
-				echo '<li class="heading">'.ucfirst($file->getFileName()).'</li>';
-			} elseif (!$file->isDir()) {
-				$filesize_array[] = $file->getSize();
-				$filesize_total = $filesize_total + $file->getSize();
-				$usercontrols = '<div class="usercontrols">
+
+		// $files = [];
+		// $dirs = [];
+		// foreach ($objects as $file) {
+		// 	if ($file->isDir()) {
+		// 		$dirs[] = $file->getFileName();
+		// 	}
+		// 	if (!$file->isDir()) {
+		// 		if (isset($_COOKIE['sortbysize']) && $_COOKIE['sortbysize'] == 1) {
+		// 			$files[$file->getFileName()] = $file->getSize();
+		// 		} elseif (isset($_COOKIE['sortbyname']) && $_COOKIE['sortbyname'] == 1) {
+		// 			$files[$file->getSize()] = $file->getFileName();
+		// 		} else {
+		// 			$files[$file->getSize()] = $file->getFileName();
+		// 		}
+		// 	}
+		// }
+		// natcasesort($files);
+		// $dirs = array_merge($dirs,$files);
+		// print_r($dirs);
+			foreach ($objects as $file) {
+		$time = DateTime::createFromFormat('U',filemtime($file->getPathName()));
+		if (!$file->isDir()) {
+			$files[] = ['filename'=>$file->getPathName(),'time'=>$time->getTimestamp(),'size'=>$file->getSize()];
+		} else {
+			$dirs[] = ['filename'=>$file->getPathName(),'time'=>$time->getTimestamp(),'size'=>$file->getSize()];
+		}
+	}
+
+		usort($dirs, function($a, $b) {
+			return $a['filename'] - $b['filename'];
+		});
+
+		usort($files, function($a, $b) {
+			if (isset($_COOKIE['sortbysize']) && $_COOKIE['sortbysize'] != 0) {
+					return ($_COOKIE['sortbysize'] == 1) ? $a['size'] - $b['size'] : $b['size'] - $a['size'];
+				} elseif (isset($_COOKIE['sortbydate']) && $_COOKIE['sortbydate'] != 0) {
+					return ($_COOKIE['sortbydate'] == 1) ? $a['time'] - $b['time'] : $b['time'] - $a['time'];
+				} elseif (isset($_COOKIE['sortbyname']) && $_COOKIE['sortbyname'] == 2) {
+					return $b['filename'] - $a['filename'];
+ 				} else {
+ 					return $a['filename'] - $b['filename'];
+ 				}
+		});
+
+		foreach ($dirs as $key => $value) {
+			$filesize_array[] = $value['size']; //file->getSize();
+			$filesize_total = $filesize_total + $value['size']; //file->getSize();
+			$dir = array_reverse(explode('/',$value['filename']))[0];//$file->getFileName();
+			echo '<li class="heading">'.ucfirst($dir).'</li>'; 
+			foreach ($files as $fkey => $fvalue) {
+			    $time = date('Y-m-d', $fvalue['time']);
+				$filesize_array[] = $fvalue['size']; //file->getSize();
+				$filesize_total = $filesize_total + $fvalue['size']; //file->getSize();
+				$filename = array_reverse(explode('/',$fvalue['filename']))[0];
+				if ($dir == array_reverse(explode('/',$fvalue['filename']))[1]) {
+					$usercontrols = '<div class="usercontrols">
 					<a href="'.$baseurl.'sharefile.php">
 						<img src="'.$webgfxpath.'share.png" alt="share file">
 					</a>'.((isset($_GET['user']) != 'public' && $username != 'public/') ? '<a class="deletefile" href="'.$baseurl.'deletefile.php">
 						<img src="'.$webgfxpath.'delete_icon.png" alt="delete file">
-					</a><form method="post" action="create_public_link.php"><input type="checkbox" class="make_public" title="Make public" '.((is_link($userpath.'public/'.$dir.'/'.explode('/',$username)[0].'__'.$file->getFileName()) ? 'checked' : '')).' value="'.((is_link($userpath.'public/'.$dir.'/'.explode('/',$username)[0].'__'.$file->getFileName()) ? 1 : 0)).'"></form>':'').'</div>';
-				echo '<li><span class="filename"'.(($dir == 'documents') ? ' style="max-width: initial; word-wrap: none;"':'').'>'.$file->getFileName().'</span>'.(($dir == 'pictures') ? '<span class="filelist_image"><img src="showfile.php?imgfile='.$file->getFileName().'&thumbs=true"></span> ' : (($dir == 'video') ? '<div class="tech-slideshow">
-						<div class="mover-1" style="background: url(showfile.php?vidfile='.$file->getFileName().'.jpg&thumbs=true);"></div>
-						<div class="mover-2" style="background: url(showfile.php?vidfile='.$file->getFileName().'.jpg&thumbs=true);"></div>
-					</div>' : '')).'<span class="filesize">'.format_size($file->getSize()).'</span>'.$usercontrols.'</li>';
+					</a><form method="post" action="create_public_link.php"><input type="checkbox" class="make_public" title="Make public" '.((is_link($userpath.'public/'.$dir.'/'.explode('/',$username)[0].'__'.$filename) ? 'checked' : '')).' value="'.((is_link($userpath.'public/'.$dir.'/'.explode('/',$username)[0].'__'.$filename) ? 1 : 0)).'"></form>':'').'</div>';
+					echo '<li><span class="filename"'.(($dir == 'documents') ? ' style="max-width: initial; word-wrap: none;"':'').'>'.$filename.(isset($_COOKIE['sortbydate']) ? ' - '.$time : '').'</span>'.(($dir == 'pictures') ? '<span class="filelist_image"><img src="showfile.php?imgfile='.$filename.'&thumbs=true"></span> ' : (($dir == 'video') ? '<div class="tech-slideshow">
+						<div class="mover-1" style="background: url(showfile.php?vidfile='.$filename.'.jpg&thumbs=true);"></div>
+						<div class="mover-2" style="background: url(showfile.php?vidfile='.$filename.'.jpg&thumbs=true);"></div>
+					</div>' : '')).'<span class="filesize">'.format_size($fvalue['size']).'</span>'.$usercontrols.'</li>';
+				}
 			}
 		}
 	}
