@@ -20,7 +20,8 @@ error_reporting(E_ALL); // this should be commented out in production environmen
 
 // if this is set, it trumps the session-timeout in php.ini
 
-// DB-information
+// DB-information (EDIT THIS TO ACCESS DATABASE)
+
 // Set the hostname for your database - either a direct IP-address, or a domain name
 $dbhost = '';
 // If a custom port is needed to connect to the database, set the value here
@@ -33,31 +34,41 @@ $dbusername = '';
 $dbpassword = '';
 // Set the database's table-prefix, in case you have multiple databases in one instance, or just want to differentiate between tables
 $prefix = '';
-
+// do not change this value
 $dbprefix = $prefix.'_';
 
-// $_SESSION / user settings  --  DO NOT MODIFY THIS
-$user_array = file_exists($_SERVER['DOCUMENT_ROOT'].'/conf/.userlist') ? file($_SERVER['DOCUMENT_ROOT'].'/conf/.userlist',FILE_IGNORE_NEW_LINES) : '';
 
+// EDITABLE OPTIONS (EDIT THESE TO CHANGE PAGE-FUNCTIONALITY)
+
+//sets public access on or off (true/false)
+$allow_public = true;
+//allow users to log in - if allow_public is set to false, this has to be set to true
+$use_login = true;
+//turns quotes in gallery.php on or off (true/false)
+$show_quotes = true;
+//turns on or off use of a database - the database-variables must be filled out before this is turned on (true/false)
+$use_db = false;
+//turns on or off debug-functionality (logfiles, visible error-messages etc) (true/false)
+$debug = true;
+//sets the site as deactivated temporarily (1/0)
+//$deactivated = 0; //currently not in use
+//change this to add or remove menu-items - do not change the sequence of elements
+$menu_array = ['index','gallery','upload','login','register','userprofile'];
+
+$user_array = file_exists($_SERVER['DOCUMENT_ROOT'].'/conf/.userlist') ? file($_SERVER['DOCUMENT_ROOT'].'/conf/.userlist',FILE_IGNORE_NEW_LINES) : '';
 $userpath = 'users/';
 $username = (isset($_SESSION['loggedin'])) ? $_SESSION['username'].'/' : 'public/';
 $usertype = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : 'user';
-
-$allow_public = true;
+$isadmin = ($usertype == 'admin') ? true : false;
+$isloggedin = isset($_SESSION['loggedin']) ? $_SESSION['loggedin'] : false;
 
 $countrycode = !empty($_SESSION['userlanguage']) ? $_SESSION['userlanguage'] : 187;
+$filesize_units = explode(' ', 'B KB MB GB TB PB');
+$total_filesize_limit = 536870912; //0; 512MB //GB
 
 $forgottenpassword = (isset($_GET['page']) && $_GET['page'] == 'forgottenpassword') ? 1 : '';
 $register_user = (isset($_GET['page']) && $_GET['page'] == 'adduser') ? 1 : '';
-$deactivated = 0;
 
-$use_login = true;
-$isloggedin = isset($_SESSION['loggedin']) ? $_SESSION['loggedin'] : false;
-$show_quotes = true;
-$use_db = false;
-$debug = true;
-$filesize_units = explode(' ', 'B KB MB GB TB PB');
-$total_filesize_limit = 536870912; //0; 512MB //GB
 // Session-control
 // The inactive variable controls how many seconds an active session lasts - if you want another value, replace this with the amount. Value in seconds Take note to change the value in the persdb.js file as well - the value for count
 $inactive = '600';

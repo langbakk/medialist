@@ -13,9 +13,9 @@ require_once('conf/config.php');
 			// if (!is_link($userpath.'public/'.$checkthumbs[0].'/thumbs/'.explode('/',$username)[0].'__'.$checkthumbs[1])) {
 				$thumbs = (($checkthumbs[0] == 'pictures') ? 
 					symlink($_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$checkthumbs[0].'/thumbs/'.$checkthumbs[1],$userpath.'public/'.$checkthumbs[0].'/thumbs/'.explode('/',$username)[0].'__'.$checkthumbs[1]) : 
-					($checkthumbs[0] == 'video') ? 
+					(($checkthumbs[0] == 'video') ? 
 					symlink($_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$checkthumbs[0].'/thumbs/'.$checkthumbs[1].'.jpg',$userpath.'public/'.$checkthumbs[0].'/thumbs/'.explode('/',$username)[0].'__'.$checkthumbs[1].'.jpg') : 
-					false);
+					false));
 			// }
 			if (!is_link($userpath.'public/'.$new_symbolic)) {
 				symlink($_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$symbolic,$userpath.'public/'.$new_symbolic);

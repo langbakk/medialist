@@ -1,9 +1,16 @@
 <?php
 if (!session_id()) { session_start(); };
 $returnmessage = json_encode([]);
+$deletefile = '';
 require_once('conf/config.php');
-	$deletefile = (isset($_POST['filename']) ? $_POST['filename'] : '');
-	$username = ((isset($_POST['username']) && !empty($_POST['username'])) ? $_POST['username'].'/' : $username);
+	if (isset($_POST['filename']) && ((isset($_POST['deletepublic'])) == true)) {
+		$tmpfn = explode('/',$_POST['filename']);
+		$tmpfn[1] = explode('/',$username)[0].'__'.$tmpfn[1]; 
+		$deletefile = join('/',$tmpfn);
+	} elseif (isset($_POST['filename'])) {
+		$deletefile = $_POST['filename'];
+	} 
+	$username = ((isset($_POST['username']) && !empty($_POST['username'])) ? $_POST['username'].'/' : (((isset($_POST['deletepublic'])) == true) ? 'public/' : $username));
 	if (file_exists($userpath.$username.$deletefile)) {
 		if (!empty($deletefile)) {
 			$checkthumbs = explode('/',$deletefile);

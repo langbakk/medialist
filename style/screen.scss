@@ -161,6 +161,22 @@ a {
 	background: $main-light;
 	color: $main-dark-transparent;
 }
+.sortlinks {
+	display: block;
+	max-width: 20em;
+	margin: 0 auto;
+	line-height: 2em;
+	a {
+		display: inline-block;
+		width: 50%;
+	}
+	a:first-of-type {
+		text-align: left;
+	}
+	a:last-of-type {
+		text-align: right;	
+	}
+}
 
 .usercontrols a img {
 	height: 1em;
@@ -265,6 +281,7 @@ li span:not(.public_sharename):not(.filename):not(.filesize):not(.filelist_image
 	position: absolute;
 	top: 0;
 	right: 0;
+	max-width: 5em;
 }
 li span a,li .usercontrols a {
 	display: inline-block;
@@ -277,10 +294,19 @@ li .hovername {
 	display: block;
 	position: absolute;
 }
-[id$='_list'] li .usercontrols {
+li .usercontrols form {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	vertical-align: top;
+}
+li .usercontrols form .make_public {
+	margin-top: .2em;
+}
+[id$='_list'] li .usercontrols,#user_filelist li .usercontrols {
 	display: none;
 }
-[id$='_list'] li:hover .usercontrols {
+[id$='_list'] li:hover .usercontrols,#user_filelist li:hover .usercontrols {
 	display: block;
 	z-index: 1000;
 }
@@ -433,6 +459,7 @@ input[type=submit],input[type=button],input[type=file] {
 	background-color: $main-light;
 	cursor: pointer;
 	line-height: 1em;
+	margin-top: .75em;
 	&:hover {
 		background-color: $hilight-contrast;
 		color: $main-light;
@@ -547,7 +574,7 @@ label {
 #logoutform {
 	width: 7em;
 	border: none;
-	margin: 1.5em 0.5em 0.5em 0.5em;
+	margin: .6em .5em .5em .5em;
 	padding: 0;
 	position: fixed;
 	top: 0;
@@ -1109,6 +1136,7 @@ label {
 .center {
 	display: block;
 	margin: 0 auto;
+	text-align: center;
 }
 #lightbox_container.visible {
 	// width: 60%;

@@ -116,6 +116,16 @@ $(document).ready(function() {
 		$("#file").removeClass('active').addClass('inactive');
 	})
 
+	$('.sortlinks a').click(function(e) {
+		e.preventDefault();
+		var urlParam = $(this).attr('href').split('=')[1];
+		$.post('update_cookie.php',{'setsort':urlParam}, function(data) {
+			data = $.parseJSON(data);
+			showUpdateInfo(''+data.content+'',''+data.infotype+'');
+			window.location.reload(true);
+		})
+	})
+
 	$(function() {
 		equalHeight($('.video'));
 		var elementHeight = $('.video').height();

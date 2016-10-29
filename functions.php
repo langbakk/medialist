@@ -127,7 +127,7 @@ error_reporting(E_ALL); // this should be commented out in production environmen
 
   		function displayMenu($baseurl, $usedb = false) {
   			if ($usedb == false) {
-  				$menuArray = ['index','gallery','upload','login','userprofile'];
+  				$menuArray = Config::read('menu_array');
   				$main_menu = '<ul id="mainmenu" class="flexlist">';
   				$allow_public = Config::read('allow_public');
   				$isloggedin = Config::read('isloggedin');
@@ -135,9 +135,9 @@ error_reporting(E_ALL); // this should be commented out in production environmen
   						$menutext = pathinfo($value);
   						$useurl = $menutext['basename'];
   						$page = (isset($_GET['page'])) ? $_GET['page'] : 'index'; 
-  						if ($allow_public == true && !$isloggedin && $key != 4) {
+  						if ($allow_public == true && !$isloggedin && $key != 5) {
   							$main_menu .= '<li '.(($page == strtolower($menutext['filename'])) ? 'class="active"' : '').'><a href="'.(($useurl == 'index') ? '/' : $useurl).'">'.ucfirst((($menutext['filename'] == 'index') ? 'home' : $menutext['filename'])).'<span class="activearrow">&nbsp;</span></a></li>';
-  						} elseif ($isloggedin && $key != 3) {
+  						} elseif ($isloggedin && ($key != 3 && $key != 4)) {
 	  						$main_menu .= '<li '.(($page == strtolower($menutext['filename'])) ? 'class="active"' : '').'><a href="'.(($useurl == 'index') ? '/' : $useurl).'">'.ucfirst((($menutext['filename'] == 'index') ? 'home' : $menutext['filename'])).'<span class="activearrow">&nbsp;</span></a></li>';
   						}
   					}
