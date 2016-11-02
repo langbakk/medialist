@@ -1,15 +1,19 @@
 <?php
 
+$original_username = $username;
 $username = (isset($_GET['user'])) ? $_GET['user'].'/' : $username;
 $username_exist = false;
 
 for ($i = 0; $i < count($user_array); $i++) {
 	$exploded_user_array = explode('//',$user_array[$i]);
-	$user_exist = ((isset($_GET['user']) && $_GET['user'] == 'public' && $allow_public == true) ? true : (($username == trim($exploded_user_array[0]).'/') ? true : false));
+	$user_exist = ((!$isloggedin && ($allow_public == true)) ? true : ((isset($_GET['user']) && $_GET['user'] == 'public' && ($allow_public == true)) ? true : (($username == trim($exploded_user_array[0]).'/') ? true : false)));
 	if ($user_exist == true) {
 		break;
 	}
 }
+
+echo '<span id="username_view">You\'re viewing: <i>'.explode('/',$username)[0].'</i></span>';
+
 
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_public == true) {
 	$allempty = 0;
@@ -45,7 +49,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 								$shared_content = array_reverse(explode('/',readlink($_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/'.$val)))[2];
 							}
 							$usercontrols = '<div class="usercontrols">
-								<a href="'.$baseurl.'sharefile.php">
+								<a class="sharefile" href="'.$baseurl.'sharefile.php">
 									<img src="'.$webgfxpath.'share.png" alt="share file">
 								</a>';
 								if (($isloggedin && $isadmin) || ($isloggedin && isset($_GET['user']) == $username)) { 

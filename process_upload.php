@@ -52,7 +52,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 				for ($i = 0; $i <= $totalentries; $i++) {
 					$allowed .= (($i == $totalentries) ? $allowed_extensions[$i] : $allowed_extensions[$i].', ');
 				}
-				if (($_FILES['file']['size'] + foldersize($userpath.$username) < Config::read('total_filesize_limit'))) {
+				if (($_FILES['file']['size'] + foldersize($userpath.$username) < $storage_limit)) {
 					if (in_array($_FILES['file']['type'], allowedMimeTypes(''))) {
 						if (in_array($_FILES['file']['type'], allowedMimeTypes('audio'))) {
 							$folder = 'music';

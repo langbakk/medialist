@@ -11,7 +11,7 @@ require_once('conf/config.php');
 			$new_symbolic = ($checkthumbs[0] == 'video') ? $checkthumbs[0].'/'.explode('/',$username)[0].'__'.$checkthumbs[1] : $checkthumbs[0].'/'.explode('/',$username)[0].'__'.$checkthumbs[1];
 			
 			// if (!is_link($userpath.'public/'.$checkthumbs[0].'/thumbs/'.explode('/',$username)[0].'__'.$checkthumbs[1])) {
-				$thumbs = (($checkthumbs[0] == 'pictures') ? 
+				$thumbs = 	(($checkthumbs[0] == 'pictures') ? 
 					symlink($_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$checkthumbs[0].'/thumbs/'.$checkthumbs[1],$userpath.'public/'.$checkthumbs[0].'/thumbs/'.explode('/',$username)[0].'__'.$checkthumbs[1]) : 
 					(($checkthumbs[0] == 'video') ? 
 					symlink($_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$checkthumbs[0].'/thumbs/'.$checkthumbs[1].'.jpg',$userpath.'public/'.$checkthumbs[0].'/thumbs/'.explode('/',$username)[0].'__'.$checkthumbs[1].'.jpg') : 

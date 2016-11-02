@@ -64,7 +64,7 @@ $isloggedin = isset($_SESSION['loggedin']) ? $_SESSION['loggedin'] : false;
 
 $countrycode = !empty($_SESSION['userlanguage']) ? $_SESSION['userlanguage'] : 187;
 $filesize_units = explode(' ', 'B KB MB GB TB PB');
-$total_filesize_limit = 536870912; //0; 512MB //GB
+$storage_limit = (isset($_SESSION['storagelimit'])) ? $_SESSION['storagelimit'] : 536870912; //512MB as default
 
 $forgottenpassword = (isset($_GET['page']) && $_GET['page'] == 'forgottenpassword') ? 1 : '';
 $register_user = (isset($_GET['page']) && $_GET['page'] == 'adduser') ? 1 : '';

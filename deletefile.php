@@ -8,6 +8,9 @@ require_once('conf/config.php');
 		$tmpfn[1] = explode('/',$username)[0].'__'.$tmpfn[1]; 
 		$deletefile = join('/',$tmpfn);
 	} elseif (isset($_POST['filename'])) {
+		$tmpfn = explode('/',$_POST['filename']);
+		$tmpfn[1] = explode('/',$username)[0].'__'.$tmpfn[1]; 
+		$delete_sharedfile = join('/',$tmpfn);
 		$deletefile = $_POST['filename'];
 	} 
 	$username = ((isset($_POST['username']) && !empty($_POST['username'])) ? $_POST['username'].'/' : (((isset($_POST['deletepublic'])) == true) ? 'public/' : $username));
@@ -20,6 +23,9 @@ require_once('conf/config.php');
 			if (is_link($userpath.'public/'.$deletefile)) {
 				unlink($userpath.'public/'.$deletefile);
 				unlink($userpath.'public/'.$checkthumbs[0].'/thumbs/'.$checkthumbs[1]);
+			} elseif (is_link($userpath.'public/'.$delete_sharedfile)) {
+				unlink($userpath.'public/'.$delete_sharedfile);
+				unlink($userpath.'public/'.$checkthumbs[0].'/thumbs/'.(($checkthumbs[0] == 'video') ? $tmpfn[1].'.jpg' : $tmpfn[1]));
 			}
 			if((isset($_POST['deletepublic']) == true) && !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 				$returnmessage = json_encode(["content"=>"File removed from public","infotype"=>"success"]);
@@ -33,10 +39,8 @@ require_once('conf/config.php');
 		$returnmessage = json_encode(["content"=>"it's a link","infotype"=>"info"]);
 	}
 	echo $returnmessage;
-?>
 
 
-<?php
 // if (!session_id()) { session_start(); };
 // $returnmessage = [];
 // require_once('conf/config.php');

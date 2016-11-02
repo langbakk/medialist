@@ -1,7 +1,7 @@
 <?php
 $username = (isset($_POST['username'])) ? $_POST['username'] : '';
 $password = (isset($_POST['password'])) ? $_POST['password'] : '';
-
+echo '<div class="container">';
 if (isset($_POST['submit_login']) && $username != '' && $password != '') {
 	if ($use_db === false) {
 		$success = false;
@@ -11,6 +11,7 @@ if (isset($_POST['submit_login']) && $username != '' && $password != '') {
 				$_SESSION['loggedin'] = true;
 				$_SESSION['username'] = trim($exploded_user_array[0]);
 				$_SESSION['usertype'] = trim($exploded_user_array[2]);
+				$_SESSION['storagelimit'] = (array_key_exists(3,$exploded_user_array)) ? trim($exploded_user_array[3]) : $storage_limit;
 				$success = true;
 				$folderexist = false;
 				$foldercreated = false;
@@ -50,7 +51,7 @@ if (isset($_POST['submit_login']) && $username != '' && $password != '') {
 		session_unset();
 		header('refresh: 0');
 }
-echo '<div class="container">';
+
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == false) || !isset($_SESSION['loggedin'])) {
 		if ($allow_public == true && !$isloggedin) {
 		echo '<p class="messagebox info visible">You can upload files and have them show in the public gallery without logging in, but you will not be able to set uploads as private, nor make your own albums</p>';

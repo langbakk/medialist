@@ -8,7 +8,7 @@ if ($isloggedin) {
 $username_readable = ucfirst(explode('/',$username)[0]);
 
 	$disk_used = foldersize($userpath.$username);
-	$disk_remaining = Config::read('total_filesize_limit') - $disk_used;
+	$disk_remaining = $storage_limit - $disk_used;
 
 
 echo '<div class="container">
@@ -128,7 +128,7 @@ echo '<div class="container">
 				$filename = array_reverse(explode('/',$fvalue['filename']))[0];
 				if ($dir == array_reverse(explode('/',$fvalue['filename']))[1]) {
 					$usercontrols = '<div class="usercontrols">
-					<a href="'.$baseurl.'sharefile.php">
+					<a class="sharefile" href="'.$baseurl.'sharefile.php">
 						<img src="'.$webgfxpath.'share.png" alt="share file">
 					</a>'.((isset($_GET['user']) != 'public' && $username != 'public/') ? '<a class="deletefile" href="'.$baseurl.'deletefile.php">
 						<img src="'.$webgfxpath.'delete_icon.png" alt="delete file">
@@ -144,7 +144,7 @@ echo '<div class="container">
 	echo '</ul>
 	</div>';
 	$average_size = format_size($filesize_total / count($filesize_array));
-	echo '<p><b>Diskspace used:</b> '.format_size($disk_used).'<br><b>Diskspace left:</b> '.((format_size($disk_remaining) < ($average_size * 3)) ? '<span class="error">'.format_size($disk_remaining).'</span>' : format_size($disk_remaining)).'</p>';
+	echo '<p class="diskspaceinfo"><span>Diskspace used: '.format_size($disk_used).'</span><span>Diskspace left: '.((format_size($disk_remaining) < ($average_size * 3)) ? '<span class="error">'.format_size($disk_remaining).'</span>' : format_size($disk_remaining)).'</span></p>';
 
 echo '</div></div>';
 } else {

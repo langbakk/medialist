@@ -44,6 +44,15 @@ $(document).ready(function() {
 		})
 	}
 	if (GetURLParameter() == '/gallery') {
+		$('.sharefile').click(function(e) {
+			$this = $(this);
+			e.preventDefault();
+			var userName = '';
+			if (GetURLParameter('user')) {
+				userName = GetURLParameter('user');
+			}
+			var thisFile = document.location.origin+'/?'+$(this).parents('li').find('a:first').attr('href').split('?')[1];
+		})
 		$('.deletefile').click(function(e) {
 			$this = $(this);
 			e.preventDefault();
@@ -54,7 +63,6 @@ $(document).ready(function() {
 	        var thisListID = $(this).parents('ul').prop('id');
 	        var thisListFolder = $(this).parents('ul').prop('id').split('_')[0];
 			var thisFile = $(this).parents('li').find('a:first').attr('href').split('=')[1].split('&')[0];
-			console.log(thisFile);
 			$.post('deletefile.php', { filename:thisListFolder+'/'+thisFile,username:userName }, function(data) { 
 	            data = $.parseJSON(data);
 	            showUpdateInfo(''+data.content+'',''+data.infotype+'');
