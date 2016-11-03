@@ -3,6 +3,7 @@ if (!session_id()) { session_start(); };
 require_once('conf/config.php');
 require_once('functions.php');
 $returnmessage = json_encode(["content"=>"Error Error Error","infotype"=>"error"]);
+$changereturnheader = 0;
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_public == true) {
 		if (isset($_FILES['file'])) {
 			if (in_array('error', $_FILES['file'])) {
@@ -94,6 +95,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 					} else {
 						if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {		
 							// echo 'this filetype is not allowed 1';
+							$changereturnheader = 1;
 							$returnmessage = json_encode(["content"=>"The filetype you tried to upload is not allowed","infotype"=>"error"]);
 						}
 					}
@@ -109,6 +111,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 			} else {
 				if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 					// echo 'filetype not allowed 2';
+					$changereturnheader = 1;
 					$returnmessage = json_encode(["content"=>"The filetype you tried to upload is not allowed","infotype"=>"error"]);
 				}
 			}
@@ -116,6 +119,9 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 	// echo returnCurrentUploads('current_uploads.php');
 		if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 			// echo 'returnmsg';
+			if ($changereturnheader == 1) {
+				http_response_code(415);
+			}
 			echo $returnmessage;
 		} else {
 			header('location: upload');

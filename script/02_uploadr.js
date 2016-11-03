@@ -329,6 +329,18 @@ Dropzone.options.upload = {
 					var data = $.parseJSON(response);
 					showUpdateInfo(''+data.content+'',''+data.infotype+'');
 				});
+				this.on('error', function(file, response) {
+					var data = $.parseJSON(response);
+					showUpdateInfo(''+data.content+'',''+data.infotype+'');
+					$('.dz-error-mark svg g g').attr('fill','#F00');
+					_ref = file.previewElement.querySelectorAll("[data-dz-errormessage]");
+        			_results = [];
+        			for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            			node = _ref[_i];
+            			_results.push(node.textContent = data.content);
+        			}
+        			return _results;
+				});
 			};
 		});
 	}

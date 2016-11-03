@@ -18,11 +18,13 @@
 'video/x-ms-wmv'
 'video/mp4'
 'video/mpeg'
+'video/webm'
 
 //audio
 'audio/mpeg3'
 'audio/mpeg'
 'audio/x-mpeg-3'
+'audio/webm'
 
 //documents
 'application/msword'
