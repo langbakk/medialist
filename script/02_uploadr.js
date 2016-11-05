@@ -185,7 +185,7 @@ $(document).ready(function() {
 
     if (GetURLParameter('imgfile') || GetURLParameter('docfile') || GetURLParameter('vidfile')) {
     	var getFile = ((GetURLParameter('imgfile')) ? 'imgfile='+GetURLParameter('imgfile') : ((GetURLParameter('docfile')) ? 'docfile='+GetURLParameter('docfile') : (GetURLParameter('vidfile')) ? 'vidfile='+GetURLParameter('vidfile') : ''));
-
+	          	console.log('this');
     	var fileName = '',
     		fetchName = '';
     	if (GetURLParameter('imgfile')) {
@@ -232,18 +232,18 @@ $(document).ready(function() {
     $('.lightbox,.prevbutton,.nextbutton').click(function(e) {
     	e.preventDefault();
     	var $this = $(this);
-    	if ($(e.target).hasClass('prevbutton') && $('a[href$="'+linkName+'"]').parent('.pictures').prev('li.pictures').length == 0) {
+    	if ($(e.target).hasClass('prevbutton') && $('a[href$="'+linkName+'"]').parents('.pictures').prev('li.pictures').length == 0) {
     		fetchFile = $('.pictures:last-of-type').find('a').attr('href').split('/').reverse()[0].split('?')[1];
     		linkName = $('.pictures:last-of-type').find('a').attr('href').split('=')[1];
-    	} else if ($(e.target).hasClass('nextbutton') && $('a[href$="'+linkName+'"]').parent('.pictures').next('li.pictures').length == 0) {
+    	} else if ($(e.target).hasClass('nextbutton') && $('a[href$="'+linkName+'"]').parents('.pictures').next('li.pictures').length == 0) {
     		fetchFile = $('.pictures:first-of-type').find('a').attr('href').split('/').reverse()[0].split('?')[1];
     		linkName = $('.pictures:first-of-type').find('a').attr('href').split('=')[1];
-    	} else if ($(e.target).hasClass('prevbutton') && $('a[href$="'+linkName+'"]').parent('.pictures').prev('li.pictures').length != 0)  {
-    		fetchFile = $('a[href$="'+linkName+'"]').parent('.pictures').prev('li.pictures').find('a').attr('href').split('/').reverse()[0].split('?')[1];
-    		linkName = $('a[href$="'+linkName+'"]').parent('.pictures').prev('li.pictures').find('a').attr('href').split('=')[1];
+    	} else if ($(e.target).hasClass('prevbutton') && $('a[href$="'+linkName+'"]').parents('.pictures').prev('li.pictures').length != 0)  {
+    		fetchFile = $('a[href$="'+linkName+'"]').parents('.pictures').prev('li.pictures').find('a').attr('href').split('/').reverse()[0].split('?')[1];
+    		linkName = $('a[href$="'+linkName+'"]').parents('.pictures').prev('li.pictures').find('a').attr('href').split('=')[1];
     	} else if ($(e.target).hasClass('nextbutton')) {
-    		fetchFile = $('a[href$="'+linkName+'"]').parent('.pictures').next('li.pictures').find('a').attr('href').split('/').reverse()[0].split('?')[1];
-    		linkName = $('a[href$="'+linkName+'"]').parent('.pictures').next('li.pictures').find('a').attr('href').split('=')[1];
+    		fetchFile = $('a[href$="'+linkName+'"]').parents('.pictures').next('li.pictures').find('a').attr('href').split('/').reverse()[0].split('?')[1];
+    		linkName = $('a[href$="'+linkName+'"]').parents('.pictures').next('li.pictures').find('a').attr('href').split('=')[1];
     	} else {
     		linkName = $(this).attr('href').split('=')[1];
     		fetchFile = $this[0]['href'].split('/').reverse()[0].split('?')[1];
