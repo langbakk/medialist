@@ -48,7 +48,7 @@ echo '<div class="container">
 // }
 
 
-	echo '<input type="button" id="showhidefilelist" value="Show filelist">
+	echo '<input type="button" id="showhidefilelist" value="'.((isset($_COOKIE['showuserfilelist']) && $_COOKIE['showuserfilelist'] == 1) ? 'Hide' : 'Show').' filelist">
 	<span class="sortlinks">';
 
 	if (isset($_COOKIE['setsort']) && $_COOKIE['setsort'] == 'sortbydate') {

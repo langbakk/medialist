@@ -5,9 +5,9 @@ if (!session_id()) { session_start(); };
 	require_once('conf/config.php');
 	require_once('language.php');
 	require_once('functions.php'); 
-if ($current_page != 'upload') {
-	file_put_contents('current_uploads.php','');
-}
+// if ($current_page != 'upload') {
+// 	file_put_contents('.current_uploads','');
+// }
 
 $display = new PageView();
 
@@ -30,8 +30,10 @@ echo '</head>
 		}
 echo '</header>
 	<div id="top">
-	<div id="main">
-	<span id="username_display"><span title="'.(($isloggedin) ? 'You\'re logged in as '.$username.'' : 'You\'re not logged in').'" class="'.(($isloggedin) ? 'isloggedin' : 'notloggedin').'">Current account: <i>'.explode('/',$username)[0].'</i></span></span>';
+	<div id="main">';
+	if ($isloggedin) {
+		echo '<span id="username_display"><span title="'.(($isloggedin) ? 'You\'re logged in as '.$username.'' : 'You\'re not logged in').'" class="'.(($isloggedin) ? 'isloggedin' : 'notloggedin').'">Current account: <i>'.explode('/',$username)[0].'</i></span></span>';
+	}
 	if (isset($_GET['imgfile']) || isset($_GET['vidfile']) || isset($_GET['docfile'])) {
 		echo $display->getPage();
 	} elseif (!$isloggedin && $use_login == true && (empty($current_page) || $current_page == 'index' || $current_page == 'frontpage' || $current_page == 'login')) {

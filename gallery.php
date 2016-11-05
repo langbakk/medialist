@@ -12,7 +12,9 @@ for ($i = 0; $i < count($user_array); $i++) {
 	}
 }
 
-echo '<span id="username_view">You\'re viewing: <i>'.explode('/',$username)[0].'</i></span>';
+if ($isloggedin) {
+	echo '<span id="username_view">You\'re viewing: <i>'.explode('/',$username)[0].'</i></span>';
+}
 
 
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_public == true) {
@@ -88,7 +90,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 			}
 		}
 	}
-	echo '<div class="container '.(($allempty == 0) ? 'visible' : 'hidden').'">'.((isset($_GET['user']) && $user_exist == true) ? '<p class="messagebox warning visible">This user hasn\'t uploaded anything. Tell them to get their butt in gear!</p>' : (($user_exist == false) ? '<p class="messagebox error visible">That user doesn\'t exist on the server</p>' : '<p class="messagebox info visible">No files were found on the server matching the configured criteria. <a href="upload">Upload files</a></p>')).'</div>';
+	echo '<div class="container '.(($allempty == 0) ? 'visible' : 'hidden').'">'.((isset($_GET['user']) && $user_exist == true) ? '<p class="messagebox warning visible">'.(($username == 'public/') ? 'There are no public uploads to show' : 'This user hasn\'t uploaded anything. Tell them to get their butt in gear!').'</p>' : (($user_exist == false) ? '<p class="messagebox error visible">That user doesn\'t exist on the server</p>' : '<p class="messagebox info visible">No files were found on the server matching the configured criteria. <a href="upload">Upload files</a></p>')).'</div>';
 	if ($show_quotes == true) { // this setting can be changed in config.php
 		include 'quotes.php';
 	}

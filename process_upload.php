@@ -90,7 +90,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 	    						$stills_number = floor($get_frames / 200);
 	    						$output = shell_exec("/usr/local/bin/ffmpeg -y -i $video -frames 1 -q:v 1 -vf 'select=not(mod(n\,$stills_number)),scale=-1:120,tile=100x1' $thumbnail");
 							}
-							updateCurrentUploads('current_uploads.php',$_FILES['file']['name']);
+							//updateCurrentUploads('.current_uploads',$_FILES['file']['name']);
 						}
 					} else {
 						if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {		
@@ -116,7 +116,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 				}
 			}
 		}
-	// echo returnCurrentUploads('current_uploads.php');
+	//echo returnCurrentUploads('.current_uploads');
 		if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 			// echo 'returnmsg';
 			if ($changereturnheader == 1) {
