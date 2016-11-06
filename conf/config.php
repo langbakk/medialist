@@ -42,6 +42,8 @@ $dbprefix = $prefix.'_';
 
 //sets public access on or off (true/false)
 $allow_public = true;
+//sets userlist on or off
+$allow_userlist = true;
 //allow users to log in - if allow_public is set to false, this has to be set to true
 $use_login = true;
 //turns quotes in gallery.php on or off (true/false)
@@ -53,7 +55,7 @@ $debug = true;
 //sets the site as deactivated temporarily (1/0)
 //$deactivated = 0; //currently not in use
 //change this to add or remove menu-items - do not change the sequence of elements
-$menu_array = ['index','gallery','upload','login','register','userprofile'];
+$menu_array = ['index'=>'home','gallery'=>'gallery','upload'=>'upload','login'=>'login','register'=>'register','userlist'=>'userlist','userprofile'=>'your&nbsp;profile'];
 
 $user_array = file_exists($_SERVER['DOCUMENT_ROOT'].'/conf/.userlist') ? file($_SERVER['DOCUMENT_ROOT'].'/conf/.userlist',FILE_IGNORE_NEW_LINES) : '';
 $userpath = 'users/';

@@ -157,7 +157,10 @@ a {
 		background: rgba(0,0,0,.5);
 	}
 }
-.active a,#mainmenu li a:hover {
+#mainmenu a {
+	color: $visited-link-color;
+}
+#mainmenu .active a,#mainmenu li a:hover {
 	background: $main-light;
 	color: $main-dark-transparent;
 }
