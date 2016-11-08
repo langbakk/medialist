@@ -11,7 +11,8 @@ if (isset($_POST['submit_login']) && $username != '' && $password != '') {
 				$_SESSION['loggedin'] = true;
 				$_SESSION['username'] = trim($exploded_user_array[0]);
 				$_SESSION['usertype'] = trim($exploded_user_array[2]);
-				$_SESSION['storagelimit'] = (array_key_exists(3,$exploded_user_array)) ? trim($exploded_user_array[3]) : $storage_limit;
+				$_SESSION['storagelimit'] = (array_key_exists(4,$exploded_user_array)) ? trim($exploded_user_array[4]) : $storage_limit;
+				$_SESSION['allowpublic'] = (array_key_exists(3,$exploded_user_array)) ? trim($exploded_user_array[3]) : 0;
 				$success = true;
 				$folderexist = false;
 				$foldercreated = false;

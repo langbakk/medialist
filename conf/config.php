@@ -57,7 +57,17 @@ $debug = true;
 //change this to add or remove menu-items - do not change the sequence of elements
 $menu_array = ['index'=>'home','gallery'=>'gallery','upload'=>'upload','login'=>'login','register'=>'register','userlist'=>'userlist','userprofile'=>'your&nbsp;profile'];
 
-$user_array = file_exists($_SERVER['DOCUMENT_ROOT'].'/conf/.userlist') ? file($_SERVER['DOCUMENT_ROOT'].'/conf/.userlist',FILE_IGNORE_NEW_LINES) : '';
+$read_users = file_exists($_SERVER['DOCUMENT_ROOT'].'/conf/.userlist') ? file($_SERVER['DOCUMENT_ROOT'].'/conf/.userlist',FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) : '';
+$lines_in_userfile = !empty($read_users) ? count(file($_SERVER['DOCUMENT_ROOT'].'/conf/.userlist',FILE_IGNORE_NEW_LINES)) : '';
+
+$user_array = [];
+
+for ($i=0; $i < $lines_in_userfile; $i++) {
+    if (strstr($read_users[$i], '#') === false) {
+		$user_array[] = $read_users[$i];
+	}
+}
+
 $userpath = 'users/';
 $username = (isset($_SESSION['loggedin'])) ? $_SESSION['username'].'/' : 'public/';
 $usertype = (isset($_SESSION['usertype'])) ? $_SESSION['usertype'] : 'user';
@@ -66,8 +76,18 @@ $isloggedin = isset($_SESSION['loggedin']) ? $_SESSION['loggedin'] : false;
 
 $countrycode = !empty($_SESSION['userlanguage']) ? $_SESSION['userlanguage'] : 187;
 $filesize_units = explode(' ', 'B KB MB GB TB PB');
-$storage_limit = (isset($_SESSION['storagelimit'])) ? $_SESSION['storagelimit'] : 536870912; //512MB as default
-
+$defaultsize = 536870912;
+$storage_limit = (isset($_SESSION['storagelimit'])) ? $_SESSION['storagelimit'] : $defaultsize; //512MB as default
+if (isset($_GET['user'])) {
+	foreach($user_array as $user) {
+		$checkUser = explode('//',$user);
+		if ($_GET['user'] && $_GET['user'] == 'public') {
+			$storage_limit = $defaultsize;
+		} elseif ($_GET['user'] == trim($checkUser[0])) {
+			$storage_limit = (array_key_exists(4,$checkUser) ? $checkUser[4] : $defaultsize);
+		}
+	}
+}
 $forgottenpassword = (isset($_GET['page']) && $_GET['page'] == 'forgottenpassword') ? 1 : '';
 $register_user = (isset($_GET['page']) && $_GET['page'] == 'adduser') ? 1 : '';
 

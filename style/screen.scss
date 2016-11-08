@@ -165,10 +165,8 @@ a {
 	color: $main-dark-transparent;
 }
 .sortlinks {
-	display: block;
-	max-width: 20em;
-	margin: 0 auto;
 	line-height: 2em;
+	flex: 1 1 0;
 	a {
 		display: inline-block;
 		width: 50%;
@@ -180,7 +178,9 @@ a {
 		text-align: right;	
 	}
 }
-
+#sortingcontainer {
+	display: flex;
+}
 .usercontrols a img {
 	height: 1em;
 }
@@ -228,6 +228,9 @@ h1,h2,h3,h4 {
 // h2 {
 // 	background: #00a0c6;	
 // }
+h2 {
+	margin-top: .5em;
+}
 
 #main,footer {
 	margin: 0 auto;
@@ -270,7 +273,9 @@ li {
 [id^='filelist_'] img {
 	display: block;
 	margin: 0 auto .5em auto;
-
+}
+[id^='filelist_'] ul {
+	margin-top: 0;
 }
 .tech-slideshow {
 	border: .1em solid white;
@@ -481,7 +486,7 @@ input {
 #username_view {
 	border-bottom-right-radius: 0;
 }
-#gallery_body #username_display {
+#gallery_body #username_display,#userprofile_body #username_display {
 	border-bottom-left-radius: 0;
 }
 // input[type=submit],input[type=button],input[type=file] {
