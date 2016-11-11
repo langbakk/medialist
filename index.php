@@ -1,5 +1,5 @@
 <?php
-ob_start();
+// ob_start();
 if (!session_id()) { session_start(); };
 
 	require_once('conf/config.php');
@@ -50,7 +50,7 @@ echo '</header>
 echo '
 	</div>
 	<div id="updateinfo" class="messagebox"></div>
-	<div id="lightbox_container" class="hidden"><span class="closebutton">X</span><span class="nextbutton">&gt;</span><span class="prevbutton">&lt;</span></div>
+	<div id="lightbox_wrapper" class="hidden"><div id="lightbox_container"><span class="closebutton">X</span><span class="nextbutton">&gt;</span><span class="prevbutton">&lt;</span></div></div>
 	</div>
 	<footer>
 	</footer>

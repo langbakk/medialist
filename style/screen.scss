@@ -1214,7 +1214,7 @@ label {
 	margin: 0 auto;
 	text-align: center;
 }
-#lightbox_container.visible {
+#lightbox_wrapper.visible {
 	// width: 60%;
 	margin: 0 auto;
 	position: absolute;
@@ -1223,8 +1223,14 @@ label {
 	// margin-left: -30%;
 	z-index: 7000;
 	height: 30em;
+	padding: 1.5em;
+	background: rgba(0,0,0,0.7);
+	border: 1px solid #AAA;
 }
-#lightbox_container.visible img {
+#lightbox_container {
+	// position: relative;
+}
+#lightbox_container,#lightbox_container img {
 	height: 100%;
 }
 #overlay {
@@ -1242,27 +1248,34 @@ label {
 .closebutton,.nextbutton,.prevbutton {
 	display: none;
 }
-#lightbox_container:hover .closebutton, #lightbox_container:hover .nextbutton, #lightbox_container:hover .prevbutton {
+#lightbox_wrapper:hover .closebutton, #lightbox_wrapper:hover .nextbutton, #lightbox_wrapper:hover .prevbutton {
 	display: block;
 }
 .closebutton,.nextbutton,.prevbutton {
-		background: black;
+	background: rgba(88,88,88,0.85);
 	cursor: pointer; 
 	position: absolute; 
-	top: -.75em; 
-	right: -.75em; 
+	top: -1.25em; 
+	right: -1.25em; 
 	border-radius: 50%; 
-	border: 2px solid white; 
-	height: 1.5em; 
-	width: 1.5em; 
+	// border: 2px solid white; 
+	height: 2.5em; 
+	width: 2.5em; 
 	text-align: center; 
-	line-height: 1.5em;
+	line-height: 2.5em;
+	box-sizing: border-box;
+	border: 1px solid rgba(88,88,88,0.85);
+}
+.closebutton:hover,.nextbutton:hover,.prevbutton:hover {
+	background: rgba(0,0,0,0.75);
+	color: #FFF;
+	border: 1px solid #AAA;
 }
 .nextbutton, .prevbutton {
 	top: 50%;
-	left: -.75em;
+	left: -1.25em;
 }
 .nextbutton {
 	left: initial;
-	right: -.75em;
+	right: -1.25em;
 }

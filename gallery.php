@@ -16,7 +16,6 @@ if ($isloggedin) {
 	echo '<span id="username_view">You\'re viewing: <i>'.explode('/',$username)[0].'</i></span>';
 }
 
-
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_public == true) {
 	$allempty = 0;
 	$dir_array = [1 => 'music', 2 => 'pictures/thumbs', 3 => 'video', 4 => 'documents'];

@@ -10,12 +10,9 @@ Options -Indexes
 RewriteEngine on
 
 RewriteRule (script|style|users|webgfx|translations|setup|)/(.+)$ $1/$2 [NC,QSA,L]
-
-RewriteRule ^(update_cookie.php|showfile.php|current_uploads.php|deletefile.php|language.php|gallery.php|quotes.php|retrieve_folder.php|check_email.php|config.php|delete_setup.php|functions.php|get_settings.php|get_update_info.php|get_userinfo.php|license.txt|login.php|process_search.php|process_setup.php|returnmessages.php|send_email.php|statistics_processing.php|update_settings.php|upload.php|process_upload.php|create_public_link.php)$ $1 [L,QSA]
-
+RewriteRule ^(current_uploads.php|showfile.php|deletefile.php|language.php|quotes.php|retrieve_folder.php|check_email.php|config.php|delete_setup.php|functions.php|get_settings.php|get_update_info.php|get_userinfo.php|license.txt|login.php|process_search.php|process_setup.php|returnmessages.php|send_email.php|statistics_processing.php|update_settings.php|upload.php|process_upload.php|create_public_link.php)$ $1 [L,QSA]
 RewriteRule ^(coreclass.php|coreclass|functions.php|functions|language.php|language)$ index
-RewriteRule ^index.php?page=index|^index index.php [L,QSA,NC]
-
+RewriteRule ^index.php?page=index|^index index.php [L,QSA]
 RewriteRule ^(.*)$ index.php?page=$1 [L,QSA]
 
 <IfModule mod_expires.c>

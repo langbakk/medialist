@@ -1,7 +1,6 @@
 <?php
 require_once('conf/config.php');
 if (!session_id()) { session_start(); };
-
 $username = (($isloggedin && isset($_GET['user'])) ? $_GET['user'].'/' : ((!$isloggedin) ? 'public/' : $username));
 if (!empty($_SERVER['QUERY_STRING']) && $username != 'public/') {
 	$potential_public_file = explode('__',explode('=',$_SERVER['QUERY_STRING'])[1])[0];
@@ -20,7 +19,7 @@ if (!empty($_SERVER['QUERY_STRING']) && $username != 'public/') {
 		if (isset($_GET['thumbs'])) {
 			header('X-Sendfile: '.$_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.'pictures/thumbs/'.$_GET['imgfile']);
 		} else {
-			header('X-Sendfile: '.$_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.'pictures/'.$_GET['imgfile'].'');
+			header('X-Sendfile: '.$userpath.$username.'pictures/'.$_GET['imgfile'].'');
 		}
     } elseif (isset($_GET['docfile'])) {
     	header('Content-Disposition: attachment; filename='.$_GET['docfile'].'');

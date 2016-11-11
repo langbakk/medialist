@@ -1,4 +1,5 @@
 <?php
+
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_public == true) {
 
 echo '<div class="container">
