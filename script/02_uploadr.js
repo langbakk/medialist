@@ -11,13 +11,12 @@ $(document).ready(function() {
 			e.preventDefault();
 			var userName = '';
 			var thisListID = $(this).parents('ul').prop('id');
-			var thisListFolder = $(this).parents('li').prevAll('li.heading:first').text().toLowerCase();
+			var thisListFolder = $(this).closest('li').prevAll('li.heading:first').text().toLowerCase();
 			var thisFile = $(this).parents('li').find('.filename').text();
 			$.post('deletefile.php', { filename:thisListFolder+'/'+thisFile,username:userName }, function(data) { 
 				data = $.parseJSON(data);
 				showUpdateInfo(''+data.content+'',''+data.infotype+'');
-				if (($this.parents('li').prev('li.heading:first') && $this.parents('li').next('li.heading')) || ($this.parents('li').prev('li.heading:first') && ($this.parents('li').next('li').length == 0))) {
-					console.log('blah');
+				if ((($this.parents('li').prev('li').hasClass('heading')) === true) && ((($this.parents('li').next('li').hasClass('heading')) === true) || ($this.parents('li').next('li').length == 0))) {
 					$this.parents('li').prev('li.heading:first').remove();
 				}
 				$this.parents('li').remove();
@@ -183,9 +182,31 @@ $(document).ready(function() {
     	}
     })
 
+	$(window).on('resize',function() { //this shows the new windowwidth (in conjunction with the above) on resize
+		if (viewportSize.getWidth() <= 320 && $('#username_view').length > 0) {
+			var userNameWidth = $('#username_display').width();
+    		$('#username_display').css({'border-radius':'0'});
+    		$('#username_view').css({'width':userNameWidth,'text-align':'center'});
+    	}
+    })
+	if (viewportSize.getWidth() <= 320 && $('#username_view').length > 0) {
+		var userNameWidth = $('#username_display').width();
+    	$('#username_display').css({'border-radius':'0'});
+    	$('#username_view').css({'width':userNameWidth,'text-align':'center'});
+    }
+    $(window).on('resize', function() {
+    	if (viewportSize.getWidth() <= 480) {
+    		$('#logoutform input').val('X');
+    	} else {
+    		$('#logoutform input').val('Log out');
+    	}
+    })
+    if (viewportSize.getWidth() <= 480) {
+    	$('#logoutform input').val('X');
+    } 
+
     if (GetURLParameter('imgfile') || GetURLParameter('docfile') || GetURLParameter('vidfile')) {
     	var getFile = ((GetURLParameter('imgfile')) ? 'imgfile='+GetURLParameter('imgfile') : ((GetURLParameter('docfile')) ? 'docfile='+GetURLParameter('docfile') : (GetURLParameter('vidfile')) ? 'vidfile='+GetURLParameter('vidfile') : ''));
-	          	console.log('this');
     	var fileName = '',
     		fetchName = '';
     	if (GetURLParameter('imgfile')) {
@@ -256,7 +277,6 @@ $(document).ready(function() {
     		linkName = $(this).attr('href').split('=')[1];
     		fetchFile = $this[0]['href'].split('/').reverse()[0].split('?')[1];
     	}
-    	// console.log($('a[href$="'+linkName+'"]').parent('.pictures').next('li.pictures').length == 0);
     	
    		$.ajax({
           url: 'showfile.php',

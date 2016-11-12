@@ -131,9 +131,9 @@ function displayMenu($baseurl, $usedb = false) {
 		$menuArray = Config::read('menu_array');
 		$allow_public = Config::read('allow_public');
 		$allow_userlist = Config::read('allow_userlist');
-		$isloggedin = Config::read('isloggedin');
-
-		$main_menu = '<ul id="mainmenu" class="flexlist">';
+		$isloggedin = Config::read('isloggedin');	
+		$main_menu = '<label for="mainmenu_button" class="menulistbutton"></label><input type="checkbox" id="mainmenu_button">';
+		$main_menu .= '<ul id="mainmenu" class="flexlist">';
 		foreach ($menuArray as $key => $value) {
 			$menutext = pathinfo($key);
 			$useurl = $menutext['basename'];

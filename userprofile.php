@@ -30,7 +30,7 @@ echo '<div class="container">
 	$filter = new MyRecursiveFilterIterator($iterator);
 
 	$objects  = new RecursiveIteratorIterator($filter,RecursiveIteratorIterator::SELF_FIRST);
-
+	if ($disk_used != 0) {
 	echo '<input type="button" id="showhidefilelist" value="'.((isset($_COOKIE['showuserfilelist']) && $_COOKIE['showuserfilelist'] == 1) ? 'Hide' : 'Show').' filelist">
 	<div id="sortingcontainer">';
 	$currentsorttype = '<span class="sortlinks">Filelist is currently sorted by '.((isset($_COOKIE['setsort']) && $_COOKIE['setsort'] == 'sortbysize') ? 'size' : ((isset($_COOKIE['setsort']) && $_COOKIE['setsort'] == 'sortbydate') ? 'date' : ((isset($_COOKIE['setsort']) && $_COOKIE['setsort'] == 'sortbyname') || !isset($_COOKIE['setsort']) ? 'name' : ''))).'</span>';
@@ -42,8 +42,9 @@ echo '<div class="container">
 	} else {
 		$output = '<a href="update_cookie.php?setsort=sortbysize">Sort by size</a></span>'.$currentsorttype.'<span class="sortlinks"><a href="update_cookie.php?setsort=sortbydate">Sort by date</a>';
 	}
-	echo '<span class="sortlinks">'.$output.'</span></div>
-	<div id="filelist_'.strtolower($username_readable).'" '.(((isset($_COOKIE['showuserfilelist']) && $_COOKIE['showuserfilelist'] == 1) || !isset($_COOKIE['showuserfilelist'])) ? '' : 'class="hidden"').'>
+	echo '<span class="sortlinks">'.$output.'</span></div>';
+}
+	echo '<div id="filelist_'.strtolower($username_readable).'" '.(((isset($_COOKIE['showuserfilelist']) && $_COOKIE['showuserfilelist'] == 1) || !isset($_COOKIE['showuserfilelist'])) ? '' : 'class="hidden"').'>
 		<h3>Filelist</h3>
 	<ul class="alternate" id="user_filelist">';
 		$filesize_array = [];

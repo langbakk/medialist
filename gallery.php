@@ -12,6 +12,22 @@ for ($i = 0; $i < count($user_array); $i++) {
 	}
 }
 
+if (!is_dir($userpath.$username)) {
+	mkdir($userpath.$username, 0744, true);
+}
+$directories = [1 => '/pictures', 2 => '/pictures/thumbs', 3 => '/video', 4 => '/video/thumbs', 5 => '/music', 6 => '/documents'];
+if (is_dir($userpath.$username)) {
+	$foldercreated = false;
+	foreach ($directories as $key => $dir) {
+		if (!is_dir($userpath.$username.$dir)) {
+			mkdir($userpath.$username.$dir, 0744, true);
+			file_put_contents($userpath.$username.$dir.'/.gitignore','# Ignore everything in this directory'."\r\n".'*'."\r\n".'# Except this file'."\r\n".'!.gitignore');
+			$foldercreated = true;
+		}
+	}
+	$folderexist = true;
+} 
+
 if ($isloggedin) {
 	echo '<span id="username_view">You\'re viewing: <i>'.explode('/',$username)[0].'</i></span>';
 }

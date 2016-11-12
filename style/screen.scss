@@ -157,6 +157,10 @@ a {
 		background: rgba(0,0,0,.5);
 	}
 }
+.menulistbutton {
+	display: none;
+}
+
 #mainmenu a {
 	color: $visited-link-color;
 }
@@ -164,18 +168,25 @@ a {
 	background: $main-light;
 	color: $main-dark-transparent;
 }
+
 .sortlinks {
 	line-height: 2em;
 	flex: 1 1 0;
+	box-sizing: border-box;
+}
+#sortingcontainer {
 	a {
-		display: inline-block;
-		width: 50%;
+		display: block;
+		width: 100%;
+		box-sizing: border-box;
 	}
-	a:first-of-type {
+	span:first-of-type a {
 		text-align: left;
+		margin-left: 1em;
 	}
-	a:last-of-type {
-		text-align: right;	
+	span:last-of-type a {
+		text-align: right;
+		padding-right: 1em;
 	}
 }
 #sortingcontainer {
@@ -420,6 +431,10 @@ li.pictures,li.video {
 	// 	}
 	// }
 }
+#mainmenu_button {
+	position: absolute;
+	clip: rect(0, 0, 0, 0);
+}
 
 header {
 	height: 5em;
@@ -457,6 +472,9 @@ form {
 #user_registration_form, #loginform {
 	max-width: 20em;
 	margin-top: 2em;
+	label {
+		min-width: 5em;
+	}
 }
 input {
 	text-align: center;
@@ -465,7 +483,7 @@ input {
 	border: .1em solid;
 	&:not([type=submit]),&:not([type=file]),&:not([type=checkbox]) {
 		background: #000;
-		color: #fff;
+		color: $hilight;
 		width: 20em;
 		line-height: 3em;
 	}
@@ -515,7 +533,7 @@ input {
   text-decoration: none;
   vertical-align: middle;
   cursor: pointer;
-  background: #FFF;
+  background: $hilight;
   filter: none;
   text-align: center;
   font-size: .75em;
@@ -527,7 +545,7 @@ input {
 .button:focus,input[type=submit]:focus,input[type=button]:focus,button:focus,.button:hover,input[type=submit]:hover,input[type=button]:hover,button:hover {
   background: #7ACFD6;
   border-color: #CCC;
-  color: #FFF;
+  color: $hilight;
   -webkit-transition: color 0.4s ease, background 0.8s ease, border-color 0.4s ease;
   transition: color 0.4s ease, background 0.8s ease, border-color 0.4s ease;
 }
@@ -907,7 +925,7 @@ label {
 }
 .dropzone,.content {
 	min-height: 30em;
-	border: 0.2em dashed #fff;
+	border: 0.2em dashed $hilight;
 	border-radius: 0.4em;
 	max-width: 95%;
 	// background: white;
@@ -1268,7 +1286,7 @@ label {
 }
 .closebutton:hover,.nextbutton:hover,.prevbutton:hover {
 	background: rgba(0,0,0,0.75);
-	color: #FFF;
+	color: $hilight;
 	border: 1px solid #AAA;
 }
 .nextbutton, .prevbutton {
@@ -1279,3 +1297,49 @@ label {
 	left: initial;
 	right: -1.25em;
 }
+@media screen and (max-width: 88em) {
+	#mainmenu {
+		position: absolute;
+		top: 6em;
+		left: -25em;
+		background: $hilight;
+		display: block;
+		max-width: 11em;
+	}
+	.menulistbutton {
+		display: initial;
+	}
+	.menulistbutton {
+		position: relative;
+		padding-left: 1.25em;
+		cursor: pointer;
+	}
+	.menulistbutton:before {
+		content: "";
+		position: absolute;
+		top: -3em;
+		left: 1.5em;
+		width: 1.5em;
+		height: 0.175em;
+		border-top: 0.575em double #000;
+		border-bottom: 0.225em solid #000;
+	}
+	#mainmenu_button:checked ~ #mainmenu {
+		left: .5em;
+		transition: left 1s;
+	}
+	#mainmenu_button ~ #mainmenu {
+		left: -25em;
+		transition: left 1s;
+	}
+	.messagebox {
+		margin: 2.5em auto;
+	}
+}
+@media screen and (max-width: 30em) {
+	#logoutform {
+		width: 1em;
+		margin-right: 2em;
+	}
+}
+

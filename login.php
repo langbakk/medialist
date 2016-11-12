@@ -3,7 +3,11 @@ require_once('conf/config.php');
 $username = (isset($_POST['username'])) ? $_POST['username'] : '';
 $password = (isset($_POST['password'])) ? $_POST['password'] : '';
 echo '<div class="container">';
-if (isset($_POST['submit_login']) && $username != '' && $password != '') {
+if (isset($_POST['submit_logout'])) {
+		session_destroy();
+		session_unset();
+		header('refresh: 0');
+} elseif (isset($_POST['submit_login']) && $username != '' && $password != '') {
 	if ($use_db === false) {
 		$success = false;
 		for ($i = 0; $i < count($user_array); $i++) {
@@ -38,7 +42,7 @@ if (isset($_POST['submit_login']) && $username != '' && $password != '') {
 					header('refresh: 2; url=upload');
 				} elseif ($folderexist == true && $foldercreated == false) {
 					echo '<p class="messagebox info">User-folders already exists</p>';
-					header('refresh: 2; url=upload');
+					header('refresh: 0; url=upload');
 				} else {
 					header('refresh: 0');
 				}
@@ -48,11 +52,7 @@ if (isset($_POST['submit_login']) && $username != '' && $password != '') {
 			echo '<p class="messagebox error">User not found, or password not a match</p>';
 		}
 	}
-} elseif (isset($_POST['submit_logout'])) {
-		session_destroy();
-		session_unset();
-		header('refresh: 0');
-}
+} 
 
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == false) || !isset($_SESSION['loggedin'])) {
 		if ($allow_public == true && !$isloggedin) {
