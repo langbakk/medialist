@@ -145,7 +145,7 @@ $(document).ready(function() {
 			var rem = (Math.floor($('#pictures_list li').length % 2));
 			var endResult = ((totalby2 + rem) * 10) + 10;
 			var endResult = (endResult < 70) ? endResult : 70;
-			$('#pictures_list').parents('.container').css(({'max-width':endResult+'em','min-width':'30em'}));
+			$('#pictures_list').parents('.container').css(({'max-width':endResult+'em','min-width':'20em'}));
 		}
 	}
 
