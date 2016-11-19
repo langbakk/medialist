@@ -2,15 +2,14 @@
 if (!session_id()) { session_start(); };
 require_once('conf/config.php');
 require_once('functions.php');
-require_once('language.php');
 
 $currentcontent = (isset($_POST['currentfile'])) ? $_POST['currentfile'] : '';
 
 if (!empty($currentcontent)) {
 	$getinfo = pathinfo($currentcontent);
 	$ext = strtolower($getinfo['extension']);
-	if (in_array($ext,allowedExtensions(''))) {
-		if (in_array($ext,allowedExtensions('audio'))) {
+	if (in_array($ext,allowedMimeAndExtensions('extension'))) {
+		if (in_array($ext,allowedMimeAndExtensions('audio'))) {
 			$folder = $userpath.$username.'/music/';
 			$getcontent = opendir($folder);
 			$foldervalue = [];
@@ -19,7 +18,7 @@ if (!empty($currentcontent)) {
 					$foldervalue[] = $file;
 				}
 			}
-		} elseif (in_array($ext,allowedExtensions('video'))) {
+		} elseif (in_array($ext,allowedMimeAndExtensions('video'))) {
 			$folder = $userpath.$username.'/video/';
 			$getcontent = opendir($folder);
 			$foldervalue = [];
@@ -28,8 +27,9 @@ if (!empty($currentcontent)) {
 					$foldervalue[] = $file;
 				}
 			}
-		} elseif (in_array($ext,allowedExtensions('image'))) {
-			$folder = $userpath.$username.'/images/';
+		} elseif (in_array($ext,allowedMimeAndExtensions('image'))) {
+			var_dump(allowedMimeAndExtensions('image'));
+			$folder = $userpath.$username.'pictures/';
 			$getcontent = opendir($folder);
 			$foldervalue = [];
 			while (false !== ($file = readdir($getcontent))) {
@@ -37,7 +37,7 @@ if (!empty($currentcontent)) {
 					$foldervalue[] = $file;
 				}
 			}
-		} elseif (in_array($ext,allowedExtensions('document'))) {
+		} elseif (in_array($ext,allowedMimeAndExtensions('document'))) {
 			$folder = $userpath.$username.'/documents/';
 			$getcontent = opendir($folder);
 			$foldervalue = [];

@@ -100,7 +100,7 @@ $(document).ready(function() {
 		})
 	}
 	
-	$("input[type=file]").on('change',function() {
+	$('input[type=file]').on('change',function() {
 		var thisContent = $(this).val();
 		if (thisContent != 'No file selected') {
 			$(this).removeClass('inactive').addClass('active');
@@ -118,9 +118,9 @@ $(document).ready(function() {
 		};
 	})
 	
-	$("#uploadreset").click(function() {
-		$("#file").val('');
-		$("#file").removeClass('active').addClass('inactive');
+	$('#uploadreset').click(function() {
+		$('#file').val('');
+		$('#file').removeClass('active').addClass('inactive');
 	})
 
 	$('.sortlinks a').click(function(e) {
@@ -221,25 +221,28 @@ $(document).ready(function() {
 	          	var image = new Image();
 				image.src = URL.createObjectURL(result);
 				if ($('#overlay').length <= 0) {
-					$('#top').append('<div id="overlay"></div>');
+					$('body').append('<div id="overlay"></div>');
 				}
 				if ($('#lightbox_wrapper').hasClass('hidden')) {
 					$('#lightbox_wrapper').removeClass('hidden').addClass('visible');
+					$('header,#username_view,#username_display').addClass('hidden');
 				}
 				$('#lightbox_container img').remove();
 				$('#lightbox_container').append(image);
-				image.onload = function() { var imageWidth = image.width/2; $('#lightbox_wrapper').css({'margin-left':'-'+imageWidth+'px'}); window.URL.revokeObjectURL(image.src);};
+				image.onload = function() { window.URL.revokeObjectURL(image.src); };
 				$('#lightbox_container .nextbutton, #lightbox_container .prevbutton').remove();
 				 $('#overlay,.closebutton').on('click',function(e) {
 			    	$('#overlay').remove();
 			    	$('#lightbox_wrapper').removeClass('visible').addClass('hidden');
 			    	$('#lightbox_container img').remove();
+			    	$('header,#username_display,#username_view').removeClass('hidden');
 			    })
 				$(document).keyup(function(e) {
 					if (e.which == 27) {
 				    	$('#overlay').remove();
 				    	$('#lightbox_wrapper').removeClass('visible').addClass('hidden');
 				    	$('#lightbox_container img').remove();
+			    		$('header,#username_display,#username_view').removeClass('hidden');				    	
 					}					
 				})
 	          }
@@ -261,56 +264,99 @@ $(document).ready(function() {
     $('.lightbox,.prevbutton,.nextbutton').on('click', function(e) {
     	e.preventDefault();
     	var $this = $(this);
-    	if ($(e.target).hasClass('prevbutton') && $('a[href$="'+linkName+'"]').parents('.pictures').prev('li.pictures').length == 0) {
-    		fetchFile = $('.pictures:last-of-type').find('a').attr('href').split('/').reverse()[0].split('?')[1];
-    		linkName = $('.pictures:last-of-type').find('a').attr('href').split('=')[1];
-    	} else if ($(e.target).hasClass('nextbutton') && $('a[href$="'+linkName+'"]').parents('.pictures').next('li.pictures').length == 0) {
-    		fetchFile = $('.pictures:first-of-type').find('a').attr('href').split('/').reverse()[0].split('?')[1];
-    		linkName = $('.pictures:first-of-type').find('a').attr('href').split('=')[1];
-    	} else if ($(e.target).hasClass('prevbutton') && $('a[href$="'+linkName+'"]').parents('.pictures').prev('li.pictures').length != 0)  {
-    		fetchFile = $('a[href$="'+linkName+'"]').parents('.pictures').prev('li.pictures').find('a').attr('href').split('/').reverse()[0].split('?')[1];
-    		linkName = $('a[href$="'+linkName+'"]').parents('.pictures').prev('li.pictures').find('a').attr('href').split('=')[1];
-    	} else if ($(e.target).hasClass('nextbutton')) {
-    		fetchFile = $('a[href$="'+linkName+'"]').parents('.pictures').next('li.pictures').find('a').attr('href').split('/').reverse()[0].split('?')[1];
-    		linkName = $('a[href$="'+linkName+'"]').parents('.pictures').next('li.pictures').find('a').attr('href').split('=')[1];
-    	} else {
-    		linkName = $(this).attr('href').split('=')[1];
-    		fetchFile = $this[0]['href'].split('/').reverse()[0].split('?')[1];
-    	}
-    	
-   		$.ajax({
-          url: 'showfile.php',
-          type: 'GET',
-          dataType: 'binary',
-          data: fetchFile,
-          responseType: 'blob',
-          processData: false,
-          success: function(result) {
-          	var image = new Image();
-			image.src = URL.createObjectURL(result);
-			if ($('#overlay').length <= 0) {
-				$('#top').append('<div id="overlay"></div>');
-			}
-			if ($('#lightbox_wrapper').hasClass('hidden')) {
-				$('#lightbox_wrapper').removeClass('hidden').addClass('visible');
-			}
-			$('#lightbox_container img').remove();
-			$('#lightbox_container').append(image);
-			image.onload = function() { var imageWidth = image.width/2; $('#lightbox_wrapper').css({'margin-left':'-'+imageWidth+'px'}); window.URL.revokeObjectURL(image.src);};
-			 $('#overlay,.closebutton').on('click',function(e) {
-		    	$('#overlay').remove();
-		    	$('#lightbox_wrapper').removeClass('visible').addClass('hidden');
-		    	$('#lightbox_container img').remove();
-		    })
-			$(document).keyup(function(e) {
-				if (e.which == 27) {
+	    	if ($(e.target).hasClass('prevbutton') && $('a[href$="'+linkName[1]+'"]').parents('.pictures').prev('li.pictures').length == 0) {
+	    		fetchFile = $('.pictures:last-of-type').find('a').attr('href').split('/').reverse()[0].split('?')[1];
+	    		linkName = $('.pictures:last-of-type').find('a').attr('href').split('=');
+	    	} else if ($(e.target).hasClass('nextbutton') && $('a[href$="'+linkName[1]+'"]').parents('.pictures').next('li.pictures').length == 0) {
+	    		fetchFile = $('.pictures:first-of-type').find('a').attr('href').split('/').reverse()[0].split('?')[1];
+	    		linkName = $('.pictures:first-of-type').find('a').attr('href').split('=');
+	    	} else if ($(e.target).hasClass('prevbutton') && $('a[href$="'+linkName[1]+'"]').parents('.pictures').prev('li.pictures').length != 0)  {
+	    		fetchFile = $('a[href$="'+linkName[1]+'"]').parents('.pictures').prev('li.pictures').find('a').attr('href').split('/').reverse()[0].split('?')[1];
+	    		linkName = $('a[href$="'+linkName[1]+'"]').parents('.pictures').prev('li.pictures').find('a').attr('href').split('=');
+	    	} else if ($(e.target).hasClass('nextbutton')) {
+	    		fetchFile = $('a[href$="'+linkName[1]+'"]').parents('.pictures').next('li.pictures').find('a').attr('href').split('/').reverse()[0].split('?')[1];
+	    		linkName = $('a[href$="'+linkName[1]+'"]').parents('.pictures').next('li.pictures').find('a').attr('href').split('=');
+	    	} else {
+	    		linkName = $(this).attr('href').split('=');
+	    		fetchFile = $this[0]['href'].split('/').reverse()[0].split('?')[1];
+	    	}
+	    	var joinLink = linkName.join('='),
+    			requestLink = (($this[0]['search'] != undefined) ? $this[0]['search'] : joinLink),
+    			requestType = requestLink.split('?')[1].split('=')[0],
+    			requestFile = requestLink.split('?')[1].split('=')[1],
+    			requestFileExt = requestFile.split('.').reverse()[0];
+    			console.log(requestFileExt);
+	    if (requestType == 'imgfile') {    	
+	   		$.ajax({
+	          url: 'showfile.php',
+	          type: 'GET',
+	          dataType: 'binary',
+	          data: fetchFile,
+	          responseType: 'blob',
+	          processData: false,
+	          success: function(result) {
+	          	var image = new Image();
+				image.src = URL.createObjectURL(result);
+				if ($('#overlay').length <= 0) {
+					$('body').append('<div id="overlay"></div>');
+				}
+				if ($('#lightbox_wrapper').hasClass('hidden')) {
+					$('#lightbox_wrapper').removeClass('hidden').addClass('visible');
+					$('header,#username_view,#username_display').addClass('hidden');
+				}
+				$('#lightbox_container img').remove();
+				$('#lightbox_container').append(image);
+		    	if (viewportSize.getWidth() <= 480) {
+		    		image.onload = function() { $('#lightbox_wrapper').css({'left':0,'width':'100%','padding':'1em','box-sizing':'border-box'}).find('#lightbox_container img').css({'width':'100%','height':'initial'}); $('.closebutton,.nextbutton,.prevbutton').css({'top':'20em'}); $('.prevbutton').css({'left':'3em'}); $('.nextbutton').css({'right':'3em'}); $('.closebutton').css({'left':'50%','margin-left':'-1.25em'}); window.URL.revokeObjectURL(image.src);};
+		    	} else {
+					image.onload = function() { window.URL.revokeObjectURL(image.src);};
+				}
+				 $('#overlay,.closebutton').on('click',function(e) {
 			    	$('#overlay').remove();
 			    	$('#lightbox_wrapper').removeClass('visible').addClass('hidden');
 			    	$('#lightbox_container img').remove();
-				}					
-			})
-          }
-		}); 
+			    	$('header,#username_display,#username_view').removeClass('hidden');
+			    })
+				$(document).keyup(function(e) {
+					if (e.which == 27) {
+				    	$('#overlay').remove();
+				    	$('#lightbox_wrapper').removeClass('visible').addClass('hidden');
+				    	$('#lightbox_container img').remove();
+				    	$('header,#username_display,#username_view').removeClass('hidden');
+					}					
+				})
+	          }
+			}); 
+		// } else if (requestType == 'vidfile' && Modernizr.video.requestFileExt) {
+		// 	$.ajax({
+		// 		url: 'showfile.php',
+		// 		type: 'GET',
+		// 		dataType: 'binary',
+		// 		data: requestLink.split('?')[1]+'&loadVideo=true',
+		// 		responseType: 'blob',
+		// 		processData: false,
+		// 		success: function(result) {
+		// 			if ($('#overlay').length <= 0) {
+		// 				$('#top').append('<div id="overlay"></div>');
+		// 			}
+		// 			if ($('#lightbox_wrapper').hasClass('hidden')) {
+		// 				$('#lightbox_wrapper').removeClass('hidden').addClass('visible');
+		// 			}
+		// 			$('#lightbox_container video,#lightbox_container img').remove();
+		// 			var video = '<video width="480" controls><source src="'+URL.createObjectURL(result)+'" type="video/mp4">Your browser doesn\'t support HTML5 video tag.</video>';
+		// 			$('#lightbox_container').append(video);
+		// 			$('#overlay,.closebutton').on('click',function(e) {
+		// 				$('#overlay').remove();
+		// 				$('#lightbox_wrapper').removeClass('visible').addClass('hidden');
+		// 				$('#lightbox_container video').remove();
+		// 			})
+		// 		}
+		// 	})
+		} else if (requestType == 'vidfile') {
+			$('body').append('<a href="showfile.php'+requestLink+'" id="directlink" class="hidden">Direct Link</a>');
+			$('#directlink').simulate('click');
+			$('#directlink').remove();
+		}
     })
 
     if ($('[id^=filelist_] li:last-of-type').hasClass('heading')) {

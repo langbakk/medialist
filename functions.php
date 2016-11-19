@@ -11,43 +11,99 @@ function getExtension($strName) {
 	return $info['extension'];
 }
 
-function allowedExtensions($type, $filename = 'conf/.allowed_extensions') {
-	$filetype = file($filename, FILE_IGNORE_NEW_LINES);
-	$allowedfiletypes = [];
-	foreach ($filetype as $key => $value) {
-		if (stripos($value, "//") === false && !empty($value)) {
-			// $value = str_replace('\'','',$value);
-			// $get_type = explode('/',$value);
-			// if (!empty($type) && $type == $get_type[0]) {
-				// $allowedfiletypes[] = $get_type[1];
-			// } elseif (empty($type)) {
-				// $allowedfiletypes[] = $get_type[1];
-			// } 
-			$allowedfiletypes[] = $value;
-		}
-	}
-	return $allowedfiletypes;
-}
+function generateRandomString($alpha = true, $nums = true, $usetime = false, $string = '', $length = 120) {
+    $alpha = ($alpha == true) ? 'abcdefghijklmnopqrstuvwxyz' : '';
+    $nums = ($nums == true) ? '1234567890' : '';
 
-function allowedMimeTypes($type, $filename = 'conf/.allowed_mimetypes') {
-	$mimetype = file($filename, FILE_IGNORE_NEW_LINES);
-	$allowedmimetypes = [];
-	foreach ($mimetype as $key => $value) {
-		if (stripos($value, "//") === false) {
-			$allowedmimetypes[] = str_replace('\'','',$value);
+    if ($alpha == true || $nums == true || !empty($string)) {
+        if ($alpha == true) {
+            $alpha = $alpha;
+            $alpha .= strtoupper($alpha);
+        }
+    }
+    $randomstring = '';
+    $totallength = $length;
+        for ($na = 0; $na < $totallength; $na++) {
+                $var = (bool)rand(0,1);
+                if ($var == 1) {
+                    $randomstring .= $alpha[(rand() % mb_strlen($alpha))];
+                } else {
+                    $randomstring .= $nums[(rand() % mb_strlen($nums))];
+                }
+        }
+    if ($usetime == true) {
+        $randomstring = $randomstring.time();
+    }
+    return($randomstring);
+} // end generateRandomString
+
+function allowedMimeAndExtensions($type, $mimetype = '', $filename = 'conf/.allowed_mimetypes') {
+	$list = file($filename, FILE_IGNORE_NEW_LINES);
+	$allowed_types = ['image','video','music','application','text'];
+	$allowed_files = [];
+	$allowedfiles_replace = [];
+	foreach ($list as $key => $value) {
+		if (stripos($value, "//") === false && !empty($value)) {
+			$allowed_files[] = 	trim(str_replace('\'','',$value));
 		}
 	}
-	if (!empty($type)) {
-		$allowedmimetypes_replace = [];
-		foreach ($allowedmimetypes as $key => $value) {
-			$value = explode('/',$value);
-			if ($type == $value[0]) {
-				$allowedmimetypes_replace[] = $value[0].'/'.$value[1];
+	if (!empty($type) && $type == 'extension') {
+		foreach ($list as $key => $value) {
+			if (stripos($value, "//") === false && !empty($value)) {
+				$value = trim(explode(' ',$value)[0]);
+				$allowedfiles_replace[] = $value;
 			}
 		}
-		$allowedmimetypes = $allowedmimetypes_replace;
+		$allowed_files = $allowedfiles_replace;
+	} elseif ((!empty($type) && !in_array($type, $allowed_types)) && $mimetype == 'mime') {
+		foreach ($list as $key => $value) {
+			if (stripos($value, "//") === false && !empty($value)) {
+				$value_ext = explode(' ',$value)[0];
+				if (Config::read('debug') == true) {
+					logThis('allowedmimetypes','This is the value '.$value_ext."\r\n",FILE_APPEND);
+				}
+				if ($type == $value_ext) {
+					$allowedfiles_replace[] = str_replace('\'','',explode(' ',$value)[1]);
+				}
+			}
+		}
+		$allowed_files = $allowedfiles_replace;
+	} elseif (empty($type) && ((!empty($mimetype) && $mimetype == 'mime'))) {
+		foreach ($list as $key => $value) {
+			if (stripos($value, "//") === false && !empty($value)) {
+				$value = str_replace('\'','',trim(explode(' ',$value)[1]));
+				$allowedfiles_replace[] = $value;
+			}
+		}
+		$allowed_files = $allowedfiles_replace;
+	} elseif ((!empty($type) && in_array($type,$allowed_types)) && empty($mimetype)) {
+		foreach ($list as $key => $value) {
+			if (stripos($value, "//") === false && !empty($value)) {
+				$value_mime = explode('/',explode(' ',str_replace('\'','',$value))[1]);
+				if ($type == $value_mime[0]) {
+					$value = trim(explode(' ',$value)[0]);
+					$allowedfiles_replace[] = $value;
+				}
+			}
+		}
+		$allowed_files = $allowedfiles_replace;
+	} elseif ((!empty($type) && in_array($type,$allowed_types)) && !empty($mimetype)) {
+		foreach ($list as $key => $value) {
+			if (stripos($value, "//") === false && !empty($value)) {
+				$value_mime = explode('/',explode(' ',str_replace('\'','',$value))[1]);
+				if ($type == $value_mime[0]) {
+					$value = str_replace('\'','',trim(explode(' ',$value)[1]));
+					$allowedfiles_replace[] = $value;
+				}
+			}
+		}
+		$allowed_files = $allowedfiles_replace;
 	}
-	return $allowedmimetypes;
+	if (Config::read('debug') == true) {
+		$joined_array = join(' ,',$allowed_files);
+		logThis('allowedmimetypes','This is the allowed array '.$joined_array."\r\n",FILE_APPEND);
+	}
+	return $allowed_files;
 }
 
 function in_array_recursive($needle, $haystack, $strict = false) {
@@ -61,7 +117,7 @@ function in_array_recursive($needle, $haystack, $strict = false) {
 
 function createThumbs($path, $imageName, $thumbWidth) {
 	$info = pathinfo($path . $imageName); // parse path for the extension
-    if (in_array(strtolower($info['extension']),allowedExtensions('image')))  {
+    if (in_array(strtolower($info['extension']),allowedMimeAndExtensions('image')))  {
     	if ($info['extension'] == 'jpg' || $info['extension'] == 'jpeg') {
     		$img = imagecreatefromjpeg( "{$path}{$imageName}" );
     	} elseif ($info['extension'] == 'png') {
@@ -124,7 +180,7 @@ function generate_image_thumbnail($source_image_path, $thumbnail_image_path, $th
     imagedestroy($source_gd_image);
     imagedestroy($thumbnail_gd_image);
     return true;
-} // end generate_image_thumbnail≤÷z<abs(number)'÷≤ xc1''1'1'11't
+} // end generate_image_thumbnail
 
 function displayMenu($baseurl, $usedb = false) {
 	if ($usedb == false) {
@@ -156,14 +212,6 @@ function displayMenu($baseurl, $usedb = false) {
 					}
 				}
 			}
-		
-			// if ($allow_public == false && !$isloggedin && ($key == 'index' || $key == 'login' || $key == 'register')) {
-			// 	$main_menu = '<li '.(($page == strtolower($menutext['filename'])) ? 'class="active"' : '').'><a href="'.(($useurl == 'index') ? '/' : $useurl).'">'.ucfirst((($menutext['filename'] == 'index') ? 'home' : $menutext['filename'])).'<span class="activearrow">&nbsp;</span></a></li>';
-			// } elseif ($allow_public == true && !$isloggedin && ($key != 'userprofile' || $key != 'userlist')) {
-			// 	$main_menu = '<li '.(($page == strtolower($menutext['filename'])) ? 'class="active"' : '').'><a href="'.(($useurl == 'index') ? '/' : $useurl).'">'.ucfirst((($menutext['filename'] == 'index') ? 'home' : $menutext['filename'])).'<span class="activearrow">&nbsp;</span></a></li>';
-			// } elseif ($isloggedin && ($key != 'login' || $key != 'register')) {
-			// 	$main_menu = '<li '.(($page == strtolower($menutext['filename'])) ? 'class="active"' : '').'><a href="'.(($useurl == 'index') ? '/' : $useurl).'">'.ucfirst((($menutext['filename'] == 'index') ? 'home' : $menutext['filename'])).'<span class="activearrow">&nbsp;</span></a></li>';
-			// }
 		}
 		$main_menu .= '</ul>';
 	}
@@ -209,22 +257,22 @@ function logThis($filename, $logthis) {
 }
 
 function loadFiles($filetype, $path, $recursive = 0, $testfileallow = 0) {
-	$results = [];     // create an array to hold directory list
-	$handler = opendir($path);     // create a handler for the directory
+	$results = [];     				// create an array to hold directory list
+	$handler = opendir($path);		// create a handler for the directory
 
 	while ($file = readdir($handler)) {
 		$ext = pathinfo($file, PATHINFO_EXTENSION);     // open directory and walk through the filenames
         $testfile = substr($file,0,4);
         if ($file != "." && $file != ".." && $ext == $filetype && $testfileallow == 1) {
             if ($testfile == 'new_') {
-                $results[] = $file;     // if file is a test-file (prefixed with new_) add it to the results
+                $results[] = $file;  // if file is a test-file (prefixed with new_) add it to the results
             }
             $results[] = $file; // add the rest of the files, unless it's a directory
         } elseif ($file != "." && $file != ".." && $ext == $filetype && ($testfile != 'new_' && $testfileallow == 0)) {
-                $results[] = $file;     // add all results apart from test-files (prefixed with new_) to the results, unless it's a directory
+                $results[] = $file; // add all results apart from test-files (prefixed with new_) to the results, unless it's a directory
         }
 	}
-	closedir($handler);     // tidy up: close the handler
+	closedir($handler); // tidy up: close the handler
 	natsort($results);
     $recursive = ($recursive == 1 || $recursive = '') ? '../' : '';
 	if ($filetype == 'js') {

@@ -1,12 +1,19 @@
 <?php
 
+if ($isloggedin) {
+	echo '<span id="username_view">You\'re viewing: <i>'.explode('/',$username)[0].'</i></span>';
+}
+
 $original_username = $username;
 $username = (isset($_GET['user'])) ? $_GET['user'].'/' : $username;
-$username_exist = false;
+// $exploded_user_array = explode('//',$user_array[$i]);
+// $username_exist = false;
+// var_dump($exploded_user_array);
+// if ($isloggedin && ($username == trim($exploded_user_array[0])) &
 
 for ($i = 0; $i < count($user_array); $i++) {
 	$exploded_user_array = explode('//',$user_array[$i]);
-	$user_exist = ((!$isloggedin && ($allow_public == true)) ? true : ((isset($_GET['user']) && $_GET['user'] == 'public' && ($allow_public == true)) ? true : (($username == trim($exploded_user_array[0]).'/') ? true : false)));
+	$user_exist = ((!$isloggedin && ($allow_public == true) && !isset($_GET['user'])) ? true : ((isset($_GET['user']) && $_GET['user'] == 'public' && ($allow_public == true)) ? true : ((($username == trim($exploded_user_array[0]).'/') && (array_key_exists(3,$exploded_user_array) && $exploded_user_array[3] == 1)) ? true : false)));
 	if ($user_exist == true) {
 		break;
 	}
@@ -28,14 +35,10 @@ if (is_dir($userpath.$username)) {
 	$folderexist = true;
 } 
 
-if ($isloggedin) {
-	echo '<span id="username_view">You\'re viewing: <i>'.explode('/',$username)[0].'</i></span>';
-}
-
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_public == true) {
 	$allempty = 0;
 	$dir_array = [1 => 'music', 2 => 'pictures/thumbs', 3 => 'video', 4 => 'documents'];
-	if ($user_exist == true) {
+	if ($user_exist == true || $_SESSION['usertype'] == 'admin') {
 		foreach ($dir_array as $key => $folder) {
 			if ($handle = opendir ($userpath.$username.$folder)) {
 				$filelist = [];
@@ -59,7 +62,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 							<h2>'.ucfirst($folder).'</h2>
 						<ul id="'.$folder.'_list"'.(($folder == 'pictures' || $folder == 'video') ? ' class="flexlist"' : '').'>';
 					while (list ($key, $val) = each ($filelist)) {
-						if ($val != "." && $val != ".." && in_array(getExtension(strtolower($val)),allowedExtensions(''))) {
+						if ($val != "." && $val != ".." && in_array(getExtension(strtolower($val)),allowedMimeAndExtensions('extension'))) {
 							$usercontrols = '';
 							$shared_content = '';
 							if (is_link($_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/'.$val)) {
@@ -89,7 +92,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 								</a>'.$usercontrols.$document_name.'</div>' : 
 								(($folder == 'video') ? 
 								'<div class="tech-slideshow">
-									<a href="'.$getvidfile.(isset($_GET['user']) ? '&user='.$_GET['user'].'' : '').'">
+									<a class="lightbox" href="'.$getvidfile.(isset($_GET['user']) ? '&user='.$_GET['user'].'' : '').'">
 										<div class="mover-1" style="background: url('.$getvidfile.'.jpg&thumbs=true'.(isset($_GET['user']) ? '&user='.$_GET['user'].'' : '').');"></div>
 										<div class="mover-2" style="background: url('.$getvidfile.'.jpg&thumbs=true'.(isset($_GET['user']) ? '&user='.$_GET['user'].'' : '').');"></div>
 									</a>'.$usercontrols.$document_name.
@@ -105,7 +108,8 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 			}
 		}
 	}
-	echo '<div class="container '.(($allempty == 0) ? 'visible' : 'hidden').'">'.((isset($_GET['user']) && $user_exist == true) ? '<p class="messagebox warning visible">'.(($username == 'public/') ? 'There are no public uploads to show' : 'This user hasn\'t uploaded anything. Tell them to get their butt in gear!').'</p>' : (($user_exist == false) ? '<p class="messagebox error visible">That user doesn\'t exist on the server</p>' : '<p class="messagebox info visible">No files were found on the server matching the configured criteria. <a href="upload">Upload files</a></p>')).'</div>';
+
+	echo '<div class="container '.(($allempty == 0) ? 'visible' : 'hidden').'">'.((isset($_GET['user']) && $user_exist == true) ? '<p class="messagebox warning visible">'.(($username == 'public/') ? 'There are no public uploads to show' : 'This user hasn\'t uploaded anything. Tell them to get their butt in gear!').'</p>' : (($user_exist == false && (trim($exploded_user_array[0]) != trim(explode('/',$username)[0]))) ? '<p class="messagebox error visible">That user doesn\'t exist on the server</p>' : '<p class="messagebox info visible">No files were found on the server matching the configured criteria. <a href="upload">Upload files</a></p>')).'</div>';
 	if ($show_quotes == true) { // this setting can be changed in config.php
 		include 'quotes.php';
 	}

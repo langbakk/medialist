@@ -33,7 +33,7 @@ echo '</header>
 	<div id="top">
 	<div id="main">';
 	if ($isloggedin) {
-		echo '<span id="username_display"><span title="'.(($isloggedin) ? 'You\'re logged in as '.$username.'' : 'You\'re not logged in').'" class="'.(($isloggedin) ? 'isloggedin' : 'notloggedin').'">Current account: <i>'.explode('/',$username)[0].'</i></span></span>';
+		echo '<span id="username_display"><span title="'.(($isloggedin) ? 'You\'re logged in as '.$username.'' : 'You\'re not logged in').'" class="'.(($isloggedin) ? 'isloggedin' : 'notloggedin').'">Current account: <i>'.(($_SESSION['usertype'] == 'admin') ? '<span class="usertype_admin">'.explode('/',$username)[0].'</span>' : '<span class="usertype_user">'.explode('/',$username)[0].'</span>').'</i></span></span>';
 	}
 	if (isset($_GET['imgfile']) || isset($_GET['vidfile']) || isset($_GET['docfile'])) {
 		echo $display->getPage();
@@ -50,8 +50,8 @@ echo '</header>
 echo '
 	</div>
 	<div id="updateinfo" class="messagebox"></div>
-	<div id="lightbox_wrapper" class="hidden"><div id="lightbox_container"><span class="closebutton">X</span><span class="nextbutton">&gt;</span><span class="prevbutton">&lt;</span></div></div>
 	</div>
+	<div id="lightbox_wrapper" class="hidden"><div id="lightbox_container"><span class="closebutton">X</span><span class="nextbutton">&gt;</span><span class="prevbutton">&lt;</span></div></div>
 	<footer>
 	</footer>
 </body>

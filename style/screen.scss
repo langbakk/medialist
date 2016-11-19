@@ -8,6 +8,17 @@
     font-weight: normal;
     font-style: normal;
 }
+@font-face {
+  font-family: 'fontawesome';
+  src: url('fontawesome-webfont.eot?v=4.7.0');
+  src: url('fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'),
+  	   url('fontawesome-webfont.woff2?v=4.7.0') format('woff2'),
+  	   url('fontawesome-webfont.woff?v=4.7.0') format('woff'), 
+  	   url('fontawesome-webfont.ttf?v=4.7.0') format('truetype'), 
+  	   url('fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
 
 //standard colors
 $main-light: #F9FAF8;
@@ -168,7 +179,9 @@ a {
 	background: $main-light;
 	color: $main-dark-transparent;
 }
-
+.noscroll {
+	overflow: hidden;
+}
 .sortlinks {
 	line-height: 2em;
 	flex: 1 1 0;
@@ -209,6 +222,33 @@ html,body {
 	}
 body {
 	background: black url(#{$webgfxfolder}background.jpg) fixed no-repeat center center;
+}
+.fa {
+  display: inline-block;
+  font: normal normal normal 14px/1 fontawesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* makes the font 33% larger relative to the icon container */
+.fa-lg {
+  font-size: 1.33333333em;
+  line-height: 0.75em;
+  vertical-align: -15%;
+}
+.fa-gear:before,
+.fa-cog:before {
+  content: "\f013";
+}
+.fa-question-circle-o:before {
+  content: "\f29c";
+}
+#admin_menu {
+	position: fixed; 
+	top: 2em;
+	right: 9em;
+	color: $main-dark;
 }
 // body {
 // 	// background: $main-dark-transparent;
@@ -451,6 +491,9 @@ header {
 		// padding-top: 2em;
 	}
 }
+.usertype_admin {
+	color: orange;
+}
 li {
 	list-style-type: none;
 	}
@@ -497,6 +540,8 @@ input {
 	padding: .2em .5em;
 	float: right;
 	border-radius: 0 0 .5em .5em;
+	position: relative;
+	z-index: 7000;
 }
 #username_display .notloggedin,#username_view {
 	color: red;
@@ -574,6 +619,19 @@ label {
 	color: $main-light;
 	line-height: 2.5em;
 }
+#configform {
+	max-width: 80%;
+}
+#configform p {
+	margin: 0;
+}
+#configform p label {
+	max-width: 20em;
+	min-width: 15em;
+	text-align: left;
+	text-align-last: initial;
+}
+
 #upload,.content {
 	// border: 0.3em $header-background dashed;
 	// background: $main-contrast;
@@ -941,6 +999,9 @@ label {
 	text-align: justify;
 	text-align-last: center;
 }
+.content .messagebox {
+	margin: 15% auto 0 auto;
+}
 #userprofile_body .content p {
 	margin: 1em 2em 0 2em;
 }
@@ -1234,16 +1295,20 @@ label {
 }
 #lightbox_wrapper.visible {
 	// width: 60%;
-	margin: 0 auto;
+	// margin: 0 auto;
 	position: absolute;
-	top: 10em;
+	// top: 10em;
 	left: 50%;
+	top: 50%;
+	margin-top: 1.5em;
+	transform: translate(-50%,-50%);
 	// margin-left: -30%;
 	z-index: 7000;
-	height: 30em;
+	// height: 30em;
 	padding: 1.5em;
 	background: rgba(0,0,0,0.7);
 	border: 1px solid #AAA;
+	box-sizing: border-box;
 }
 #lightbox_container {
 	// position: relative;
@@ -1259,9 +1324,7 @@ label {
 	right: 0;
 	z-index: 5050;
 	background: rgba(0,0,0,.6);
-}
-#overlay.visible {
-		overflow-y: scroll;
+	overflow-y: scroll;
 }
 .closebutton,.nextbutton,.prevbutton {
 	display: none;

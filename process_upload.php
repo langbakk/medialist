@@ -47,23 +47,24 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 				}
 			}
 			if (isset($_FILES['file']) && $returnerror == false) {
-				$allowed = '';
-				$allowed_extensions = allowedExtensions('');
-				$totalentries = count(allowedExtensions('')) -1;
-				for ($i = 0; $i <= $totalentries; $i++) {
-					$allowed .= (($i == $totalentries) ? $allowed_extensions[$i] : $allowed_extensions[$i].', ');
-				}
+				// $allowed = '';
+				// $allowed_extensions = allowedMimeAndExtensions('');
+				// $totalentries = count(allowedMimeAndExtensions('')) -1;
+				// for ($i = 0; $i <= $totalentries; $i++) {
+				// 	$allowed .= (($i == $totalentries) ? $allowed_extensions[$i] : $allowed_extensions[$i].', ');
+				// }
 				if (($_FILES['file']['size'] + foldersize($userpath.$username) < $storage_limit)) {
-					if (in_array($_FILES['file']['type'], allowedMimeTypes(''))) {
-						if (in_array($_FILES['file']['type'], allowedMimeTypes('audio'))) {
+					if (in_array($_FILES['file']['type'], allowedMimeAndExtensions('','mime'))) {
+						if (in_array($_FILES['file']['type'], allowedMimeAndExtensions('audio','mime'))) {
 							$folder = 'music';
-						} elseif (in_array($_FILES['file']['type'], allowedMimeTypes('image'))) {
+						} elseif (in_array($_FILES['file']['type'], allowedMimeAndExtensions('image','mime'))) {
 							$folder = 'pictures';
-						} elseif (in_array($_FILES['file']['type'], allowedMimeTypes('video'))) {
+						}
+						 elseif (in_array($_FILES['file']['type'], allowedMimeAndExtensions('video','mime'))) {
 							$folder = 'video';
-						} elseif (in_array($_FILES['file']['type'], allowedMimeTypes('application'))) {
+						} elseif (in_array($_FILES['file']['type'], allowedMimeAndExtensions('application','mime'))) {
 							$folder = 'documents';
-						} elseif (in_array($_FILES['file']['type'], allowedMimeTypes('text'))) {
+						} elseif (in_array($_FILES['file']['type'], allowedMimeAndExtensions('text','mime'))) {
 							$folder = 'documents';
 						}
 						$filename = $_FILES['file']['name'];
@@ -79,11 +80,11 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 								$returnmessage = json_encode(["content"=>"You uploaded $filename","infotype"=>"success"]);
 							}
 							$movedfile = pathinfo($_FILES['file']['name']);
-							if (in_array(strtolower($movedfile['extension']),allowedExtensions('')) && in_array($_FILES['file']['type'],allowedMimeTypes('image'))) {
+							if (in_array(strtolower($movedfile['extension']),allowedMimeAndExtensions('extension')) && in_array($_FILES['file']['type'],allowedMimeAndExtensions('image','mime'))) {
 								// createThumbs($userpath.$username.$folder.'/',onlyValidChar($_FILES['file']['name']),200);
 								generate_image_thumbnail($userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']),$userpath.$username.$folder.'/thumbs/'.onlyValidChar($_FILES['file']['name']));
 							}
-							if (in_array(strtolower($movedfile['extension']),allowedExtensions('')) && in_array($_FILES['file']['type'],allowedMimeTypes('video'))) {
+							if (in_array(strtolower($movedfile['extension']),allowedMimeAndExtensions('extension')) && in_array($_FILES['file']['type'],allowedMimeAndExtensions('video','mime'))) {
 								$video = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']);
 								$thumbnail = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/thumbs/'.onlyValidChar($_FILES['file']['name']).'.jpg';
 	    						$get_frames = shell_exec("/usr/local/bin/ffmpeg -nostats -i $video -vcodec copy -f rawvideo -y /dev/null 2>&1 | grep frame | awk '{split($0,a,\"fps\")}END{print a[1]}' | sed 's/.*= *//'");
