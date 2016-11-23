@@ -154,6 +154,7 @@ $even_info: rgba(36,156,224,.6);
 
 //imports
 @import 'reset';
+@import 'fontawesome';
 
 a {
 	color: $main-link-color;
@@ -166,6 +167,15 @@ a {
 	& + .usercontrols {
 		display: block;
 		background: rgba(0,0,0,.5);
+	}
+	&.deletefile {
+		color: $error-background;
+	}
+	&.sharefile {
+		color: $main-light;
+	}
+	&.makepublic.fa-square {
+		background: $main-light;
 	}
 }
 .menulistbutton {
@@ -205,13 +215,6 @@ a {
 #sortingcontainer {
 	display: flex;
 }
-.usercontrols a img {
-	height: 1em;
-}
-.usercontrols .make_public {
-	padding-bottom: 0.2em;
-	text-decoration: none;
-}
 html,body {
 	color: $main-light;
 	// background: black;
@@ -223,27 +226,30 @@ html,body {
 body {
 	background: black url(#{$webgfxfolder}background.jpg) fixed no-repeat center center;
 }
-.fa {
-  display: inline-block;
-  font: normal normal normal 14px/1 fontawesome;
-  font-size: inherit;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-/* makes the font 33% larger relative to the icon container */
-.fa-lg {
-  font-size: 1.33333333em;
-  line-height: 0.75em;
-  vertical-align: -15%;
-}
-.fa-gear:before,
-.fa-cog:before {
-  content: "\f013";
-}
-.fa-question-circle-o:before {
-  content: "\f29c";
-}
+// .fa {
+//   display: inline-block;
+//   font: normal normal normal 14px/1 fontawesome;
+//   font-size: inherit;
+//   text-rendering: auto;
+//   -webkit-font-smoothing: antialiased;
+//   -moz-osx-font-smoothing: grayscale;
+// }
+// makes the font 33% larger relative to the icon container
+// .fa-lg {
+//   font-size: 1.33333333em;
+//   line-height: 0.75em;
+//   vertical-align: -15%;
+// }
+// .fa-gear:before,
+// .fa-cog:before {
+//   content: "\f013";
+// }
+// .fa-share-alt:before {
+
+// }
+// .fa-question-circle-o:before {
+//   content: "\f29c";
+// }
 #admin_menu {
 	position: fixed; 
 	top: 2em;
@@ -344,7 +350,10 @@ li span:not(.public_sharename):not(.filename):not(.filesize):not(.filelist_image
 }
 li span a,li .usercontrols a {
 	display: inline-block;
-	padding: .1em .3em 0 .3em;
+	padding: 0 .3em;
+}
+li .usercontrols {
+	line-height: 2em;
 }
 li .hovername {
 	top: initial;
@@ -355,12 +364,15 @@ li .hovername {
 }
 li .usercontrols form {
 	display: inline-block;
-	width: 1em;
-	height: 1em;
 	vertical-align: top;
-}
-li .usercontrols form .make_public {
-	margin-top: .2em;
+	padding: 0 .3em;
+	label {
+		line-height: 2em;
+		float: none;
+	}
+	.makepublic.fa-check-square {
+		color: $info-background;
+	}
 }
 [id$='_list'] li .usercontrols,#user_filelist li .usercontrols {
 	display: none;
@@ -392,13 +404,6 @@ li .usercontrols form .make_public {
 	bottom: 0;
 	padding: .1em .4em 0 0;
 }
-#documents_list .usercontrols form {
-	display: inline-block;
-}
-#documents_list .usercontrols a img, #documents_list .usercontrols form input[type=checkbox] {
-	display: table-cell;
-	vertical-align: middle;
-}
 #documents_list li:hover {
 	background: #666;
 }
@@ -406,6 +411,35 @@ li .usercontrols form .make_public {
 	max-width: 25.6em;
 	padding-right: 1em;
 	word-wrap: break-word;
+}
+#adminmenu {
+	background: $main-light;
+	padding: .5em 0;
+	margin-top: .8em;
+	border-radius: .3em .3em 0 0;
+}
+#adminmenu li {
+	border-right: 2px solid $main-dark;
+}
+#adminmenu li:last-of-type {
+	border-right: 0;
+}
+#adminmenu a {
+	color: $main-dark;
+	text-decoration: none;
+}
+.admincontainer {
+	display: none;
+}
+[id$=_container]:target {
+	display: block;
+}
+.admincontainer h2:before {
+    content: " ";
+    display: block;
+    height: 7em;
+    margin-top: -7em;
+    visibility: hidden;
 }
 #user_filelist li {
 	display: flex;
@@ -552,6 +586,24 @@ input {
 #gallery_body #username_display,#userprofile_body #username_display {
 	border-bottom-left-radius: 0;
 }
+.user_management_form {
+	margin: .5em;
+}
+.user_management_form label {
+	display: inline-block;
+	float: none;
+	height: 5em;
+	overflow: hidden;
+}
+.user_management_form input {
+	display: initial;
+}
+.user_management_form input[type=submit] {
+	margin-top: -3.5em;
+}
+#user_management_container .messagebox {
+	margin: 0 auto;
+}
 // input[type=submit],input[type=button],input[type=file] {
 // 	width: auto;
 // 	padding: .4em .8em;
@@ -617,7 +669,7 @@ input[type=checkbox] {
 label {
 	float: left;
 	color: $main-light;
-	line-height: 2.5em;
+	line-height: 2.09em;
 }
 #configform {
 	max-width: 80%;
@@ -774,7 +826,7 @@ label {
 }
 .alternate li,.alternate tr {
 	overflow: hidden;
-	padding: 0.2em 0.4em;
+	padding: 0.4em;
 }
 .alternate label {
 	font-weight: normal;
@@ -1360,6 +1412,126 @@ label {
 	left: initial;
 	right: -1.25em;
 }
+.ui-selectmenu-menu {
+	padding: 0;
+	margin: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: none;
+	z-index: 50000;
+}
+.ui-selectmenu-menu .ui-menu {
+	overflow: auto;
+	/* Support: IE7 */
+	overflow-x: hidden;
+	max-width: 100%;
+	// padding-bottom: 0.1em;
+}
+.ui-selectmenu-menu .ui-menu .ui-selectmenu-optgroup {
+	// font-size: 1em;
+	font-weight: bold;
+	line-height: 1.5;
+	padding: 2px 0.4em;
+	// margin: 0.5em 0 0 0;
+	height: auto;
+	border: 0;
+}
+.ui-selectmenu-open {
+	display: block;
+	// background: $main-light-transparent;
+	color: $hilight-contrast;
+	max-width: 10.5em;
+	// color: #C4DEE0;
+	border: .1em solid $border-color;
+	border-top: 0;
+	ul {
+		border-bottom: 0.1em solid $header-background;
+		background: $main-dark;
+		font-size: .75em;
+		margin-top: 0;
+		// border-radius: 0 0 $border-radius-regular $border-radius-regular;
+		// li {
+		// 	border-left: 0.1em solid $header-background;
+		// 	border-right: 0.1em solid $header-background;
+		// }
+		li {
+			padding: .75em 0;
+		}
+		li:hover {
+			background: $hilight-contrast;
+			color: $main-dark;
+		}
+	}
+}
+.ui-selectmenu-button {
+	border: .1em solid $border-color;
+	display: inline-block;
+	overflow: hidden;
+	position: relative;
+	text-decoration: none;
+	cursor: pointer;
+	line-height: 2.1em;
+	padding-left: 0.5em;
+	min-width: 10em;
+	&:hover {
+		// background: $selectmenu-button-color;
+	}
+}
+.ui-selectmenu-button-open,.ui-selectmenu-button-open.success {
+	border-bottom: none;
+	border-radius: 	0.2em 0.2em 0 0;
+}
+.ui-multiselect {
+	float: right;
+	line-height: 2em;
+	height: 2.7em;
+	max-width: 60%;
+	min-width: 27em;
+}
+.ui-selectmenu-button span.ui-icon {
+	right: 0.5em;
+	left: auto;
+	margin-top: -8px;
+	position: absolute;
+	top: 50%;
+}
+.ui-selectmenu-button span.ui-selectmenu-text {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	opacity: 0.5;
+	font-size: .7em;
+}
+.ui-icon {
+	width: 16px;
+	height: 16px;
+}
+.ui-icon,
+.ui-widget-content .ui-icon {
+	background-image: url("images/ui-icons_ffffff_256x240.png");
+}
+.ui-widget-header .ui-icon {
+	background-image: url("images/ui-icons_222222_256x240.png");
+}
+.ui-state-default .ui-icon {
+	background-image: url("images/ui-icons_888888_256x240.png");
+}
+.ui-state-hover .ui-icon,
+.ui-state-focus .ui-icon {
+	background-image: url("images/ui-icons_454545_256x240.png");
+}
+.ui-state-active .ui-icon {
+	background-image: url("images/ui-icons_454545_256x240.png");
+}
+.ui-state-highlight .ui-icon {
+	background-image: url("images/ui-icons_2e83ff_256x240.png");
+}
+.ui-state-error .ui-icon,
+.ui-state-error-text .ui-icon {
+	background-image: url("images/ui-icons_cd0a0a_256x240.png");
+}
+.ui-icon-triangle-1-s { background-position: -64px -16px; }
+
 @media screen and (max-width: 88em) {
 	#mainmenu {
 		position: absolute;
@@ -1405,4 +1577,3 @@ label {
 		margin-right: 2em;
 	}
 }
-

@@ -32,12 +32,14 @@ $(document).ready(function() {
 					data = $.parseJSON(data);
 					showUpdateInfo(''+data.content+'',''+data.infotype+'');
 					$this.prop('checked',true).val(1);
+					$this.next('label').find('i').addClass('fa-check-square').removeClass('fa-square');
 				})	
 			} else {
 				$.post('deletefile.php', { deletepublic:true,filename:thisListFolder+'/'+thisFile }, function(data) {
 		            data = $.parseJSON(data);
 		            showUpdateInfo(''+data.content+'',''+data.infotype+'');
 		            $this.prop('checked',false).val(0);
+		            $this.next('label').find('i').addClass('fa-square').removeClass('fa-check-square');
 	        	})
 			}
 		})
@@ -89,12 +91,14 @@ $(document).ready(function() {
 					data = $.parseJSON(data);
 					showUpdateInfo(''+data.content+'',''+data.infotype+'');
 					$this.prop('checked',true).val(1);
+					$this.next('label').find('i').addClass('fa-check-square').removeClass('fa-square');
 				})	
 			} else {
 				$.post('deletefile.php', { deletepublic:true,filename:thisListFolder+'/'+thisFile,username:'public' }, function(data) {
 		            data = $.parseJSON(data);
 		            showUpdateInfo(''+data.content+'',''+data.infotype+'');
 		            $this.prop('checked',false).val(0);
+		           	$this.next('label').find('i').addClass('fa-square').removeClass('fa-check-square');
 	        	})
 			}
 		})
@@ -133,11 +137,11 @@ $(document).ready(function() {
 		})
 	})
 
-	$(function() {
-		equalHeight($('.video'));
-		var elementHeight = $('.video').height();
-		$('.video > a > img').css({'height':elementHeight});
-	})
+	// $(function() {
+	// 	equalHeight($('.video'));
+	// 	var elementHeight = $('.video').height();
+	// 	$('.video > a > img').css({'height':elementHeight});
+	// })
 	
 	if (GetURLParameter() == '/gallery') {
 		if ($('.container > #pictures_list').length > 0) {
@@ -173,6 +177,10 @@ $(document).ready(function() {
           return val === "Show filelist" ? "Hide filelist" : "Show filelist";
       })
     })
+
+    $('select').selectmenu({
+    	width: '10em'
+    });
     
     $('[id^=filelist_] li').each(function() {
     	if ($(this).hasClass('heading')) {

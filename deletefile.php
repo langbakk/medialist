@@ -6,6 +6,7 @@ require_once('conf/config.php');
 	if (isset($_POST['filename']) && ((isset($_POST['deletepublic'])) == true)) {
 		$tmpfn = explode('/',$_POST['filename']);
 		$tmpfn[1] = explode('/',$username)[0].'__'.$tmpfn[1]; 
+		$delete_sharedfile = join('/',$tmpfn);
 		$deletefile = join('/',$tmpfn);
 	} elseif (isset($_POST['filename'])) {
 		$tmpfn = explode('/',$_POST['filename']);

@@ -17,7 +17,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 			<ul class="alternate">
 				<li class="heading">List of users</li>';
 		foreach ($allow_public_users as $key => $value) {
-			echo '<li>'.($value == true && (trim(explode('/',$username)[0]) != trim($key)) ? '<a href="gallery?user='.$key.'">' : '').$key.($value == true && (trim(explode('/',$username)[0]) != trim($key)) ? '</a>' : '').'</li>';
+			echo '<li>'.(($value == true && trim(explode('/',$username)[0]) != trim($key)) || ($_SESSION['usertype'] == 'admin' && explode('/',$username)[0] != trim($key)) ? '<a href="gallery?user='.$key.'">' : '').$key.(($value == true && trim(explode('/',$username)[0]) != trim($key)) || ($_SESSION['usertype'] == 'admin' && explode('/',$username)[0] != trim($key)) ? '</a>' : '').'</li>';
 		}
 	echo '</ul></div>';
 

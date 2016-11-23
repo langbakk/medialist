@@ -20,7 +20,7 @@ echo '<div class="container">
 	<h2>'.$username_readable.'</h2>
 	<div class="content">';
 	if (!isset($_GET['user'])) {
-		echo '	<p>Logged in with '.$usertype.' rigths</p>';
+		echo '	<p>Logged in with '.$usertype.' rights</p>';
 	}
 	
 	$path = realpath($_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username);
@@ -52,17 +52,17 @@ echo '<div class="container">
 	if ($disk_used == 0) {
 		echo '<li class="messagebox warning">No files uploaded</li>';
 	} else {
-		$dir = '';
+		$folder = '';
 			foreach ($objects as $file) {
 		$time = DateTime::createFromFormat('U',filemtime($file->getPathName()));
 		if (!$file->isDir()) {
 			$files[] = ['filename'=>$file->getPathName(),'time'=>$time->getTimestamp(),'size'=>$file->getSize()];
 		} else {
-			$dirs[] = ['filename'=>$file->getPathName(),'time'=>$time->getTimestamp(),'size'=>$file->getSize()];
+			$folders[] = ['filename'=>$file->getPathName(),'time'=>$time->getTimestamp(),'size'=>$file->getSize()];
 		}
 	}
 
-		usort($dirs, function($a, $b) {
+		usort($folders, function($a, $b) {
 			return $a['filename'] - $b['filename'];
 		});
 
@@ -78,24 +78,33 @@ echo '<div class="container">
  			}
 		});
 
-		foreach ($dirs as $key => $value) {
+		foreach ($folders as $key => $value) {
 			$filesize_array[] = $value['size']; 
 			$filesize_total = $filesize_total + $value['size'];
-			$dir = array_reverse(explode('/',$value['filename']))[0];
-			echo '<li class="heading">'.ucfirst($dir).'</li>'; 
+			$folder = array_reverse(explode('/',$value['filename']))[0];
+			echo '<li class="heading">'.ucfirst($folder).'</li>'; 
+			$id_number = 0;
 			foreach ($files as $fkey => $fvalue) {
+				++$id_number;
 			    $time = date('Y-m-d H:m', $fvalue['time']);
 				$filesize_array[] = $fvalue['size'];
 				$filesize_total = $filesize_total + $fvalue['size'];
 				$filename = array_reverse(explode('/',$fvalue['filename']))[0];
-				if ($dir == array_reverse(explode('/',$fvalue['filename']))[1]) {
+				if ($folder == array_reverse(explode('/',$fvalue['filename']))[1]) {
 					$usercontrols = '<div class="usercontrols">
-					<a class="sharefile" href="'.$baseurl.'sharefile.php">
-						<img src="'.$webgfxpath.'share.png" alt="share file">
-					</a>'.((isset($_GET['user']) != 'public' && $username != 'public/') ? '<a class="deletefile" href="'.$baseurl.'deletefile.php">
-						<img src="'.$webgfxpath.'delete_icon.png" alt="delete file">
-					</a><form method="post" action="create_public_link.php"><input type="checkbox" class="make_public" title="Make public" '.((is_link($userpath.'public/'.$dir.'/'.explode('/',$username)[0].'__'.$filename) ? 'checked' : '')).' value="'.((is_link($userpath.'public/'.$dir.'/'.explode('/',$username)[0].'__'.$filename) ? 1 : 0)).'"></form>':'').'</div>';
-					echo '<li><span class="filename"'.(($dir == 'documents') ? ' style="max-width: initial; word-wrap: none;"':'').'>'.$filename.'</span>'.(($dir == 'pictures') ? '<span class="filelist_image"><img src="showfile.php?imgfile='.$filename.'&thumbs=true"></span> ' : (($dir == 'video') ? '<div class="tech-slideshow">
+						<a class="sharefile" href="'.$baseurl.'sharefile.php">
+							<i class="fa fa-share-alt" title="Share file"></i>
+						</a>';
+						if (($isloggedin && $isadmin) || ($isloggedin && $original_username == $username)) { 
+						$usercontrols .= '<a class="deletefile" href="'.$baseurl.'deletefile.php">
+							<i class="fa fa-remove" title="Delete file"></i>
+						</a>';
+						}
+						if ((($isloggedin && $isadmin) || ($original_username == $username)) && $username != 'public') {
+						$usercontrols .= '<form method="post" action="create_public_link.php"><input type="checkbox" id="'.$folder.'_'.$id_number.'" class="hidden make_public" title="Make public" '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$filename) ? 'checked' : '')).' value="'.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$filename) ? 1 : 0)).'"><label for="'.$folder.'_'.$id_number.'"><i class="makepublic fa '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$filename) ? 'fa-check-square' : 'fa-square')).'"></i></label></form>';
+						}
+					$usercontrols .= '</div>';
+					echo '<li><span class="filename"'.(($folder == 'documents') ? ' style="max-width: initial; word-wrap: none;"':'').'>'.$filename.'</span>'.(($folder == 'pictures') ? '<span class="filelist_image"><img src="showfile.php?imgfile='.$filename.'&thumbs=true"></span> ' : (($folder == 'video') ? '<div class="tech-slideshow">
 						<div class="mover-1" style="background: url(showfile.php?vidfile='.$filename.'.jpg&thumbs=true);"></div>
 						<div class="mover-2" style="background: url(showfile.php?vidfile='.$filename.'.jpg&thumbs=true);"></div>
 					</div>' : '')).'<span class="filesize">'.((isset($_COOKIE['setsort']) && $_COOKIE['setsort'] == 'sortbydate') ? $time : format_size($fvalue['size'])).'</span>'.$usercontrols.'</li>';

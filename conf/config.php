@@ -50,6 +50,9 @@ $show_quotes = true;
 $use_db = false;
 //turns on or off debug-functionality (logfiles, visible error-messages etc) (true/false)
 $debug = true;
+//this is the default size storage space set for users
+$defaultsize = 536870912;
+
 //sets the site as deactivated temporarily (1/0)
 //$deactivated = 0; //currently not in use
 //change this to add or remove menu-items - do not change the sequence of elements
@@ -74,7 +77,7 @@ $isloggedin = isset($_SESSION['loggedin']) ? $_SESSION['loggedin'] : false;
 
 $countrycode = !empty($_SESSION['userlanguage']) ? $_SESSION['userlanguage'] : 187;
 $filesize_units = explode(' ', 'B KB MB GB TB PB');
-$defaultsize = 536870912;
+
 $storage_limit = (isset($_SESSION['storagelimit'])) ? $_SESSION['storagelimit'] : $defaultsize; //512MB as default
 if (isset($_GET['user'])) {
 	foreach($user_array as $user) {
