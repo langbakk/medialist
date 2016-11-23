@@ -81,7 +81,10 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 								$usercontrols .= '<form method="post" action="create_public_link.php"><input type="checkbox" class="make_public" title="Make public" '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 'checked' : '')).' value="'.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 1 : 0)).'"></form>';
 								}
 							$usercontrols .= '</div>';
-							$document_name = ((strpos($val,'__') == true) ? explode('__',urldecode(ucwords(removeExtension($val)))) : urldecode(ucwords(removeExtension($val))));;
+							$document_name = ((strpos($val,'__') == true) ? explode('__',urldecode(ucwords(removeExtension($val)))) : urldecode(ucwords(removeExtension($val))));
+							if (getExtension($val) && $folder == 'documents') {
+								$fileicon = '<i class="fa fa-file-'.getExtension($val).'-o"></i>';
+							}
 							$document_name = ((is_array($document_name) && $folder == 'documents') ? '<span class="public_sharename">(Uploaded by '.$document_name[0].') - '.$document_name[1].'</span>' : (is_array($document_name) ? '<span class="public_sharename">(Uploaded by '.$document_name[0].')</span>' : '<span class="public_sharename">'.$document_name.'</span>'));
 							if ($folder == 'video') {
 								$getvidfile = 'showfile.php?vidfile='.$val.'';
@@ -97,7 +100,8 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 										<div class="mover-2" style="background: url('.$getvidfile.'.jpg&thumbs=true'.(isset($_GET['user']) ? '&user='.$_GET['user'].'' : '').');"></div>
 									</a>'.$usercontrols.$document_name.
 								'</div>' : 
-								'<a href="showfile.php?docfile='.$val.'">'.$document_name.'</a>'.$usercontrols));
+								(($folder == 'documents') ? 
+								'<a href="showfile.php?docfile='.$val.'">'.$fileicon.' '.$document_name.'</a>'.$usercontrols : '')));
 							$floatleft = (($folder == 'pictures' && !empty($shared_content)) ? 'class="pictures shared"' : (($folder == 'pictures' && empty($shared_folder)) ? 'class="pictures"' : (($folder == 'video') ? 'class="video"' : '')));
 							echo '<li '.$floatleft.'>'.$linkdisplay.'</li>';
 						}
@@ -109,7 +113,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 		}
 	}
 
-	echo '<div class="container '.(($allempty == 0) ? 'visible' : 'hidden').'">'.((isset($_GET['user']) && $user_exist == true) ? '<p class="messagebox warning visible">'.(($username == 'public/') ? 'There are no public uploads to show' : 'This user hasn\'t uploaded anything. Tell them to get their butt in gear!').'</p>' : (($user_exist == false && (trim($exploded_user_array[0]) != trim(explode('/',$username)[0]))) ? '<p class="messagebox error visible">That user doesn\'t exist on the server</p>' : '<p class="messagebox info visible">No files were found on the server matching the configured criteria. <a href="upload">Upload files</a></p>')).'</div>';
+	echo '<div class="container '.(($allempty == 0) ? 'visible' : 'hidden').'">'.((isset($_GET['user']) && $user_exist == true) ? '<p class="messagebox warning visible">'.(($username == 'public/') ? 'There are no public uploads to show' : 'This user hasn\'t uploaded anything. Tell them to get their butt in gear!').'</p>' : (($user_exist == false && (trim($exploded_user_array[0]) != trim(explode('/',$username)[0]))) ? '<p class="messagebox error visible">That user doesn\'t exist on the server</p>' : '<p class="messagebox info visible">There are no public uploads to show. <a href="upload">Upload files</a></p>')).'</div>';
 	if ($show_quotes == true) { // this setting can be changed in config.php
 		include 'quotes.php';
 	}
