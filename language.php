@@ -1,6 +1,6 @@
 <?php
 
-	$chosenlanguage = [	'mainheading' 			=> 'Uploadr.io',
+	$chosenlanguage = [	'mainheading' 			=> 'Uploadr',
 						'uploadlabel'			=> 'Choose file',
 						'uploadsubmit'			=> 'Upload',
 						'uploadreset'			=> 'Reset form'

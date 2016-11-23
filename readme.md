@@ -1,5 +1,5 @@
-Uploadr.at
-==========
+Uploadr
+=======
 
 ** A database-less gallery-app, where you can select what files and filetypes you want to allow for upload. You can add users, and even though its's not database-driven, you can use database as a backend, for instance to create and manage users **
 

@@ -1,7 +1,7 @@
 <?php
 if (!session_id()) { session_start(); };
 
-$websitename = 'Uploadr.io';
+$websitename = 'Uploadr';
 
 ini_set('display_errors',1); // this should be commented out in production environments
 error_reporting(E_ALL); // this should be commented out in production environments
