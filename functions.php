@@ -39,7 +39,7 @@ function generateRandomString($alpha = true, $nums = true, $usetime = false, $st
 
 function allowedMimeAndExtensions($type, $mimetype = '', $filename = 'conf/.allowed_mimetypes') {
 	$list = file($filename, FILE_IGNORE_NEW_LINES);
-	$allowed_types = ['image','video','music','application','text'];
+	$allowed_types = ['image','video','audio','application','text'];
 	$allowed_files = [];
 	$allowedfiles_replace = [];
 	foreach ($list as $key => $value) {
@@ -47,7 +47,15 @@ function allowedMimeAndExtensions($type, $mimetype = '', $filename = 'conf/.allo
 			$allowed_files[] = 	trim(str_replace('\'','',$value));
 		}
 	}
-	if (!empty($type) && $type == 'extension') {
+	if ((!empty($type) && $type == 'extension') && (!empty($mimetype) && $mimetype == 'mime')) {
+		foreach ($list as $key => $value) {
+			if (stripos($value,"//") === false && !empty($value)) {
+				$value = explode(' ',$value);
+				$allowedfiles_replace[$value[0]] = $value[1];
+			}
+		}
+		$allowed_files = $allowedfiles_replace;
+	} elseif (!empty($type) && $type == 'extension') {
 		foreach ($list as $key => $value) {
 			if (stripos($value, "//") === false && !empty($value)) {
 				$value = trim(explode(' ',$value)[0]);

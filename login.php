@@ -18,6 +18,7 @@ if (isset($_POST['submit_logout'])) {
 				$_SESSION['usertype'] = trim($exploded_user_array[2]);
 				$_SESSION['storagelimit'] = (array_key_exists(4,$exploded_user_array)) ? trim($exploded_user_array[4]) : $storage_limit;
 				$_SESSION['allowpublic'] = (array_key_exists(3,$exploded_user_array)) ? trim($exploded_user_array[3]) : 0;
+				$_SESSION['userstartpage'] = (array_key_exists(5,$exploded_user_array)) ? trim($exploded_user_array[5]) : 'upload';
 				$success = true;
 				$folderexist = false;
 				$foldercreated = false;
@@ -42,7 +43,8 @@ if (isset($_POST['submit_logout'])) {
 					header('refresh: 2; url=upload');
 				} elseif ($folderexist == true && $foldercreated == false) {
 					echo '<p class="messagebox info">User-folders already exists</p>';
-					header('refresh: 0; url=upload');
+					$redirectpage = $_SESSION['userstartpage'];
+					header('refresh: 0; url='.$redirectpage);
 				} else {
 					header('refresh: 0');
 				}

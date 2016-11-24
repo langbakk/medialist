@@ -285,7 +285,7 @@ h1,h2,h3,h4 {
 // h2 {
 // 	background: #00a0c6;	
 // }
-h2 {
+h2,h3 {
 	margin-top: .5em;
 }
 
@@ -301,7 +301,7 @@ h2 {
 	padding: 5em 0 0 0;
 	// background: $main-dark-transparent;
 	h3 {
-		display: none;
+		// display: none;
 	}
 }
 .container {
@@ -314,6 +314,10 @@ h2 {
 	h2 {
 		// margin-top: 3em;
 	}
+}
+.dark-background {
+	background: $main-contrast;
+	color: $main-light;
 }
 ul {
 	overflow: hidden;
@@ -369,6 +373,7 @@ li .usercontrols form {
 	label {
 		line-height: 2em;
 		float: none;
+		cursor: pointer;
 	}
 	.makepublic.fa-check-square {
 		color: $info-background;
@@ -380,6 +385,23 @@ li .usercontrols form {
 [id$='_list'] li:hover .usercontrols,#user_filelist li:hover .usercontrols {
 	display: block;
 	z-index: 1000;
+}
+[id$='_list'] a {
+	text-decoration: none;
+}
+[id$='_list'] a span {
+	text-decoration: underline;
+}
+#filetypelist li {
+	display: flex;
+}
+#filetypelist li span {
+	position: initial;
+	flex: 1 1 0;
+	max-width: 100%;
+}
+.helper {
+	cursor: help;
 }
 #pictures_list .public_sharename {
 	display: none;
@@ -394,17 +416,18 @@ li .usercontrols form {
 	background: $main-dark-transparent;
 	padding: .3em 0;
 }
-#documents_list li {
+#documents_list li,#music_list li {
 	line-height: 1.6em;
 }
-#documents_list li .usercontrols {
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	padding: .1em .4em 0 0;
+#documents_list li .usercontrols,#music_list li .usercontrols {
+	// position: absolute;
+	// top: 0;
+	// right: 0;
+	// bottom: 0;
+	// padding: .1em .4em 0 0;
+	padding: .2em .5em 0 0;
 }
-#documents_list li:hover {
+#documents_list li:hover,#music_list li:hover {
 	background: #666;
 }
 #user_filelist li .filename {
@@ -597,6 +620,10 @@ input {
 }
 .user_management_form input {
 	display: initial;
+	width: 15em;
+}
+.user_management_form input[name=userdiskspace] {
+	width: 12em;
 }
 .user_management_form input[type=submit] {
 	margin-top: -3.5em;

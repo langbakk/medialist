@@ -5,6 +5,7 @@ require_once('functions.php');
 
 if ($isloggedin) {
 
+$original_username = $username;
 $username = isset($_GET['user']) ? $_GET['user'] : $username;
 
 $username_readable = ucfirst(explode('/',$username)[0]);
@@ -95,13 +96,13 @@ echo '<div class="container">
 						<a class="sharefile" href="'.$baseurl.'sharefile.php">
 							<i class="fa fa-share-alt" title="Share file"></i>
 						</a>';
-						if (($isloggedin && $isadmin) || ($isloggedin && $original_username == $username)) { 
-						$usercontrols .= '<a class="deletefile" href="'.$baseurl.'deletefile.php">
-							<i class="fa fa-remove" title="Delete file"></i>
-						</a>';
+						if (($isloggedin && $isadmin) || ($isloggedin && $original_username == $username) || (is_array($document_name) && strtolower($document_name[0]) == strtolower(explode('/',$original_username)[0]))) {
+							$usercontrols .= '<a class="deletefile" href="'.$baseurl.'deletefile.php">
+								<i class="fa fa-remove" title="Delete file"></i>
+							</a>';
 						}
-						if ((($isloggedin && $isadmin) || ($original_username == $username)) && $username != 'public') {
-						$usercontrols .= '<form method="post" action="create_public_link.php"><input type="checkbox" id="'.$folder.'_'.$id_number.'" class="hidden make_public" title="Make public" '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$filename) ? 'checked' : '')).' value="'.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$filename) ? 1 : 0)).'"><label for="'.$folder.'_'.$id_number.'"><i class="makepublic fa '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$filename) ? 'fa-check-square' : 'fa-square')).'"></i></label></form>';
+						if ((($isloggedin && $isadmin) || ($original_username == $username)) && $username != 'public') {
+							$usercontrols .= '<form method="post" action="create_public_link.php"><input type="checkbox" id="'.$folder.'_'.$id_number.'" class="hidden make_public" title="Make public" '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$filename) ? 'checked' : '')).' value="'.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$filename) ? 1 : 0)).'"><label title="'.(is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$filename) ? 'Undo &quot;make file public&quot;' : 'Make file public').'" for="'.$folder.'_'.$id_number.'"><i class="makepublic fa '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$filename) ? 'fa-check-square' : 'fa-square')).'"></i></label></form>';
 						}
 					$usercontrols .= '</div>';
 					echo '<li><span class="filename"'.(($folder == 'documents') ? ' style="max-width: initial; word-wrap: none;"':'').'>'.$filename.'</span>'.(($folder == 'pictures') ? '<span class="filelist_image"><img src="showfile.php?imgfile='.$filename.'&thumbs=true"></span> ' : (($folder == 'video') ? '<div class="tech-slideshow">
@@ -117,7 +118,8 @@ echo '<div class="container">
 	$average_size = ($filesize_total != 0) ? format_size($filesize_total / count($filesize_array)) : 0;
 	echo '<p class="diskspaceinfo"><span>Diskspace used: '.format_size($disk_used).'</span><span>Diskspace left: '.(($disk_remaining < $average_size * 3) ? '<span class="error">'.format_size($disk_remaining).'</span>' : format_size($disk_remaining)).'</span></p>';
 
-echo '</div></div>';
+echo '</div>
+<div class="content" id="settings"><h3>Settings</h3></div></div>';
 } else {
 	header('Location: login');
 }

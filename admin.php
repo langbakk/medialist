@@ -180,7 +180,7 @@ echo '			<p class="buttoncontainer">
 		<div id="user_management_container" class="admincontainer">
 		<h2>User management</h2>';
 			$usertypes = ['admin','user'];
-			$newuserlist = '';
+			$newuserlist = '#username // password // userrole // allow userlist link // diskspace-setting'."\r\n";
 			$c = 0;
 			foreach ($user_array as $uakey => $uavalue) {
 				$c++;
@@ -200,7 +200,8 @@ echo '			<p class="buttoncontainer">
 					$updated_usertype = isset($_POST['usertype']) ? $_POST['usertype'] : trim($user[2]);
 					$updated_userlistlink = isset($_POST['userlistlink']) ? 1 : 0;
 					$updated_userdiskspace = (isset($_POST['userdiskspace']) && $_POST['userdiskspace'] != $defaultsize) ? $_POST['userdiskspace'] : $defaultsize;
-					$newuserlist .= $updated_username.' // '.$updated_password.' // '.$updated_usertype.' // '.$updated_userlistlink.' // '.$updated_userdiskspace."\r\n";
+					$updated_userstartpage = (isset($_POST['userstartpage'])) ? $_POST['userstartpage'] : trim($user[5]);
+					$newuserlist .= $updated_username.' // '.$updated_password.' // '.$updated_usertype.' // '.$updated_userlistlink.' // '.$updated_userdiskspace.' // '.$updated_userstartpage."\r\n";
 					// echo $updated_username.' '.$updated_password.' '.$updated_usertype.' '.$updated_userlistlink.' '.$updated_userdiskspace;
 				}
 				$formusername = trim($user[0]);
@@ -221,6 +222,16 @@ echo '			<p class="buttoncontainer">
 					<input id="userlistlink_'.$formusername.'" type="checkbox" name="userlistlink" '.(($user[3] == 1) ? 'checked' : '').'></label>
 					<label for="userdiskspace_'.$formusername.'">Disk space<br>
 					<input id="userdiskspace_'.$formusername.'" type="text" name="userdiskspace" value="'.(!empty($user[4]) ? $user[4] : $defaultsize).'"></label>
+					<label for="userstartpage_'.$formusername.'">Preferred startpage<br>
+					<select id="userstartpage_'.$formusername.'" name="userstartpage" autocomplete="off">';
+					foreach (Config::read('menu_array') as $menukey => $menuvalue) {
+						if ($menuvalue != 'login' &&  $menuvalue != 'register' && $menuvalue != 'home') {
+							$setvalue = (isset($_POST['userstartpage']) && ($_POST['username'] == $formusername)) ? $_POST['userstartpage'] : $_SESSION['userstartpage'];
+							$selected = ((isset($_POST['userstartpage']) && ($_POST['username'] == $formusername) && $_POST['userstartpage'] == $menuvalue) ? 'selected' : (((!isset($_POST['userstartpage']) || ($_POST['username'] != $formusername)) && trim($user[5]) == $menuvalue) ? 'selected' : (((empty($user[5]) && $menuvalue == 'upload') ? 'selected' : '')))); 
+							echo '<option value="'.$menuvalue.'" '.$selected.'>'.ucfirst($menuvalue).'</option>';
+						}
+					}
+					echo '</select></label>
 					<input type="submit" name="submit_userchanges" value="Save">
 				</form>';
 			}

@@ -70,24 +70,26 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 							if (is_link($_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/'.$val)) {
 								$shared_content = array_reverse(explode('/',readlink($_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/'.$val)))[2];
 							}
+							$document_name = ((strpos($val,'__') == true) ? explode('__',urldecode(ucwords(removeExtension($val)))) : urldecode(ucwords(removeExtension($val))));
 							$usercontrols = '<div class="usercontrols">
 								<a class="sharefile" href="'.$baseurl.'sharefile.php">
 									<i class="fa fa-share-alt" title="Share file"></i>
 								</a>';
-								if (($isloggedin && $isadmin) || ($isloggedin && isset($_GET['user']) == $username)) { 
+								if (($isloggedin && $isadmin) || ($isloggedin && $original_username == $username) || (is_array($document_name) && strtolower($document_name[0]) == strtolower(explode('/',$original_username)[0]))) {
 								$usercontrols .= '<a class="deletefile" href="'.$baseurl.'deletefile.php">
 									<i class="fa fa-remove" title="Delete file"></i>
 								</a>';
 								}
-								if ((($isloggedin && $isadmin) || ($original_username == $username)) && $username != 'public') {
-								$usercontrols .= '<form method="post" action="create_public_link.php"><input type="checkbox" id="'.$folder.'_'.$id_number.'" class="hidden make_public" title="Make public" '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 'checked' : '')).' value="'.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 1 : 0)).'"><label for="'.$folder.'_'.$id_number.'"><i class="makepublic fa '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 'fa-check-square' : 'fa-square')).'"></i></label></form>';
+								if ((($isloggedin && $isadmin) || ($original_username == $username)) && $username != 'public') {
+								$usercontrols .= '<form method="post" action="create_public_link.php"><input type="checkbox" id="'.$folder.'_'.$id_number.'" class="hidden make_public" title="Make public" '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 'checked' : '')).' value="'.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 1 : 0)).'"><label title="'.(is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 'Undo &quot;make file public&quot;' : 'Make file public').'" for="'.$folder.'_'.$id_number.'"><i class="makepublic fa '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 'fa-check-square' : 'fa-square')).'"></i></label></form>';
 								}
 							$usercontrols .= '</div>';
-							$document_name = ((strpos($val,'__') == true) ? explode('__',urldecode(ucwords(removeExtension($val)))) : urldecode(ucwords(removeExtension($val))));
-							if (getExtension($val) && $folder == 'documents') {
-								$fileicon = '<i class="fa fa-file-'.getExtension($val).'-o"></i>';
+							if (getExtension($val) && ($folder == 'documents' || $folder == 'music')) {
+								$fileext = getExtension($val);
+								$extension = (($fileext == 'txt') ? 'text-o' : (($fileext == 'xls' || $fileext == 'xlsx') ? 'excel-o' : (($fileext == 'doc' || $fileext == 'docx') ? 'word-o' : (($fileext == 'mp3' || $fileext == 'webm') ? 'audio-o' : $fileext.'-o'))));
+								$fileicon = '<i class="dark-background fa fa-file-'.$extension.'"></i>';
 							}
-							$document_name = ((is_array($document_name) && $folder == 'documents') ? '<span class="public_sharename">(Uploaded by '.$document_name[0].') - '.$document_name[1].'</span>' : (is_array($document_name) ? '<span class="public_sharename">(Uploaded by '.$document_name[0].')</span>' : '<span class="public_sharename">'.$document_name.'</span>'));
+							$document_name = ((is_array($document_name) && $folder == 'documents') ? '<span class="public_sharename">(Uploaded by '.$document_name[0].') - '.$document_name[1].'</span>' : (is_array($document_name) ? '<span class="public_sharename">(Uploaded by '.$document_name[0].')</span>' : '<span class="public_sharename">'.rtrim(trim($document_name),'_-').'</span>'));
 							if ($folder == 'video') {
 								$getvidfile = 'showfile.php?vidfile='.$val.'';
 							}
@@ -102,7 +104,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 										<div class="mover-2" style="background: url('.$getvidfile.'.jpg&thumbs=true'.(isset($_GET['user']) ? '&user='.$_GET['user'].'' : '').');"></div>
 									</a>'.$usercontrols.$document_name.
 								'</div>' : 
-								(($folder == 'documents') ? 
+								(($folder == 'documents' || $folder == 'music') ? 
 								'<a href="showfile.php?docfile='.$val.'">'.$fileicon.' '.$document_name.'</a>'.$usercontrols : '')));
 							$floatleft = (($folder == 'pictures' && !empty($shared_content)) ? 'class="pictures shared"' : (($folder == 'pictures' && empty($shared_folder)) ? 'class="pictures"' : (($folder == 'video') ? 'class="video"' : '')));
 							echo '<li '.$floatleft.'>'.$linkdisplay.'</li>';
