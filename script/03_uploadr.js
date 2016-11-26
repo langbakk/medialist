@@ -48,11 +48,13 @@ $(document).ready(function() {
 		$('.sharefile').click(function(e) {
 			$this = $(this);
 			e.preventDefault();
-			var userName = '';
+			var userName = $('#username_display').find('i').children('span').text();
 			if (GetURLParameter('user')) {
 				userName = GetURLParameter('user');
 			}
-			var thisFile = document.location.origin+'/?'+$(this).parents('li').find('a:first').attr('href').split('?')[1];
+			var modifiedLink = $(this).parents('li').find('a:first').attr('href').split('?')[1].split('=');
+			var thisFile = document.location.origin+'/?'+modifiedLink[0]+'='+userName+'__'+modifiedLink[1];
+			alert(thisFile);
 		})
 		$('.deletefile').click(function(e) {
 			$this = $(this);

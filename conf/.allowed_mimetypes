@@ -38,7 +38,7 @@ xlsx 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 ppt 'application/vnd.ms-powerpoint'
 txt 'text/plain'
 
-//compressed and packaged files
+//applications and compressed files
 7z 'application/x-7z-compressed'
 apk 'application/vnd.android.package-archive'
 arj 'application/x-arj'

@@ -62,10 +62,10 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 						}
 						 elseif (in_array($_FILES['file']['type'], allowedMimeAndExtensions('video','mime'))) {
 							$folder = 'video';
+						} elseif (in_array($_FILES['file']['type'], allowedMimeAndExtensions('documents','mime'))) { //} || in_array($_FILES['file']['type'], allowedMimeAndExtensions('text','mime'))) {
+							$folder = 'documents';
 						} elseif (in_array($_FILES['file']['type'], allowedMimeAndExtensions('application','mime'))) {
-							$folder = 'documents';
-						} elseif (in_array($_FILES['file']['type'], allowedMimeAndExtensions('text','mime'))) {
-							$folder = 'documents';
+							$folder = 'applications';
 						}
 						$filename = $_FILES['file']['name'];
 						if (file_exists(''.$userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']))) {

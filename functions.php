@@ -39,7 +39,7 @@ function generateRandomString($alpha = true, $nums = true, $usetime = false, $st
 
 function allowedMimeAndExtensions($type, $mimetype = '', $filename = 'conf/.allowed_mimetypes') {
 	$list = file($filename, FILE_IGNORE_NEW_LINES);
-	$allowed_types = ['image','video','audio','application','text'];
+	$allowed_types = ['image','video','audio','application','text','documents'];
 	$allowed_files = [];
 	$allowedfiles_replace = [];
 	foreach ($list as $key => $value) {
@@ -63,13 +63,22 @@ function allowedMimeAndExtensions($type, $mimetype = '', $filename = 'conf/.allo
 			}
 		}
 		$allowed_files = $allowedfiles_replace;
+	} elseif ((!empty($type) && $type == 'documents') && (!empty($mimetype) && $mimetype == 'mime')) {
+		$document_array = ['doc','docx','pdf','xls','xlsx','ppt','txt'];
+		foreach ($list as $key => $value) {
+			if (stripos($value, "//") === false && !empty($value)) {
+				$value = explode(' ',$value);
+				if (in_array(trim($value[0]),$document_array)) {
+					$allowedfiles_replace[] = str_replace('\'','',trim($value[1]));
+				}
+			}
+		}	
+		$allowed_files = $allowedfiles_replace;		
 	} elseif ((!empty($type) && !in_array($type, $allowed_types)) && $mimetype == 'mime') {
 		foreach ($list as $key => $value) {
 			if (stripos($value, "//") === false && !empty($value)) {
 				$value_ext = explode(' ',$value)[0];
-				if (Config::read('debug') == true) {
-					logThis('allowedmimetypes','This is the value '.$value_ext."\r\n",FILE_APPEND);
-				}
+				logThis('allowedmimetypes','This is the value '.$value_ext."\r\n",FILE_APPEND);
 				if ($type == $value_ext) {
 					$allowedfiles_replace[] = str_replace('\'','',explode(' ',$value)[1]);
 				}
@@ -107,10 +116,8 @@ function allowedMimeAndExtensions($type, $mimetype = '', $filename = 'conf/.allo
 		}
 		$allowed_files = $allowedfiles_replace;
 	}
-	if (Config::read('debug') == true) {
 		$joined_array = join(' ,',$allowed_files);
 		logThis('allowedmimetypes','This is the allowed array '.$joined_array."\r\n",FILE_APPEND);
-	}
 	return $allowed_files;
 }
 
@@ -261,7 +268,9 @@ function returnCurrentUploads($filename) {
 function logThis($filename, $logthis) {
     $date = new DateTime();
     $date = $date->format('Y m d H:i:s');
-    file_put_contents(LOG_FOLDER.$filename.'.txt',$date.' '.$logthis."\r\n",FILE_APPEND);
+    if (Config::read('debug') == true) {
+    	file_put_contents(LOG_FOLDER.$filename.'.txt',$date.' '.$logthis."\r\n",FILE_APPEND);
+    }
 }
 
 function loadFiles($filetype, $path, $recursive = 0, $testfileallow = 0) {

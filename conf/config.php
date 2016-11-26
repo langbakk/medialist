@@ -49,7 +49,7 @@ $show_quotes = true;
 //turns on or off use of a database - the database-variables must be filled out before this is turned on (true/false)
 $use_db = false;
 //turns on or off debug-functionality (logfiles, visible error-messages etc) (true/false)
-$debug = true;
+$debug = false;
 //this is the default size storage space set for users
 $defaultsize = 536870912;
 

@@ -106,7 +106,7 @@ $even_info: rgba(36,156,224,.6);
 
 @mixin flex_list {
 		display: flex;
-		flex-wrap: wrap;
+		// flex-wrap: wrap;
 		li {
 			flex: 1 1 0;
 		}
@@ -416,10 +416,10 @@ li .usercontrols form {
 	background: $main-dark-transparent;
 	padding: .3em 0;
 }
-#documents_list li,#music_list li {
+#documents_list li,#music_list li,#applications_list li {
 	line-height: 1.6em;
 }
-#documents_list li .usercontrols,#music_list li .usercontrols {
+#documents_list li .usercontrols,#music_list li .usercontrols, #applications_list li .usercontrols {
 	// position: absolute;
 	// top: 0;
 	// right: 0;
@@ -427,7 +427,7 @@ li .usercontrols form {
 	// padding: .1em .4em 0 0;
 	padding: .2em .5em 0 0;
 }
-#documents_list li:hover,#music_list li:hover {
+#documents_list li:hover,#music_list li:hover,#applications_list li:hover {
 	background: #666;
 }
 #user_filelist li .filename {
