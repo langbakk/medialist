@@ -44,8 +44,9 @@ $footer-color: #000;
 
 //link colors
 $main-link-color: #FFF;
-$secondary-link-color: #000;
 $hover-link-color: #CCC;
+$secondary-link-color: #555;
+$hover-secondary-link-color: #000;
 $visited-link-color: #AAA;
 $active-link-color: #CCC;
 $error-link-color: #999;
@@ -272,10 +273,10 @@ body {
 	border: .1em solid black;
 }
 #settings_list a {
-	color: $hover-link-color;
+	color: $secondary-link-color;
 }
 #settings_list:hover a:hover {
-	color: $secondary-link-color;
+	color: $hover-secondary-link-color;
 }
 // body {
 // 	// background: $main-dark-transparent;
