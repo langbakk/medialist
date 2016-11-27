@@ -37,15 +37,15 @@ echo '</header>
 	}
 	if (isset($_GET['imgfile']) || isset($_GET['vidfile']) || isset($_GET['docfile'])) {
 		echo $display->getPage();
-	} elseif (!$isloggedin && $use_login == true && (empty($current_page) || $current_page == 'index' || $current_page == 'frontpage' || $current_page == 'login')) {
-		echo $display->getLogin();
 	} elseif ($allow_public == true || $isloggedin) {
 		echo $display->getPage();
 		if (!isset($_GET['page']) || empty($_GET['page'])) {
 			echo '<div class="container">';
-					include_once('index.html');					
+			include_once('index.html');					
 			echo '</div>';
 		}
+	} elseif (!$isloggedin && $use_login == true && (empty($current_page) || $current_page == 'index' || $current_page == 'frontpage' || $current_page == 'login')) {
+		echo $display->getLogin();
 	} 
 echo '
 	</div>

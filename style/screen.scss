@@ -250,11 +250,28 @@ body {
 // .fa-question-circle-o:before {
 //   content: "\f29c";
 // }
-#admin_menu {
+#admin_menu,#user_menu {
 	position: fixed; 
 	top: 2em;
 	right: 9em;
 	color: $main-dark;
+	cursor: pointer;
+}
+#settings_list {
+	display: none;
+}
+#admin_menu:hover ~ #settings_list,#settings_list:hover {
+	display: block;
+	position: absolute;
+	top: 1.5em;
+	right: 4.5em;
+	background: white;
+	color: black;
+	z-index: 50000;
+	border: .1em solid black;
+}
+#settings_list:hover a:hover {
+	color: black;
 }
 // body {
 // 	// background: $main-dark-transparent;
@@ -1074,8 +1091,11 @@ label {
 .dropzone, .dropzone * {
   box-sizing: border-box; 
 }
+.dropzone {
+	min-height: 20em;
+}
 .dropzone,.content {
-	min-height: 30em;
+	// min-height: 30em;
 	border: 0.2em dashed $hilight;
 	border-radius: 0.4em;
 	max-width: 95%;
@@ -1087,8 +1107,11 @@ label {
 	margin-left: auto;
 	margin-right: auto;
 }
+#login_body .content, #register_body .content {
+	min-height: 10em;
+}
 .content p {
-	margin: 20% 2em 0 2em;
+	// margin: 20% 2em 0 2em;
 	text-align: justify;
 	text-align-last: center;
 }
@@ -1100,9 +1123,10 @@ label {
 }
 #userprofile_body .content p:first-of-type {
 	margin-bottom: 1em;
+	margin-top: -2em;
 }
 #userprofile_body .content p.diskspaceinfo {
-	margin: 0;
+	margin: 0 0 0 -2em;
 	padding: .5em 0;
 }
 .dropzone.dz-clickable {
