@@ -34,14 +34,14 @@ echo '<div class="container">
 	if ($disk_used != 0) {
 	echo '<input type="button" id="showhidefilelist" value="Hide filelist">
 	<div id="sortingcontainer">';
-	$currentsorttype = '<span class="sortlinks">Filelist is currently sorted by '.((isset($_COOKIE['setsort']) && $_COOKIE['setsort'] == 'sortbysize') ? 'size' : ((isset($_COOKIE['setsort']) && $_COOKIE['setsort'] == 'sortbydate') ? 'date' : ((isset($_COOKIE['setsort']) && $_COOKIE['setsort'] == 'sortbyname') || !isset($_COOKIE['setsort']) ? 'name' : ''))).'</span>';
+	$currentsorttype = '<span class="sortlinks"><span class="sortlinktext">Filelist is currently sorted by </span>'.((isset($_COOKIE['setsort']) && $_COOKIE['setsort'] == 'sortbysize') ? 'size' : ((isset($_COOKIE['setsort']) && $_COOKIE['setsort'] == 'sortbydate') ? 'date' : ((isset($_COOKIE['setsort']) && $_COOKIE['setsort'] == 'sortbyname') || !isset($_COOKIE['setsort']) ? 'name' : ''))).'</span>';
 
 	if (isset($_COOKIE['setsort']) && $_COOKIE['setsort'] == 'sortbydate') {
-		$output = '<a href="update_cookie.php?setsort=sortbysize">Sort by size</a></span>'.$currentsorttype.'<span class="sortlinks"><a href="update_cookie.php?setsort=sortbyname">Sort by name</a>';
+		$output = '<a href="update_cookie.php?setsort=sortbysize"><span class="sortlinktext">Sort by </span>size</a></span>'.$currentsorttype.'<span class="sortlinks"><a href="update_cookie.php?setsort=sortbyname"><span class="sortlinktext">Sort by </span>name</a>';
 	} elseif (isset($_COOKIE['setsort']) && $_COOKIE['setsort'] == 'sortbysize') {
-		$output = '<a href="update_cookie.php?setsort=sortbyname">Sort by name</a></span>'.$currentsorttype.'<span class="sortlinks"><a href="update_cookie.php?setsort=sortbydate">Sort by date</a>';
+		$output = '<a href="update_cookie.php?setsort=sortbyname"><span class="sortlinktext">Sort by </span>name</a></span>'.$currentsorttype.'<span class="sortlinks"><a href="update_cookie.php?setsort=sortbydate"><span class="sortlinktext">Sort by </span>date</a>';
 	} else {
-		$output = '<a href="update_cookie.php?setsort=sortbysize">Sort by size</a></span>'.$currentsorttype.'<span class="sortlinks"><a href="update_cookie.php?setsort=sortbydate">Sort by date</a>';
+		$output = '<a href="update_cookie.php?setsort=sortbysize"><span class="sortlinktext">Sort by </span>size</a></span>'.$currentsorttype.'<span class="sortlinks"><a href="update_cookie.php?setsort=sortbydate"><span class="sortlinktext">Sort by </span>date</a>';
 	}
 	echo '<span class="sortlinks">'.$output.'</span></div>';
 }
@@ -116,12 +116,14 @@ echo '<div class="container">
 	echo '</ul>
 	</div>';
 	$average_size = ($filesize_total != 0) ? format_size($filesize_total / count($filesize_array)) : 0;
-	echo '<p class="diskspaceinfo"><span>Diskspace used: '.format_size($disk_used).'</span><span>Diskspace left: '.(($disk_remaining < $average_size * 3) ? '<span class="error">'.format_size($disk_remaining).'</span>' : format_size($disk_remaining)).'</span></p>';
+	echo '<p class="diskspaceinfo">
+			<span><span class="diskspacetitle">Diskspace used: </span>'.format_size($disk_used).'</span>
+			<span><span class="diskspacetitle">Diskspace left: </span>'.(($disk_remaining < $average_size * 3) ? '<span class="error">'.format_size($disk_remaining).'</span>' : format_size($disk_remaining)).'</span></p>';
 
 echo '</div>
 	<div class="content" id="settings">
 		<h3>Settings</h3>
-			<input type="button" id="resetlocalstorage" value="Reset all locally stored settings" title="This resets all removed info-containers and similar changes done to the website by the user">
+			<input type="button" id="resetlocalstorage" value="Reset localstorage" title="This resets all removed info-containers and similar changes done to the website by the user">
 	</div>
 </div>';
 } else {

@@ -21,14 +21,14 @@ if (isset($_POST['submit_registration'])) {
 	}
 }
 echo '<div class="container">
-		<h2>Register user</h2>
+		<h2>'.mb_ucfirst(__REGISTERUSER).'</h2>
 		<div class="content">
 		<form id="user_registration_form" method="post" action="register">
 			<label for="username">'.mb_ucfirst(__USERNAME).'</label>
-			<input type="text" name="username" id="username" placeholder="Only letters and numbers">
+			<input type="text" name="username" id="username" placeholder="'.mb_ucfirst(__REGISTER_USERNAME_PLACEHOLDER).'">
 			<label for="password">'.mb_ucfirst(__PASSWORD).'</label>
-			<input type="password" name="password" id="password" placeholder="At least 8 characters long">
-			<input type="submit" name="submit_registration" value="Register user">
+			<input type="password" name="password" id="password" placeholder="'.mb_ucfirst(__REGISTER_PASSWORD_PLACEHOLDER).'">
+			<input type="submit" name="submit_registration" value="'.mb_ucfirst(__REGISTERUSER).'">
 		</form>
 		</div>
 	</div>';

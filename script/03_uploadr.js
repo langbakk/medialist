@@ -55,7 +55,11 @@ $(document).ready(function() {
 				userName = GetURLParameter('user');
 			}
 			var modifiedLink = $(this).parents('li').find('a:first').attr('href').split('?')[1].split('=');
-			var thisFile = document.location.origin+'/?'+modifiedLink[0]+'='+userName+'__'+modifiedLink[1];
+			if (modifiedLink[1].indexOf('__') >= 0) {
+				var thisFile = document.location.origin+'/?'+modifiedLink[0]+'='+modifiedLink[1];
+			} else {
+				var thisFile = document.location.origin+'/?'+modifiedLink[0]+'='+userName+'__'+modifiedLink[1];	
+			}
 			alert(thisFile);
 		})
 		$('.deletefile').click(function(e) {
@@ -149,10 +153,11 @@ $(document).ready(function() {
 	
 	if (GetURLParameter() == '/gallery') {
 		if ($('.container > #pictures_list').length > 0) {
-			var totalby2 = (Math.floor($('#pictures_list li').length / 2));
-			var rem = (Math.floor($('#pictures_list li').length % 2));
-			var endResult = ((totalby2 + rem) * 10) + 10;
-			var endResult = (endResult < 70) ? endResult : 70;
+			// var totalby2 = (Math.floor($('#pictures_list li').length / 2));
+			// var rem = (Math.floor($('#pictures_list li').length % 2));
+			// var endResult = ((totalby2 + rem) * 10) + 10;
+			// var endResult = (endResult < 70) ? endResult : 70;
+			var endResult = ($('#pictures_list li').length * 10) + 10;
 			$('#pictures_list').parents('.container').css(({'max-width':endResult+'em','min-width':'20em'}));
 		}
 	}

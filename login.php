@@ -23,8 +23,7 @@ if (isset($_POST['submit_logout'])) {
 				$folderexist = false;
 				$foldercreated = false;
 				if (!is_dir($userpath.$username)) {
-					mkdir($userpath.$username, 0744, true);
-					// file_put_contents($userpath.$username.'/index.html','<p>Placeholder</p>');					
+					mkdir($userpath.$username, 0744, true);				
 				}
 				$directories = [1 => '/pictures', 2 => '/pictures/thumbs', 3 => '/video', 4 => '/video/thumbs', 5 => '/audio', 6 => '/documents', 7 => '/applications'];
 				if (is_dir($userpath.$username)) {
@@ -39,10 +38,10 @@ if (isset($_POST['submit_logout'])) {
 					$folderexist = true;
 				} 
 				if ($folderexist == true && $foldercreated == true) {
-					echo '<p class="messagebox success">User-folders created!</p>';
+					echo '<p class="messagebox success">'.mb_ucfirst(__USERFOLDERS_CREATED).'</p>';
 					header('refresh: 2; url=upload');
 				} elseif ($folderexist == true && $foldercreated == false) {
-					echo '<p class="messagebox info">User-folders already exists</p>';
+					echo '<p class="messagebox info">'.mb_ucfirst(__USERFOLDERS_EXIST).'</p>';
 					$redirectpage = $_SESSION['userstartpage'];
 					header('refresh: 0; url='.$redirectpage);
 				} else {
@@ -51,22 +50,22 @@ if (isset($_POST['submit_logout'])) {
 			} 
 		}
 		if ($success == false) {
-			echo '<p class="messagebox error">User not found, or password not a match</p>';
+			echo '<p class="messagebox error">'.mb_ucfirst(__LOGIN_ERROR_NO_MATCH).'</p>';
 		}
 	}
 } 
 
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == false) || !isset($_SESSION['loggedin'])) {
 		if ($allow_public == true && !$isloggedin) {
-		echo '<p id="logininfo" class="messagebox info visible remove_box">You can upload files and have them show in the public gallery without logging in, but you will not be able to set uploads as private, nor make your own albums</p>';
+		echo '<p class="messagebox info visible remove_box">'.mb_ucfirst(__LOGIN_INFO_MESSAGE).'</p>';
 	}
 echo '<h2>'.str_replace(' ','',mb_ucfirst(__LOGIN)).'</h2>
 		<div class="content">
 		<form id="loginform" method="post" action="login">
 			<label for="username">'.mb_ucfirst(__USERNAME).'</label>
-			<input type="text" id="username" name="username" value="'.$username.'" placeholder="Please input your username">
+			<input type="text" id="username" name="username" value="'.$username.'" placeholder="'.mb_ucfirst(__LOGIN_USERNAME_PLACEHOLDER).'">
 			<label for="password">'.mb_ucfirst(__PASSWORD).'</label>
-			<input type="password" id="password" name="password" value="'.$password.'" placeholder="Please input your password">
+			<input type="password" id="password" name="password" value="'.$password.'" placeholder="'.mb_ucfirst(__LOGIN_PASSWORD_PLACEHOLDER).'">
 			<a href="register" class="center">'.mb_ucfirst(__NO_ACCOUNT).'</a>
 			<input type="submit" name="submit_login" value="'.mb_ucfirst(__LOGIN).'">
 		</form>

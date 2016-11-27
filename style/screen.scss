@@ -106,7 +106,7 @@ $even_info: rgba(36,156,224,.6);
 
 @mixin flex_list {
 		display: flex;
-		// flex-wrap: wrap;
+		flex-wrap: wrap;
 		li {
 			flex: 1 1 0;
 		}
@@ -402,6 +402,9 @@ li .usercontrols form {
 }
 .helper {
 	cursor: help;
+}
+#pictures_list {
+	max-width: 80%;
 }
 #pictures_list .public_sharename {
 	display: none;
@@ -1612,11 +1615,29 @@ label {
 	}
 }
 @media screen and (max-width: 30em) {
-	#login_body .content,#register_body .content,#upload_body #upload {
+	#login_body .content,#register_body .content,#userprofile_body .content, #upload_body #upload {
 		min-height: 15em;
 		label {
 			float: none;
 		}
+	}
+	#userprofile_body .content p.diskspaceinfo {
+		margin-left: -1em;
+	}
+	.diskspacetitle {
+		display: none;
+	}
+	.sortlinktext {
+		display: none;
+	}
+	.sortlinks {
+		text-transform: capitalize;
+	}
+	.container {
+		margin-top: 2em;
+	}
+	.content {
+		padding: 0 1em;
 	}
 	.flexlist {
 		flex-wrap: wrap;
