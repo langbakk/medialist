@@ -26,7 +26,7 @@ if (isset($_POST['submit_logout'])) {
 					mkdir($userpath.$username, 0744, true);
 					// file_put_contents($userpath.$username.'/index.html','<p>Placeholder</p>');					
 				}
-				$directories = [1 => '/pictures', 2 => '/pictures/thumbs', 3 => '/video', 4 => '/video/thumbs', 5 => '/music', 6 => '/documents', 7 => '/applications'];
+				$directories = [1 => '/pictures', 2 => '/pictures/thumbs', 3 => '/video', 4 => '/video/thumbs', 5 => '/audio', 6 => '/documents', 7 => '/applications'];
 				if (is_dir($userpath.$username)) {
 					$foldercreated = false;
 					foreach ($directories as $key => $dir) {

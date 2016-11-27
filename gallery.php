@@ -22,7 +22,7 @@ for ($i = 0; $i < count($user_array); $i++) {
 if (!is_dir($userpath.$username)) {
 	mkdir($userpath.$username, 0744, true);
 }
-$directories = [1 => '/pictures', 2 => '/pictures/thumbs', 3 => '/video', 4 => '/video/thumbs', 5 => '/music', 6 => '/documents', 7 => '/applications'];
+$directories = [1 => '/pictures', 2 => '/pictures/thumbs', 3 => '/video', 4 => '/video/thumbs', 5 => '/audio', 6 => '/documents', 7 => '/applications'];
 if (is_dir($userpath.$username)) {
 	$foldercreated = false;
 	foreach ($directories as $key => $dir) {
@@ -37,7 +37,7 @@ if (is_dir($userpath.$username)) {
 
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_public == true) {
 	$allempty = 0;
-	$dir_array = [1 => 'music', 2 => 'pictures/thumbs', 3 => 'video', 4 => 'documents', 5 => 'applications'];
+	$dir_array = [1 => 'audio', 2 => 'pictures/thumbs', 3 => 'video', 4 => 'documents', 5 => 'applications'];
 	if ($user_exist == true || $_SESSION['usertype'] == 'admin') {
 		foreach ($dir_array as $key => $folder) {
 			if ($handle = opendir ($userpath.$username.$folder)) {
@@ -84,7 +84,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 								$usercontrols .= '<form method="post" action="create_public_link.php"><input type="checkbox" id="'.$folder.'_'.$id_number.'" class="hidden make_public" title="Make public" '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 'checked' : '')).' value="'.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 1 : 0)).'"><label title="'.(is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 'Undo &quot;make file public&quot;' : 'Make file public').'" for="'.$folder.'_'.$id_number.'"><i class="makepublic fa '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 'fa-check-square' : 'fa-square')).'"></i></label></form>';
 								}
 							$usercontrols .= '</div>';
-							if (getExtension($val) && ($folder == 'documents' || $folder == 'music' || $folder == 'applications')) {
+							if (getExtension($val) && ($folder == 'documents' || $folder == 'audio' || $folder == 'applications')) {
 								$fileext = getExtension($val);
 								$extension = (($fileext == 'txt') ? 'text-o' : (($fileext == 'xls' || $fileext == 'xlsx') ? 'excel-o' : (($fileext == 'doc' || $fileext == 'docx') ? 'word-o' : (($fileext == 'mp3' || $fileext == 'webm') ? 'audio-o' : (($fileext == 'dmg') ? 'o' : $fileext.'-o')))));
 								$fileicon = '<i class="dark-background fa fa-file-'.$extension.'"></i>';
@@ -104,7 +104,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 										<div class="mover-2" style="background: url('.$getvidfile.'.jpg&thumbs=true'.(isset($_GET['user']) ? '&user='.$_GET['user'].'' : '').');"></div>
 									</a>'.$usercontrols.$document_name.
 								'</div>' : 
-								(($folder == 'documents' || $folder == 'music' || $folder == 'applications') ? 
+								(($folder == 'documents' || $folder == 'audio' || $folder == 'applications') ? 
 								'<a href="showfile.php?docfile='.$val.'">'.$fileicon.' '.$document_name.'</a>'.$usercontrols : '')));
 							$floatleft = (($folder == 'pictures' && !empty($shared_content)) ? 'class="pictures shared"' : (($folder == 'pictures' && empty($shared_folder)) ? 'class="pictures"' : (($folder == 'video') ? 'class="video"' : '')));
 							echo '<li '.$floatleft.'>'.$linkdisplay.'</li>';

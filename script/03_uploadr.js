@@ -5,6 +5,8 @@ $(document).ready(function() {
 	// 	console.log(e.target);
 	// }); 
 
+	messageBoxHide();
+
 	if (GetURLParameter() == '/userprofile') {
 		$('.deletefile').click(function(e) {
 			$this = $(this);
@@ -172,13 +174,20 @@ $(document).ready(function() {
     	$(this).val(function(i, val){
           $('[id^=filelist_]').toggleClass('hidden');
           if (!$('[id^=filelist_]').hasClass('hidden')) {
-			$.cookie('showuserfilelist','1', { expires: 365, path: '/'});
+          	localStorage.setItem('showuserfilelist',1);
           } else {
-          	$.cookie('showuserfilelist','');
+          	localStorage.setItem('showuserfilelist',0);
           }
-          return val === "Show filelist" ? "Hide filelist" : "Show filelist";
+          return val === 'Show filelist' ? 'Hide filelist' : 'Show filelist';
       })
     })
+    if (localStorage.getItem('showuserfilelist') == 1) {
+    	$('#showhidefilelist').val('Hide filelist');
+    	$('[id^=filelist_]').removeClass('hidden');
+    } else if (localStorage.getItem('showuserfilelist') == 0) {
+    	$('#showhidefilelist').val('Show filelist');
+    	$('[id^=filelist_]').addClass('hidden');
+    }
 
     $('select').selectmenu({
     	width: '10em'
@@ -214,6 +223,11 @@ $(document).ready(function() {
     if (viewportSize.getWidth() <= 480) {
     	$('#logoutform input').val('X');
     } 
+
+    $('#resetlocalstorage').click(function() {
+    	localStorage.clear();
+    	showUpdateInfo('Your removed items are back, and other site-preferences have been reset','success');
+    })
 
     if (GetURLParameter('imgfile') || GetURLParameter('docfile') || GetURLParameter('vidfile')) {
     	var getFile = ((GetURLParameter('imgfile')) ? 'imgfile='+GetURLParameter('imgfile') : ((GetURLParameter('docfile')) ? 'docfile='+GetURLParameter('docfile') : (GetURLParameter('vidfile')) ? 'vidfile='+GetURLParameter('vidfile') : ''));
@@ -378,9 +392,29 @@ function showUpdateInfo(data,infotype) {
     $('#updateinfo').stop().css({'opacity':'1','display':'block'}).addClass(infotype).text(data).fadeOut(5000);
 }
 
+function messageBoxHide() {
+	$('.messagebox').each(function() {
+		var thisID = $(this).attr('id');
+		if (localStorage.getItem(thisID) != 1 && !$(this).hasClass('visible') && thisID != 'updateinfo') {
+			$('#'+thisID).show();
+		}
+		if (localStorage.getItem(thisID) == 1) {
+			$('#'+thisID).addClass('hidden');
+		}
+		if ($('#'+thisID).hasClass('remove_box')) {
+			var msgcontent = $('#'+thisID).append('<span class="remove" title="Close the information-container"><i class="fa fa-close"></i></span>').html();
+		}
+		$('#'+thisID+' .remove').click(function() {
+			$('#'+thisID).hide();
+			localStorage.setItem(thisID,'1');
+		})
+	})
+}
+
 function ucfirst(text) {
 	   return text.substr(0, 1).toUpperCase() + text.substr(1);    
 }
+
 function equalHeight(group) {
    	tallest = 0;
 		group.each(function() {
@@ -391,6 +425,7 @@ function equalHeight(group) {
     })
     group.height(tallest);
 }
+
 function GetURLParameter(sParam) {
 	if (sParam != undefined && sParam.length > 0) {
 		var sPageHref = window.location.href;

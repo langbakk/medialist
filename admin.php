@@ -12,7 +12,7 @@ $menu_array = 	[0 => ['href'=>'#user_management_container','menutext'=>'User man
 echo '<div class="container">
 	<h2>Control panel</h2>';
 	if ($isloggedin && $_SESSION['usertype'] == 'admin') {
-		echo '<p class="messagebox visible info">Here you will find all the modifiable settings for the page. The settings you change here will be updated in the config-file. You might need to log out and back in for the changes to take effect.</p>
+		echo '<p id="controlpanel_info" class="messagebox visible info remove_box">Here you will find all the modifiable settings for the page. The settings you change here will be updated in the config-file. You might need to log out and back in for the changes to take effect.</p>
 	<div class="content">
 		<ul id="adminmenu" class="flexlist">';
 	foreach ($menu_array as $key => $value) {

@@ -56,7 +56,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 				if (($_FILES['file']['size'] + foldersize($userpath.$username) < $storage_limit)) {
 					if (in_array($_FILES['file']['type'], allowedMimeAndExtensions('','mime'))) {
 						if (in_array($_FILES['file']['type'], allowedMimeAndExtensions('audio','mime'))) {
-							$folder = 'music';
+							$folder = 'audio';
 						} elseif (in_array($_FILES['file']['type'], allowedMimeAndExtensions('image','mime'))) {
 							$folder = 'pictures';
 						}

@@ -32,7 +32,7 @@ echo '<div class="container">
 
 	$objects  = new RecursiveIteratorIterator($filter,RecursiveIteratorIterator::SELF_FIRST);
 	if ($disk_used != 0) {
-	echo '<input type="button" id="showhidefilelist" value="'.((isset($_COOKIE['showuserfilelist']) && $_COOKIE['showuserfilelist'] == 1) ? 'Hide' : 'Show').' filelist">
+	echo '<input type="button" id="showhidefilelist" value="Hide filelist">
 	<div id="sortingcontainer">';
 	$currentsorttype = '<span class="sortlinks">Filelist is currently sorted by '.((isset($_COOKIE['setsort']) && $_COOKIE['setsort'] == 'sortbysize') ? 'size' : ((isset($_COOKIE['setsort']) && $_COOKIE['setsort'] == 'sortbydate') ? 'date' : ((isset($_COOKIE['setsort']) && $_COOKIE['setsort'] == 'sortbyname') || !isset($_COOKIE['setsort']) ? 'name' : ''))).'</span>';
 
@@ -45,7 +45,7 @@ echo '<div class="container">
 	}
 	echo '<span class="sortlinks">'.$output.'</span></div>';
 }
-	echo '<div id="filelist_'.strtolower($username_readable).'" '.(((isset($_COOKIE['showuserfilelist']) && $_COOKIE['showuserfilelist'] == 1) || !isset($_COOKIE['showuserfilelist'])) ? '' : 'class="hidden"').'>
+	echo '<div id="filelist_'.strtolower($username_readable).'">
 		<h3>Filelist</h3>
 	<ul class="alternate" id="user_filelist">';
 		$filesize_array = [];
@@ -105,7 +105,7 @@ echo '<div class="container">
 							$usercontrols .= '<form method="post" action="create_public_link.php"><input type="checkbox" id="'.$folder.'_'.$id_number.'" class="hidden make_public" title="Make public" '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$filename) ? 'checked' : '')).' value="'.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$filename) ? 1 : 0)).'"><label title="'.(is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$filename) ? 'Undo &quot;make file public&quot;' : 'Make file public').'" for="'.$folder.'_'.$id_number.'"><i class="makepublic fa '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$filename) ? 'fa-check-square' : 'fa-square')).'"></i></label></form>';
 						}
 					$usercontrols .= '</div>';
-					echo '<li><span class="filename"'.(($folder == 'documents') ? ' style="max-width: initial; word-wrap: none;"':'').'>'.$filename.'</span>'.(($folder == 'pictures') ? '<span class="filelist_image"><img src="showfile.php?imgfile='.$filename.'&thumbs=true"></span> ' : (($folder == 'video') ? '<div class="tech-slideshow">
+					echo '<li><span class="filename"'.(($folder == 'documents' || $folder == 'applications' || $folder == 'audio') ? ' style="max-width: initial; word-wrap: none;"':'').'>'.$filename.'</span>'.(($folder == 'pictures') ? '<span class="filelist_image"><img src="showfile.php?imgfile='.$filename.'&thumbs=true"></span> ' : (($folder == 'video') ? '<div class="tech-slideshow">
 						<div class="mover-1" style="background: url(showfile.php?vidfile='.$filename.'.jpg&thumbs=true);"></div>
 						<div class="mover-2" style="background: url(showfile.php?vidfile='.$filename.'.jpg&thumbs=true);"></div>
 					</div>' : '')).'<span class="filesize">'.((isset($_COOKIE['setsort']) && $_COOKIE['setsort'] == 'sortbydate') ? $time : format_size($fvalue['size'])).'</span>'.$usercontrols.'</li>';
@@ -119,7 +119,11 @@ echo '<div class="container">
 	echo '<p class="diskspaceinfo"><span>Diskspace used: '.format_size($disk_used).'</span><span>Diskspace left: '.(($disk_remaining < $average_size * 3) ? '<span class="error">'.format_size($disk_remaining).'</span>' : format_size($disk_remaining)).'</span></p>';
 
 echo '</div>
-<div class="content" id="settings"><h3>Settings</h3></div></div>';
+	<div class="content" id="settings">
+		<h3>Settings</h3>
+			<input type="button" id="resetlocalstorage" value="Reset all locally stored settings" title="This resets all removed info-containers and similar changes done to the website by the user">
+	</div>
+</div>';
 } else {
 	header('Location: login');
 }

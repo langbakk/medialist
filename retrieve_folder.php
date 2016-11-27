@@ -10,7 +10,7 @@ if (!empty($currentcontent)) {
 	$ext = strtolower($getinfo['extension']);
 	if (in_array($ext,allowedMimeAndExtensions('extension'))) {
 		if (in_array($ext,allowedMimeAndExtensions('audio'))) {
-			$folder = $userpath.$username.'/music/';
+			$folder = $userpath.$username.'/audio/';
 			$getcontent = opendir($folder);
 			$foldervalue = [];
 			while (false !== ($file = readdir($getcontent))) {
