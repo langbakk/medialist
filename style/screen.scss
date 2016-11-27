@@ -1077,10 +1077,10 @@ label {
 	border-radius: 0.4em;
 	max-width: 95%;
 	// background: white;
-	padding: 2em;
+	// padding: 2em;
 }
 .content {
-	padding: initial;
+	padding: 2em;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -1124,10 +1124,12 @@ label {
 	text-align: center;
 	// margin: 20% 0 0 0;
 	position: absolute;
-	height: 1em;
-	top: calc(50% - 1em);
-	left: 0;
-	right: 0; 
+	// height: 1em;
+	// top: calc(50% - 1em);
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	min-width: 100%;
 }
 .dropzone .dz-preview {
 	position: relative;
@@ -1610,7 +1612,7 @@ label {
 	}
 }
 @media screen and (max-width: 30em) {
-	#login_body .content,#register_body .content {
+	#login_body .content,#register_body .content,#upload_body #upload {
 		min-height: 15em;
 		label {
 			float: none;

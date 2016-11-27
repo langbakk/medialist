@@ -63,10 +63,12 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == false) || !isset($
 echo '<h2>Login</h2>
 		<div class="content">
 		<form id="loginform" method="post" action="login">
-	<input type="text" id="username" name="username" value="'.$username.'" placeholder="Please input your username">
-	<input type="password" id="password" name="password" value="'.$password.'" placeholder="Please input your password">
-	<a href="register" class="center">No account? Register here</a>
-	<input type="submit" name="submit_login" value="Login">
+			<label for="username">Username</label>
+			<input type="text" id="username" name="username" value="'.$username.'" placeholder="Please input your username">
+			<label for="password">Password</label>
+			<input type="password" id="password" name="password" value="'.$password.'" placeholder="Please input your password">
+			<a href="register" class="center">No account? Register here</a>
+			<input type="submit" name="submit_login" value="Login">
 	</div>
 </form>';
 }
