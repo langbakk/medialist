@@ -60,15 +60,15 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == false) || !isset($
 		if ($allow_public == true && !$isloggedin) {
 		echo '<p id="logininfo" class="messagebox info visible remove_box">You can upload files and have them show in the public gallery without logging in, but you will not be able to set uploads as private, nor make your own albums</p>';
 	}
-echo '<h2>Login</h2>
+echo '<h2>'.str_replace(' ','',mb_ucfirst(__LOGIN)).'</h2>
 		<div class="content">
 		<form id="loginform" method="post" action="login">
-			<label for="username">Username</label>
+			<label for="username">'.mb_ucfirst(__USERNAME).'</label>
 			<input type="text" id="username" name="username" value="'.$username.'" placeholder="Please input your username">
-			<label for="password">Password</label>
+			<label for="password">'.mb_ucfirst(__PASSWORD).'</label>
 			<input type="password" id="password" name="password" value="'.$password.'" placeholder="Please input your password">
-			<a href="register" class="center">No account? Register here</a>
-			<input type="submit" name="submit_login" value="Login">
+			<a href="register" class="center">'.mb_ucfirst(__NO_ACCOUNT).'</a>
+			<input type="submit" name="submit_login" value="'.mb_ucfirst(__LOGIN).'">
 	</div>
 </form>';
 }

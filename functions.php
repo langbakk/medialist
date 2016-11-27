@@ -37,6 +37,12 @@ function generateRandomString($alpha = true, $nums = true, $usetime = false, $st
     return($randomstring);
 } // end generateRandomString
 
+function mb_ucfirst($string, $encoding='UTF-8') {
+    $firstChar = mb_substr($string, 0, 1, $encoding);
+    $then = mb_substr($string, 1, mb_strlen($string, $encoding)-1, $encoding);
+    return mb_strtoupper($firstChar, $encoding) . $then;
+}
+
 function allowedMimeAndExtensions($type, $mimetype = '', $filename = 'conf/.allowed_mimetypes') {
 	$list = file($filename, FILE_IGNORE_NEW_LINES);
 	$allowed_types = ['image','video','audio','application','text','documents'];

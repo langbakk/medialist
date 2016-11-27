@@ -12,11 +12,11 @@ if (!session_id()) { session_start(); };
 $display = new PageView();
 
 echo '<!DOCTYPE html>
-<html lang="nb">
+<html lang="en">
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>'.__MAINHEADING.'</title>
+	<title>'.mb_ucfirst(__MAINHEADING).'</title>
 
 		<link type="text/css" href="style/screen.css" rel="stylesheet" media="screen, projection">';
 		loadFiles('js', 'script/');
@@ -24,7 +24,7 @@ echo '</head>
 
 <body id="'.$current_page.'_body">
 	<header>
-		<h1>'.__MAINHEADING.'</h1>
+		<h1>'.mb_ucfirst(__MAINHEADING).'</h1>
 		'.displayMenu($baseurl);
 		if ($isloggedin && $use_login == true) {
 			echo $display->getLogin();
