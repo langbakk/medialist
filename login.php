@@ -58,13 +58,16 @@ if (isset($_POST['submit_logout'])) {
 
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == false) || !isset($_SESSION['loggedin'])) {
 		if ($allow_public == true && !$isloggedin) {
-		echo '<p class="messagebox info visible">You can upload files and have them show in the public gallery without logging in, but you will not be able to set uploads as private, nor make your own albums</p>';
+		echo '<p id="logininfo" class="messagebox info visible remove_box">You can upload files and have them show in the public gallery without logging in, but you will not be able to set uploads as private, nor make your own albums</p>';
 	}
-echo '<form id="loginform" method="post" action="login">
+echo '<h2>Login</h2>
+		<div class="content">
+		<form id="loginform" method="post" action="login">
 	<input type="text" id="username" name="username" value="'.$username.'" placeholder="Please input your username">
 	<input type="password" id="password" name="password" value="'.$password.'" placeholder="Please input your password">
 	<a href="register" class="center">No account? Register here</a>
 	<input type="submit" name="submit_login" value="Login">
+	</div>
 </form>';
 }
 echo '</div>';

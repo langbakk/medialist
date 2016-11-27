@@ -72,6 +72,6 @@ $quotes = [
 		$randomquote = rand(1,count($quotes)-1);
 		$num = (count($quotes));
 
-	echo '<p class="center"><strong>'.$quotes[$randomquote][1].'</strong> <br>'.ucwords($quotes[$randomquote][2].' - '.$quotes[$randomquote][3]).'</p>';
+	echo '<p id="quotes" class="center"><strong>'.$quotes[$randomquote][1].'</strong> <br>'.ucwords($quotes[$randomquote][2].' - '.$quotes[$randomquote][3]).'</p>';
 
 ?>

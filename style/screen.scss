@@ -795,10 +795,14 @@ label {
 .right {
 	float: right;
 }
-#loginform {
+#loginform,#user_registration_form {
 	width: 50em;
 	margin: 0 auto;
 	border: none;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
 }
 #logoutform {
 	width: 7em;
@@ -1606,6 +1610,18 @@ label {
 	}
 }
 @media screen and (max-width: 30em) {
+	#login_body .content,#register_body .content {
+		min-height: 15em;
+		label {
+			float: none;
+		}
+	}
+	.flexlist {
+		flex-wrap: wrap;
+	}
+	#quotes {
+		display: none;
+	}
 	#logoutform {
 		width: 1em;
 		margin-right: 2em;
