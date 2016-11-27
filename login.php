@@ -69,8 +69,8 @@ echo '<h2>'.str_replace(' ','',mb_ucfirst(__LOGIN)).'</h2>
 			<input type="password" id="password" name="password" value="'.$password.'" placeholder="Please input your password">
 			<a href="register" class="center">'.mb_ucfirst(__NO_ACCOUNT).'</a>
 			<input type="submit" name="submit_login" value="'.mb_ucfirst(__LOGIN).'">
-	</div>
-</form>';
+		</form>
+		</div>';
 }
 echo '</div>';
 ?>
