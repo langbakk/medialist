@@ -7,7 +7,6 @@ if ($isloggedin) {
 
 $original_username = $username;
 $username = isset($_GET['user']) ? $_GET['user'] : $username;
-
 $username_readable = ucfirst(explode('/',$username)[0]);
 
 	$disk_used = foldersize($userpath.$username);
@@ -24,7 +23,7 @@ echo '<div class="container">
 		echo '	<p>Logged in with '.$usertype.' rights</p>';
 	}
 	
-	$path = realpath($_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username);
+	$path = realpath($_SERVER['DOCUMENT_ROOT'].DIRECTORY_SEPARATOR.$userpath.$username);
 
 	$iterator = new RecursiveDirectoryIterator($path);
 	$iterator->setFlags(RecursiveDirectoryIterator::SKIP_DOTS);
@@ -82,7 +81,7 @@ echo '<div class="container">
 		foreach ($folders as $key => $value) {
 			$filesize_array[] = $value['size']; 
 			$filesize_total = $filesize_total + $value['size'];
-			$folder = array_reverse(explode('/',$value['filename']))[0];
+			$folder = array_reverse(explode(DIRECTORY_SEPARATOR,$value['filename']))[0];
 			echo '<li class="heading">'.ucfirst($folder).'</li>'; 
 			$id_number = 0;
 			foreach ($files as $fkey => $fvalue) {
@@ -90,8 +89,8 @@ echo '<div class="container">
 			    $time = date('Y-m-d H:m', $fvalue['time']);
 				$filesize_array[] = $fvalue['size'];
 				$filesize_total = $filesize_total + $fvalue['size'];
-				$filename = array_reverse(explode('/',$fvalue['filename']))[0];
-				if ($folder == array_reverse(explode('/',$fvalue['filename']))[1]) {
+				$filename = array_reverse(explode(DIRECTORY_SEPARATOR,$fvalue['filename']))[0];
+				if ($folder == array_reverse(explode(DIRECTORY_SEPARATOR,$fvalue['filename']))[1]) {
 					$usercontrols = '<div class="usercontrols">
 						<a class="sharefile" href="'.$baseurl.'sharefile.php">
 							<i class="fa fa-share-alt" title="Share file"></i>

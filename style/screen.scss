@@ -1441,6 +1441,9 @@ label {
 #lightbox_container,#lightbox_container img {
 	height: 100%;
 }
+#lightbox_container img {
+	max-width: 100%;
+}
 #overlay {
 	position: fixed;
 	top: 0;
@@ -1644,16 +1647,7 @@ label {
 		margin: 2.5em auto;
 	}
 }
-@media screen and (max-width: 30em) {
-	#login_body .content,#register_body .content,#userprofile_body .content, #upload_body #upload {
-		min-height: 15em;
-		label {
-			float: none;
-		}
-	}
-	#userprofile_body .content p.diskspaceinfo {
-		margin-left: -1em;
-	}
+@media screen and (max-width: 40em) {
 	.diskspacetitle {
 		display: none;
 	}
@@ -1662,6 +1656,25 @@ label {
 	}
 	.sortlinks {
 		text-transform: capitalize;
+	}
+}
+@media screen and (max-width: 32em) {
+
+}
+// @media screen and (max-width: 36em) {
+// 	#userprofile_body .content p.diskspaceinfo {
+// 		margin-left: -1em;
+// 	}
+// }
+@media screen and (max-width: 30em) {
+	#login_body .content,#register_body .content,#userprofile_body .content, #upload_body #upload {
+		min-height: 15em;
+		label {
+			float: none;
+		}
+	}
+	#userprofile_body .content p:first-of-type {
+		margin-top: 1em;
 	}
 	.container {
 		margin-top: 2em;
@@ -1678,5 +1691,11 @@ label {
 	#logoutform {
 		width: 1em;
 		margin-right: 2em;
+	}
+	#admin_menu {
+		right: 4em;
+	}
+	#userprofile_body .content p.diskspaceinfo {
+		margin-left: -1em;
 	}
 }
