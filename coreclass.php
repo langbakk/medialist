@@ -137,13 +137,17 @@ class valueCrypt {
     }
 
     public static function vC_pwHash($value,$db_value = '') {
-        $key = Config::read('unique_key');
-        $method = Config::read('method');
-        $salt = crypt($value, $key);
+        // $key = Config::read('unique_key');
+        // $key = bin2hex(openssl_random_pseudo_bytes(16));
+        // $method = Config::read('method');
+        // $salt = crypt($value, $key);
+        // $salt = mcrypt_create_iv(64);
+        // var_dump($salt);
+        $password = false;
         if (empty($db_value)) {
-            $password = crypt($value, $salt);   
+            $password = password_hash($value,PASSWORD_DEFAULT);   
         } else {
-            $password = crypt($value,$db_value);
+            $password = password_verify($value,$db_value);
         }
         return $password;
     }

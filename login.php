@@ -13,7 +13,7 @@ if (isset($_POST['submit_logout'])) {
 		$success = false;
 		for ($i = 0; $i < count($user_array); $i++) {
 			$exploded_user_array = explode('//',$user_array[$i]);
-			if (($username == trim($exploded_user_array[0])) && (valueCrypt::vC_pwHash($password,trim($exploded_user_array[1])) === trim($exploded_user_array[1]))) {
+			if (($username == trim($exploded_user_array[0])) && (valueCrypt::vC_pwHash($password,trim($exploded_user_array[1])) === true)) {
 				$_SESSION['loggedin'] = true;
 				$_SESSION['username'] = trim($exploded_user_array[0]);
 				$_SESSION['usertype'] = trim($exploded_user_array[2]);
