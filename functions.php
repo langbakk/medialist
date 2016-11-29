@@ -208,7 +208,9 @@ function displayMenu($baseurl, $usedb = false) {
 		$menuArray = Config::read('menu_array');
 		$allow_public = Config::read('allow_public');
 		$allow_userlist = Config::read('allow_userlist');
-		$isloggedin = Config::read('isloggedin');	
+		$moderate = Config::read('moderation_queue');
+		$isloggedin = Config::read('isloggedin');
+		$isadmin = (isset($_SESSION['usertype']) && $_SESSION['usertype'] == 'admin') ? true : false;	
 		$main_menu = '<label for="mainmenu_button" class="menulistbutton"></label><input type="checkbox" id="mainmenu_button">';
 		$main_menu .= '<ul id="mainmenu" class="flexlist">';
 		foreach ($menuArray as $key => $value) {
@@ -217,7 +219,7 @@ function displayMenu($baseurl, $usedb = false) {
 			$page = (isset($_GET['page'])) ? $_GET['page'] : 'index';
 		
 			if (!$isloggedin) {
-				if ($key != 'userlist' && $key != 'userprofile') {
+				if ($key != 'userlist' && $key != 'userprofile' && $key != 'moderate') {
 					if ($allow_public == false && ($key != 'gallery' && $key != 'upload')) {
 						$main_menu .= '<li'.(($page == strtolower($menutext['filename'])) ? ' class="active"' : '').'><a href="'.(($useurl == 'index') ? '/' : $useurl).'">'.$value.'<span class="activearrow">&nbsp;</span></a></li>';
 					} elseif ($allow_public == true) {
@@ -225,12 +227,14 @@ function displayMenu($baseurl, $usedb = false) {
 					}
 				} 
 			} else {
-				if ($key != 'login' && $key != 'register') {
+				if ($key != 'login' && $key != 'register' && $key != 'moderate') {
 					if ($allow_userlist == false && $key != 'userlist') {
 						$main_menu .= '<li'.(($page == strtolower($menutext['filename'])) ? ' class="active"' : '').'><a href="'.(($useurl == 'index') ? '/' : $useurl).'">'.$value.'<span class="activearrow">&nbsp;</span></a></li>';
 					} elseif ($allow_userlist == true) {
 						$main_menu .= '<li'.(($page == strtolower($menutext['filename'])) ? ' class="active"' : '').'><a href="'.(($useurl == 'index') ? '/' : $useurl).'">'.$value.'<span class="activearrow">&nbsp;</span></a></li>';
-					}
+					}				
+				} elseif ($isadmin == true && $key == 'moderate') {
+					$main_menu .= '<li'.(($page == strtolower($menutext['filename'])) ? ' class="active"' : '').'><a href="'.(($useurl == 'index') ? '/' : $useurl).'">'.$value.'<span class="activearrow">&nbsp;</span></a></li>';
 				}
 			}
 		}

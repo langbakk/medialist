@@ -2305,20 +2305,25 @@ body {
   cursor: pointer; }
 
 #settings_list {
-  display: none; }
-
-#admin_menu:hover ~ #settings_list, #settings_list:hover {
-  display: block;
+  display: none;
   position: absolute;
   top: 1.5em;
   right: 4.5em;
   background: white;
-  color: black;
-  z-index: 50000;
-  border: .1em solid black; }
+  color: #000;
+  border: 0.1em solid #000; }
+
+#settings_list li {
+  padding: 0; }
+
+#admin_menu:hover ~ #settings_list, #settings_list:hover {
+  display: block;
+  z-index: 50000; }
 
 #settings_list a {
-  color: #777; }
+  color: #777;
+  padding: .3em 0;
+  display: block; }
 
 #settings_list:hover a:hover {
   color: #000;

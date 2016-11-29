@@ -261,19 +261,24 @@ body {
 }
 #settings_list {
 	display: none;
-}
-#admin_menu:hover ~ #settings_list,#settings_list:hover {
-	display: block;
 	position: absolute;
 	top: 1.5em;
 	right: 4.5em;
 	background: white;
-	color: black;
+	color: $hover-secondary-link-color;
+	border: .1em solid $hover-secondary-link-color;
+}
+#settings_list li {
+	padding: 0;
+}
+#admin_menu:hover ~ #settings_list,#settings_list:hover {
+	display: block;
 	z-index: 50000;
-	border: .1em solid black;
 }
 #settings_list a {
 	color: $secondary-link-color;
+	padding: .3em 0;
+	display: block;
 }
 #settings_list:hover a:hover {
 	color: $hover-secondary-link-color;
