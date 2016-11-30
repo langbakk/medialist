@@ -2,6 +2,7 @@
 require_once('conf/config.php');
 $username = (isset($_POST['username'])) ? $_POST['username'] : '';
 $password = (isset($_POST['password'])) ? $_POST['password'] : '';
+$directories = [1 => '/pictures', 2 => '/pictures/thumbs', 3 => '/video', 4 => '/video/thumbs', 5 => '/audio', 6 => '/documents', 7 => '/applications'];
 echo '<div class="container">';
 if (isset($_POST['submit_logout'])) {
 		session_destroy();
@@ -25,7 +26,6 @@ if (isset($_POST['submit_logout'])) {
 				if (!is_dir($userpath.$username)) {
 					mkdir($userpath.$username, 0744, true);				
 				}
-				$directories = [1 => '/pictures', 2 => '/pictures/thumbs', 3 => '/video', 4 => '/video/thumbs', 5 => '/audio', 6 => '/documents', 7 => '/applications'];
 				if (is_dir($userpath.$username)) {
 					$foldercreated = false;
 					foreach ($directories as $key => $dir) {
@@ -54,6 +54,23 @@ if (isset($_POST['submit_logout'])) {
 		}
 	}
 } 
+
+if (Config::read('moderation_queue') == true) {
+	if (!is_dir($userpath.'moderation/')) {
+		mkdir($userpath.'moderation/', 0744, true);
+	}
+	if (is_dir($userpath.'moderation/')) {
+		$foldercreated = false;
+		foreach ($directories as $key => $dir) {
+			if (!is_dir($userpath.'moderation/'.$dir)) {
+				mkdir($userpath.'moderation/'.$dir, 0744, true);
+				file_put_contents($userpath.'moderation/'.$dir.'/.gitignore','# Ignore everything in this directory'."\r\n".'*'."\r\n".'# Except this file'."\r\n".'!.gitignore');
+				$foldercreated = true;
+			}
+		}
+		$folderexist = true;
+	}
+}	
 
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == false) || !isset($_SESSION['loggedin'])) {
 		if ($allow_public == true && !$isloggedin) {

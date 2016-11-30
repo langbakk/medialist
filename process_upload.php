@@ -4,6 +4,7 @@ require_once('conf/config.php');
 require_once('functions.php');
 $returnmessage = json_encode(["content"=>"Error Error Error","infotype"=>"error"]);
 $changereturnheader = 0;
+$original_username = $username;
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_public == true) {
 		if (isset($_FILES['file'])) {
 			if (in_array('error', $_FILES['file'])) {
@@ -46,6 +47,40 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 					break;
 				}
 			}
+			
+			$directories = [1 => '/pictures', 2 => '/pictures/thumbs', 3 => '/video', 4 => '/video/thumbs', 5 => '/audio', 6 => '/documents', 7 => '/applications'];
+			if (!is_dir($userpath.$username)) {
+				mkdir($userpath.$username, 0744, true);
+			}
+			if (is_dir($userpath.$username)) {
+				$foldercreated = false;
+				foreach ($directories as $key => $dir) {
+					if (!is_dir($userpath.$username.$dir)) {
+						mkdir($userpath.$username.$dir, 0744, true);
+						file_put_contents($userpath.$username.$dir.'/.gitignore','# Ignore everything in this directory'."\r\n".'*'."\r\n".'# Except this file'."\r\n".'!.gitignore');
+						$foldercreated = true;
+					}
+				}
+				$folderexist = true;
+			} 
+			if (Config::read('moderation_queue') == true) {
+				$username = 'moderation/';
+				if (!is_dir($userpath.$username)) {
+					mkdir($userpath.$username, 0744, true);
+				}
+				if (is_dir($userpath.$username)) {
+					$foldercreated = false;
+					foreach ($directories as $key => $dir) {
+						if (!is_dir($userpath.$username.$dir)) {
+							mkdir($userpath.$username.$dir, 0744, true);
+							file_put_contents($userpath.$username.$dir.'/.gitignore','# Ignore everything in this directory'."\r\n".'*'."\r\n".'# Except this file'."\r\n".'!.gitignore');
+							$foldercreated = true;
+						}
+					}
+					$folderexist = true;
+				}
+			}	
+
 			if (isset($_FILES['file']) && $returnerror == false) {
 				// $allowed = '';
 				// $allowed_extensions = allowedMimeAndExtensions('');
@@ -68,13 +103,19 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 							$folder = 'applications';
 						}
 						$filename = $_FILES['file']['name'];
-						if (file_exists(''.$userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']))) {
+						// var_dump((((Config::read('moderation_queue') == true) && ($usertype == 'admin')) ? $original_username : $username));
+						// var_dump(file_exists(''.$userpath.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? $username : $original_username).$folder.'/'.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? '' : $original_username.'__').onlyValidChar($_FILES['file']['name'])));
+						if (file_exists(''.$userpath.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? $username : $original_username).$folder.'/'.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? explode('/',$original_username)[0].'__' : '').onlyValidChar($_FILES['file']['name']))) {
 							if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 								// echo 'exist';
 								$returnmessage = json_encode(["content"=>"$filename already exist","infotype"=>"error"]);
 							}						
 						} else {
-							move_uploaded_file($_FILES['file']['tmp_name'],''.$userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']));
+							if ((Config::read('moderation_queue') == true) && (Config::read('usertype') != 'admin')) {
+								move_uploaded_file($_FILES['file']['tmp_name'],''.$userpath.$username.$folder.'/'.explode('/',$original_username)[0].'__'.onlyValidChar($_FILES['file']['name']));
+							} else {
+								move_uploaded_file($_FILES['file']['tmp_name'],''.$userpath.$original_username.$folder.'/'.onlyValidChar($_FILES['file']['name']));	
+							}
 							if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 								// echo 'uploaded file';
 								$returnmessage = json_encode(["content"=>"You uploaded $filename","infotype"=>"success"]);

@@ -35,6 +35,23 @@ if (is_dir($userpath.$username)) {
 	$folderexist = true;
 } 
 
+if (Config::read('moderation_queue') == true) {
+	if (!is_dir($userpath.'moderation/')) {
+		mkdir($userpath.'moderation/', 0744, true);
+	}
+	if (is_dir($userpath.'moderation/')) {
+		$foldercreated = false;
+		foreach ($directories as $key => $dir) {
+			if (!is_dir($userpath.'moderation/'.$dir)) {
+				mkdir($userpath.'moderation/'.$dir, 0744, true);
+				file_put_contents($userpath.'moderation/'.$dir.'/.gitignore','# Ignore everything in this directory'."\r\n".'*'."\r\n".'# Except this file'."\r\n".'!.gitignore');
+				$foldercreated = true;
+			}
+		}
+		$folderexist = true;
+	}
+}			
+
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_public == true) {
 	$allempty = 0;
 	$dir_array = [1 => 'audio', 2 => 'pictures/thumbs', 3 => 'video', 4 => 'documents', 5 => 'applications'];

@@ -53,13 +53,13 @@ $debug = false;
 //this is the default size storage space set for users
 $defaultsize = 536870912;
 //turns on or off moderation-queue
-$moderation_queue = false;
+$moderation_queue = true;
 
 //sets the site as deactivated temporarily (1/0)
 //$deactivated = 0; //currently not in use
 
 //change this to add or remove menu-items - do not change the sequence of elements
-$menu_array = ['index'=>'home','gallery'=>'gallery','upload'=>'upload','login'=>'login','register'=>'register','userlist'=>'userlist','userprofile'=>'your&nbsp;profile','moderate'=>'moderate'];
+$menu_array = ['index'=>'home','gallery'=>'gallery','upload'=>'upload','login'=>'login','register'=>'register','userlist'=>'userlist','userprofile'=>'your&nbsp;profile'];
 
 $read_users = file_exists($_SERVER['DOCUMENT_ROOT'].'/conf/.userlist') ? file($_SERVER['DOCUMENT_ROOT'].'/conf/.userlist',FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) : '';
 $lines_in_userfile = !empty($read_users) ? count(file($_SERVER['DOCUMENT_ROOT'].'/conf/.userlist',FILE_IGNORE_NEW_LINES)) : '';

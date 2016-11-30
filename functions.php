@@ -227,14 +227,12 @@ function displayMenu($baseurl, $usedb = false) {
 					}
 				} 
 			} else {
-				if ($key != 'login' && $key != 'register' && $key != 'moderate') {
+				if ($key != 'login' && $key != 'register') {
 					if ($allow_userlist == false && $key != 'userlist') {
 						$main_menu .= '<li'.(($page == strtolower($menutext['filename'])) ? ' class="active"' : '').'><a href="'.(($useurl == 'index') ? '/' : $useurl).'">'.$value.'<span class="activearrow">&nbsp;</span></a></li>';
 					} elseif ($allow_userlist == true) {
 						$main_menu .= '<li'.(($page == strtolower($menutext['filename'])) ? ' class="active"' : '').'><a href="'.(($useurl == 'index') ? '/' : $useurl).'">'.$value.'<span class="activearrow">&nbsp;</span></a></li>';
 					}				
-				} elseif ($isadmin == true && $key == 'moderate') {
-					$main_menu .= '<li'.(($page == strtolower($menutext['filename'])) ? ' class="active"' : '').'><a href="'.(($useurl == 'index') ? '/' : $useurl).'">'.$value.'<span class="activearrow">&nbsp;</span></a></li>';
 				}
 			}
 		}
