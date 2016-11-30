@@ -386,6 +386,9 @@ li span a,li .usercontrols a {
 }
 li .usercontrols {
 	line-height: 2em;
+	.approvefile .fa-check {
+		color: $success-color;	
+	}
 }
 li .hovername {
 	top: initial;

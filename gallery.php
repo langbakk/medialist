@@ -55,7 +55,7 @@ if (Config::read('moderation_queue') == true) {
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_public == true) {
 	$allempty = 0;
 	$dir_array = [1 => 'audio', 2 => 'pictures/thumbs', 3 => 'video', 4 => 'documents', 5 => 'applications'];
-	if ($user_exist == true || $_SESSION['usertype'] == 'admin') {
+	if ($user_exist == true || isset($_SESSION['usertype']) && $_SESSION['usertype'] == 'admin') {
 		foreach ($dir_array as $key => $folder) {
 			if ($handle = opendir ($userpath.$username.$folder)) {
 				$filelist = [];

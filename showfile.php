@@ -9,7 +9,7 @@ if (!$isloggedin && (isset($_GET['imgfile']) || isset($_GET['docfile']) || isset
 	$querystring = explode('__',explode('=',$_SERVER['QUERY_STRING'])[1]);
 	$username = $querystring[0].'/';
 	$filename = explode('&',$querystring[1])[0];
-} elseif (!empty($_SERVER['QUERY_STRING']) && $username != 'public/') {
+} elseif (!empty($_SERVER['QUERY_STRING']) && $username != 'public/' && array_reverse(explode('/',$_SERVER['HTTP_REFERER']))[0] != 'moderate') {
 	$potential_public_file = explode('__',explode('=',$_SERVER['QUERY_STRING'])[1])[0];
 	for ($i = 0; $i < count($user_array); $i++) {
 		$exploded_user_array = explode('//',$user_array[$i]);
@@ -17,7 +17,10 @@ if (!$isloggedin && (isset($_GET['imgfile']) || isset($_GET['docfile']) || isset
 			$username = 'public/';
 		}
 	}
+} elseif (array_reverse(explode('/',$_SERVER['HTTP_REFERER']))[0] == 'moderate') {
+	$username = 'moderation/';
 }
+
 	logThis('showfile_processing','Username is set to '.$username.''."\r\n",FILE_APPEND);
 	if (isset($_GET['imgfile'])) {
 		logThis('showfile_processing','Image-file requested '.$username.$filename."\r\n",FILE_APPEND);
