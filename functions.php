@@ -162,12 +162,15 @@ function createThumbs($path, $imageName, $thumbWidth) {
 	}
 }
 
-function generate_image_thumbnail($source_image_path, $thumbnail_image_path, $thumb_width = 200, $thumb_height = 200) {
+function generate_image_thumbnail($source_image_path, $thumbnail_image_path, $thumb_width = 150, $thumb_height = 150) {
 	list($source_image_width, $source_image_height, $source_image_type) = getimagesize($source_image_path);
 	
 	$w = $source_image_width;
 	$h = $source_image_height;
-    
+ 
+	$thumb_width = ($w < $thumb_width) ? $w : $thumb_width;
+	$thumb_height = ($h < $thumb_height) ? $h : $thumb_height;
+
     $source_gd_image = false;
     switch ($source_image_type) {
         case IMAGETYPE_GIF:  		 
