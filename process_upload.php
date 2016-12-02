@@ -5,6 +5,7 @@ require_once('functions.php');
 $returnmessage = json_encode(["content"=>"Error Error Error","infotype"=>"error"]);
 $changereturnheader = 0;
 $original_username = $username;
+$moderation_queue = false;
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_public == true) {
 		if (isset($_FILES['file'])) {
 			if (in_array('error', $_FILES['file'])) {
@@ -82,12 +83,6 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 			}	
 
 			if (isset($_FILES['file']) && $returnerror == false) {
-				// $allowed = '';
-				// $allowed_extensions = allowedMimeAndExtensions('');
-				// $totalentries = count(allowedMimeAndExtensions('')) -1;
-				// for ($i = 0; $i <= $totalentries; $i++) {
-				// 	$allowed .= (($i == $totalentries) ? $allowed_extensions[$i] : $allowed_extensions[$i].', ');
-				// }
 				if (($_FILES['file']['size'] + foldersize($userpath.$username) < $storage_limit)) {
 					if (in_array($_FILES['file']['type'], allowedMimeAndExtensions('','mime'))) {
 						if (in_array($_FILES['file']['type'], allowedMimeAndExtensions('audio','mime'))) {
@@ -103,26 +98,22 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 							$folder = 'applications';
 						}
 						$filename = $_FILES['file']['name'];
-						// var_dump((((Config::read('moderation_queue') == true) && ($usertype == 'admin')) ? $original_username : $username));
-						// var_dump(file_exists(''.$userpath.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? $username : $original_username).$folder.'/'.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? '' : $original_username.'__').onlyValidChar($_FILES['file']['name'])));
 						if (file_exists(''.$userpath.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? $username : $original_username).$folder.'/'.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? explode('/',$original_username)[0].'__' : '').onlyValidChar($_FILES['file']['name']))) {
 							if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-								// echo 'exist';
 								$returnmessage = json_encode(["content"=>"$filename already exist","infotype"=>"error"]);
 							}						
 						} else {
 							if ((Config::read('moderation_queue') == true) && (Config::read('usertype') != 'admin')) {
 								move_uploaded_file($_FILES['file']['tmp_name'],''.$userpath.$username.$folder.'/'.explode('/',$original_username)[0].'__'.onlyValidChar($_FILES['file']['name']));
+								$moderation_queue = true;
 							} else {
 								move_uploaded_file($_FILES['file']['tmp_name'],''.$userpath.$original_username.$folder.'/'.onlyValidChar($_FILES['file']['name']));	
 							}
 							if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-								// echo 'uploaded file';
 								$returnmessage = json_encode(["content"=>"You uploaded $filename","infotype"=>"success"]);
 							}
 							$movedfile = pathinfo($_FILES['file']['name']);
 							if (in_array(strtolower($movedfile['extension']),allowedMimeAndExtensions('extension')) && in_array($_FILES['file']['type'],allowedMimeAndExtensions('image','mime'))) {
-								// createThumbs($userpath.$username.$folder.'/',onlyValidChar($_FILES['file']['name']),200);
 								generate_image_thumbnail($userpath.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? $username : $original_username).$folder.'/'.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? explode('/',$original_username)[0].'__' : '').onlyValidChar($_FILES['file']['name']),$userpath.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? $username : $original_username).$folder.'/thumbs/'.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? explode('/',$original_username)[0].'__' : '').onlyValidChar($_FILES['file']['name']));
 							}
 							if (in_array(strtolower($movedfile['extension']),allowedMimeAndExtensions('extension')) && in_array($_FILES['file']['type'],allowedMimeAndExtensions('video','mime'))) {

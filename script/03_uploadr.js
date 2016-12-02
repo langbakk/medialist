@@ -46,7 +46,7 @@ $(document).ready(function() {
 			}
 		})
 	}
-	if (GetURLParameter() == '/gallery') {
+	if (GetURLParameter() == '/gallery' || GetURLParameter() == '/moderate') {
 		$('.sharefile').click(function(e) {
 			$this = $(this);
 			e.preventDefault();
@@ -87,6 +87,28 @@ $(document).ready(function() {
 	                }
 	            }
 	        })
+		})
+		$('.approvefile').click(function(e) {
+			$this = $(this);
+			e.preventDefault();
+			var thisListID = $(this).parents('ul').prop('id');
+			var thisListFolder = $(this).parents('ul').prop('id').split('_')[0];
+			var thisFile = $(this).parents('li').find('a:first').attr('href').split('=')[1].split('&')[0];
+			$.post('approvefile.php',{ filename:thisListFolder+'/'+thisFile }, function(data) {
+				data = $.parseJSON(data);
+				showUpdateInfo(''+data.content+'',''+data.infotype+'');
+				$this.parents('li').remove();
+				$('.pictures > a > img').each(function() {
+	    			var getImgDimension = $(this).position();    
+	    			$(this).parent('a').next('span').css({'width':'4em','position':'absolute','left':getImgDimension.left});  
+	        	})
+	        	if (($('#'+thisListID+' li').length) === 0) {
+	                $('#'+thisListID).parent('.container').remove();       
+	                if (($('.container').length) == 1 && $('.container').hasClass('hidden')) {
+	                    $('.container').removeClass('hidden').addClass('visible');
+	                }
+	            }
+			})
 		})
 		$('.make_public').click(function(e) {
 			$this = $(this);
@@ -129,6 +151,22 @@ $(document).ready(function() {
 			$('#createfolder').removeClass('hidden');
 		};
 	})
+
+	$('#use_db').click(function() {
+		if ($(this).is(':checked')) {
+			$('#configform p').each(function() {
+				if ($(this).hasClass('hidden')) {
+					$(this).removeClass('hidden').addClass('washidden');
+				}
+			})
+		} else {
+			$('#configform p').each(function() {
+				if ($(this).hasClass('washidden')) {
+					$(this).removeClass('washidden').addClass('hidden');
+				}
+			})
+		}
+	})
 	
 	$('#uploadreset').click(function() {
 		$('#file').val('');
@@ -144,19 +182,9 @@ $(document).ready(function() {
 			window.location.reload(true);
 		})
 	})
-
-	// $(function() {
-	// 	equalHeight($('.video'));
-	// 	var elementHeight = $('.video').height();
-	// 	$('.video > a > img').css({'height':elementHeight});
-	// })
 	
 	if (GetURLParameter() == '/gallery') {
 		if ($('.container > #pictures_list').length > 0) {
-			// var totalby2 = (Math.floor($('#pictures_list li').length / 2));
-			// var rem = (Math.floor($('#pictures_list li').length % 2));
-			// var endResult = ((totalby2 + rem) * 10) + 10;
-			// var endResult = (endResult < 70) ? endResult : 70;
 			var endResult = ($('#pictures_list li').length * 10) + 10;
 			$('#pictures_list').parents('.container').css(({'max-width':endResult+'em','min-width':'20em'}));
 		}
@@ -356,31 +384,6 @@ $(document).ready(function() {
 				})
 	          }
 			}); 
-		// } else if (requestType == 'vidfile' && Modernizr.video.requestFileExt) {
-		// 	$.ajax({
-		// 		url: 'showfile.php',
-		// 		type: 'GET',
-		// 		dataType: 'binary',
-		// 		data: requestLink.split('?')[1]+'&loadVideo=true',
-		// 		responseType: 'blob',
-		// 		processData: false,
-		// 		success: function(result) {
-		// 			if ($('#overlay').length <= 0) {
-		// 				$('#top').append('<div id="overlay"></div>');
-		// 			}
-		// 			if ($('#lightbox_wrapper').hasClass('hidden')) {
-		// 				$('#lightbox_wrapper').removeClass('hidden').addClass('visible');
-		// 			}
-		// 			$('#lightbox_container video,#lightbox_container img').remove();
-		// 			var video = '<video width="480" controls><source src="'+URL.createObjectURL(result)+'" type="video/mp4">Your browser doesn\'t support HTML5 video tag.</video>';
-		// 			$('#lightbox_container').append(video);
-		// 			$('#overlay,.closebutton').on('click',function(e) {
-		// 				$('#overlay').remove();
-		// 				$('#lightbox_wrapper').removeClass('visible').addClass('hidden');
-		// 				$('#lightbox_container video').remove();
-		// 			})
-		// 		}
-		// 	})
 		} else if (requestType == 'vidfile') {
 			$('body').append('<a href="showfile.php'+requestLink+'" id="directlink" class="hidden">Direct Link</a>');
 			$('#directlink').simulate('click');
@@ -476,34 +479,8 @@ Dropzone.options.upload = {
 			};
 		});
 	}
-// success: function(file, response) {
-// var data = $.parseJSON(response);
-// showUpdateInfo(''+data.content+'',''+data.infotype+'');
-// }
-  // init: function() {
-  //   this.on("addedfile", function(file) {
-  //   	if (this.files.length) {
-  //  			var _i, _len;
-  //  			for (_i = 0, _len = this.files.length; _i < _len; _i++) {
-  //     			if(this.files[_i].name === file.name && this.files[_i].size === file.size) {
-  //       			return false;
-  //     			}
-  //   		}
-  // 		}
-  // 	});
-  // },
-  // success: function(file, response) {
-  	// var data = $.parseJSON(response);
-  	// if (file.name+' already exist' == data.content) {
-  	// 	if ($('.dz-filename').text() == file.name) {
-  	// 		$('.dz-filename').parents('.dz-preview').remove();
-  	// 	}
-   // 	}
-  	// showUpdateInfo(''+data.content+'',''+data.infotype+'');
-  // }
-};
+}
 
- 
 // use this transport for "binary" data type
 $.ajaxTransport("+binary", function(options, originalOptions, jqXHR){
     // check for conditions and support for blob / arraybuffer response type

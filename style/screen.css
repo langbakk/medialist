@@ -2405,6 +2405,8 @@ li span a, li .usercontrols a {
 
 li .usercontrols {
   line-height: 2em; }
+  li .usercontrols .approvefile .fa-check {
+    color: #508c14; }
 
 li .hovername {
   top: initial;

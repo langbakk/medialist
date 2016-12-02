@@ -39,6 +39,7 @@ echo '<div id="setup_container" class="admincontainer">
 								$required = 'required="required"';
 								$content = $last;
 								$checkbox = false;
+								$hidden = '';
 								break;
 							case 'dbhost':
 								$label = 'Database Hostname';
@@ -46,6 +47,7 @@ echo '<div id="setup_container" class="admincontainer">
 								$required = 'required="required"';
 								$content = $last;
 								$checkbox = false;
+								$hidden = (Config::read('use_db') == true) ? '' : 'hidden';
 								break;
 							case 'dbport':
 								$label = 'Database Port';
@@ -53,6 +55,7 @@ echo '<div id="setup_container" class="admincontainer">
 								$required = '';
 								$content = $last;
 								$checkbox = false;
+								$hidden = (Config::read('use_db') == true) ? '' : 'hidden';
 								break;
 							case 'dbname':
 								$label = 'Database Name';
@@ -60,6 +63,7 @@ echo '<div id="setup_container" class="admincontainer">
 								$required = 'required="required"';
 								$content = $last;
 								$checkbox = false;								
+								$hidden = (Config::read('use_db') == true) ? '' : 'hidden';								
 								break;
 							case 'dbusername':
 								$label = 'Database Username';
@@ -67,13 +71,15 @@ echo '<div id="setup_container" class="admincontainer">
 								$required = 'required="required"';
 								$content = $last;
 								$checkbox = false;								
+								$hidden = (Config::read('use_db') == true) ? '' : 'hidden';								
 								break;
 							case 'dbpassword':
 								$label = 'Database Password';
 								$desc  = 'Enter the password for your database';
 								$required = '';
 								$content = $last;
-								$checkbox = false;								
+								$checkbox = false;	
+								$hidden = (Config::read('use_db') == true) ? '' : 'hidden';															
 								break;
 							case 'prefix':
 								$label = 'Database table-prefix';
@@ -81,6 +87,7 @@ echo '<div id="setup_container" class="admincontainer">
 								$required = '';
 								$content = $last;
 								$checkbox = false;								
+								$hidden = (Config::read('use_db') == true) ? '' : 'hidden';								
 								break;
 							case 'allow_public':
 								$label = 'Allow public access';
@@ -88,6 +95,7 @@ echo '<div id="setup_container" class="admincontainer">
 								$required = 'required="required"';
 								$content = $last;
 								$checkbox = true;
+								$hidden = '';																
 								break;	
 							case 'allow_userlist':
 								$label = 'Allow showing userlist';
@@ -95,6 +103,7 @@ echo '<div id="setup_container" class="admincontainer">
 								$required = 'required="required"';
 								$content = $last;
 								$checkbox = true;
+								$hidden = '';								
 								break;		
 							case 'use_login':
 								$label = 'Use login/registreing';
@@ -102,6 +111,7 @@ echo '<div id="setup_container" class="admincontainer">
 								$required = 'required="required"';
 								$content = $last;
 								$checkbox = true;
+								$hidden = '';								
 								break;	
 							case 'debug':
 								$label = 'Show debug-messages';
@@ -109,6 +119,7 @@ echo '<div id="setup_container" class="admincontainer">
 								$required = 'required="required"';
 								$content = $last;
 								$checkbox = true;
+								$hidden = '';								
 								break;	
 							case 'show_quotes':
 								$label = 'Show quotes on Gallery-page';
@@ -116,6 +127,7 @@ echo '<div id="setup_container" class="admincontainer">
 								$required = 'required="required"';
 								$content = $last;
 								$checkbox = true;
+								$hidden = '';								
 								break;	
 							case 'use_db':
 								$label = 'Use database';
@@ -123,6 +135,7 @@ echo '<div id="setup_container" class="admincontainer">
 								$required = 'required="required"';
 								$content = $last;
 								$checkbox = true;
+								$hidden = '';								
 								break;
 							case 'rootfolder':
 								$label = 'Installation folder on webhost';
@@ -130,6 +143,7 @@ echo '<div id="setup_container" class="admincontainer">
 								$required = 'required="required"';
 								$content = !empty($last) ? $last : '/';
 								$checkbox = false;	
+								$hidden = '';								
 								break;
 							case 'main_support_email':
 								$label = 'Support Email';
@@ -137,6 +151,7 @@ echo '<div id="setup_container" class="admincontainer">
 								$required = 'required="required"';
 								$content = $last;
 								$checkbox = false;	
+								$hidden = '';								
 								break;
 							case 'unique_key':
 								$label = 'Unique encryption key';
@@ -144,7 +159,8 @@ echo '<div id="setup_container" class="admincontainer">
 								$required = 'required="required"';
 								$randomkey = generateRandomString(true,true,true,'',20);
 								$content = !empty($last) ? $last : $randomkey;
-								$checkbox = false;									
+								$checkbox = false;	
+								$hidden = '';																
 						};
 					$setvar = (isset($_POST['configcreation'])) ? $_POST[$name] : '';
 					if ($getconfigvars[$i] == '$'.$name.' = \'\';') {
@@ -159,7 +175,7 @@ echo '<div id="setup_container" class="admincontainer">
 							$content = '';
 						}
 					}
-echo '		<p>
+echo '		<p class="'.$hidden.'">
 						<label class="left" for="'.$name.'"><i class="fa fa-question-circle-o" title="'.$desc.'"></i> '.$label.'</label>';
 						if ($checkbox == true) {
 							echo '<input class="configinput" type="checkbox" id="'.$name.'" name="'.$name.'" '.$required.' '.(($content == 'true') ? 'checked' : '').'>';
