@@ -77,7 +77,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 					if ($folder == 'pictures/thumbs') { $folder = 'pictures'; };
 					echo '<div class="container">
 							<h2>'.ucfirst($folder).'</h2>
-						<ul id="'.$folder.'_list"'.(($folder == 'pictures' || $folder == 'video') ? ' class="flexlist"' : '').'>';
+						<ul id="'.$folder.'_list"'.(($folder == 'pictures' || $folder == 'video') ? ' class="grid"' : '').'><li class="grid-sizer"></li>';
 						$id_number = 0;
 					while (list ($key, $val) = each ($filelist)) {
 						if ($val != "." && $val != ".." && in_array(getExtension(strtolower($val)),allowedMimeAndExtensions('extension'))) {
@@ -123,7 +123,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 								'</div>' : 
 								(($folder == 'documents' || $folder == 'audio' || $folder == 'applications') ? 
 								'<a href="showfile.php?docfile='.$val.'">'.$fileicon.' '.$document_name.'</a>'.$usercontrols : '')));
-							$floatleft = (($folder == 'pictures' && !empty($shared_content)) ? 'class="pictures shared"' : (($folder == 'pictures' && empty($shared_folder)) ? 'class="pictures"' : (($folder == 'video') ? 'class="video"' : '')));
+							$floatleft = (($folder == 'pictures' && !empty($shared_content)) ? 'class="grid-item pictures shared"' : (($folder == 'pictures' && empty($shared_folder)) ? 'class="grid-item pictures"' : (($folder == 'video') ? 'class="grid-item video"' : '')));
 							echo '<li '.$floatleft.'>'.$linkdisplay.'</li>';
 						}
 					}

@@ -83,8 +83,8 @@ echo '<h2>'.str_replace(' ','',mb_ucfirst(__LOGIN)).'</h2>
 			<input type="text" id="username" name="username" value="'.$username.'" placeholder="'.mb_ucfirst(__LOGIN_USERNAME_PLACEHOLDER).'">
 			<label for="password">'.mb_ucfirst(__PASSWORD).'</label>
 			<input type="password" id="password" name="password" value="'.$password.'" placeholder="'.mb_ucfirst(__LOGIN_PASSWORD_PLACEHOLDER).'">
-			<a href="register" class="center">'.mb_ucfirst(__NO_ACCOUNT).'</a>
 			<input type="submit" name="submit_login" value="'.mb_ucfirst(__LOGIN).'">
+			<a href="register" class="center">'.mb_ucfirst(__NO_ACCOUNT).'</a>
 		</form>
 		</div>';
 }

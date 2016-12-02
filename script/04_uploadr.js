@@ -152,6 +152,16 @@ $(document).ready(function() {
 		};
 	})
 
+	var masonryGrid = $('.grid').masonry({
+  		// set itemSelector so .grid-sizer is not used in layout
+  		itemSelector: '.grid-item',
+  		// use element for option
+  		columnWidth: '.grid-sizer',
+  		percentPosition: true
+	});
+	masonryGrid.imagesLoaded().progress( function() {
+  		masonryGrid.masonry('layout');
+	});
 	$('#use_db').click(function() {
 		if ($(this).is(':checked')) {
 			$('#configform p').each(function() {
@@ -410,7 +420,7 @@ function messageBoxHide() {
 			$('#'+thisID).addClass('hidden');
 		}
 		if ($('#'+thisID).hasClass('remove_box')) {
-			var msgcontent = $('#'+thisID).append('<span class="remove" title="Close the information-container"><i class="fa fa-close"></i></span>').html();
+			var msgcontent = $('#'+thisID).append('<span class="remove" title="Close the information-container"><i class="fa fa-remove"></i></span>').html();
 		}
 		$('#'+thisID+' .remove').click(function() {
 			$('#'+thisID).hide();

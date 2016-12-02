@@ -4,11 +4,14 @@ require_once('functions.php');
 if (!session_id()) { session_start(); };
 $username = (($isloggedin && isset($_GET['user'])) ? $_GET['user'].'/' : ((!$isloggedin) ? 'public/' : $username));
 $filename = explode('&',explode('=',$_SERVER['QUERY_STRING'])[1])[0];
+logThis('showfile_processing','firstfilename:'.$filename."\r\n",FILE_APPEND);
 
 if (!$isloggedin && (isset($_GET['imgfile']) || isset($_GET['docfile']) || isset($_GET['vidfile']))) {
 	$querystring = explode('__',explode('=',$_SERVER['QUERY_STRING'])[1]);
-	$username = $querystring[0].'/';
-	$filename = explode('&',$querystring[1])[0];
+	// logThis('showfile_processing',$querystring[0].'-'.$querystring[1]."\r\n",FILE_APPEND);
+	$username = (stripos($_SERVER['QUERY_STRING'], '__') === true && !empty($_SERVER['QUERY_STRING'])) ? $querystring[0].'/' : 'public/';
+	$filename = (array_key_exists(1,$querystring)) ? explode('&',$querystring[1])[0] : explode('&',$querystring[0])[0];
+	// logThis('showfile_processing','secondfilename'.$filename."\r\n",FILE_APPEND);
 } elseif (!empty($_SERVER['QUERY_STRING']) && $username != 'public/' && array_reverse(explode('/',$_SERVER['HTTP_REFERER']))[0] != 'moderate') {
 	$potential_public_file = explode('__',explode('=',$_SERVER['QUERY_STRING'])[1])[0];
 	for ($i = 0; $i < count($user_array); $i++) {
@@ -17,15 +20,17 @@ if (!$isloggedin && (isset($_GET['imgfile']) || isset($_GET['docfile']) || isset
 			$username = 'public/';
 		}
 	}
+	// logThis('showfile_processing','thirdfilename'.$filename."\r\n",FILE_APPEND);
 } elseif (array_reverse(explode('/',$_SERVER['HTTP_REFERER']))[0] == 'moderate') {
 	$username = 'moderation/';
+	// logThis('showfile_processing','fourthfilename'.$filename."\r\n",FILE_APPEND);
 }
 
 	logThis('showfile_processing','Username is set to '.$username.''."\r\n",FILE_APPEND);
 	if (isset($_GET['imgfile'])) {
-		logThis('showfile_processing','Image-file requested '.$username.$filename."\r\n",FILE_APPEND);
+		logThis('showfile_processing','Image-file requested '.$username.'pictures/'.$filename."\r\n",FILE_APPEND);
 		if (isset($_GET['thumbs']) && file_exists($_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.'pictures/thumbs/'.$filename)) {
-			logThis('showfile_processing','Thumb-file requested '.$username.'/'.$filename."\r\n",FILE_APPEND);
+			logThis('showfile_processing','Thumb-file requested '.$userpath.$username.'pictures/thumbs/'.$filename."\r\n",FILE_APPEND);
 			header('Content-type: image/jpeg');
 			header('X-Sendfile: '.$_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.'pictures/thumbs/'.$filename);
 		} elseif (file_exists($_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.'pictures/'.$filename)) {

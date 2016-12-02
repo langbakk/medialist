@@ -53,7 +53,7 @@ $debug = true;
 //this is the default size storage space set for users
 $defaultsize = 536870912;
 //turns on or off moderation-queue
-$moderation_queue = true;
+$moderation_queue = false;
 
 //sets the site as deactivated temporarily (1/0)
 //$deactivated = 0; //currently not in use

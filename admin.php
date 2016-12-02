@@ -176,7 +176,7 @@ echo '<div id="setup_container" class="admincontainer">
 						}
 					}
 echo '		<p class="'.$hidden.'">
-						<label class="left" for="'.$name.'"><i class="fa fa-question-circle-o" title="'.$desc.'"></i> '.$label.'</label>';
+						<label class="left" for="'.$name.'"><span data-tooltip="'.$desc.'"><i class="fa fa-question-circle"></i></span> '.$label.'</label>';
 						if ($checkbox == true) {
 							echo '<input class="configinput" type="checkbox" id="'.$name.'" name="'.$name.'" '.$required.' '.(($content == 'true') ? 'checked' : '').'>';
 						} else {
