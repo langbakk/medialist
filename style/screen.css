@@ -2620,7 +2620,7 @@ form {
   margin: 0 auto; }
 
 #user_registration_form, #loginform {
-  max-width: 20em;
+  max-width: 25em;
   margin-top: 2em; }
   #user_registration_form label, #loginform label {
     min-width: 5em; }
@@ -2723,7 +2723,8 @@ input[type=checkbox] {
 label {
   float: left;
   color: #F9FAF8;
-  line-height: 2.09em; }
+  line-height: 2.75em;
+  font-weight: bold; }
 
 #configform {
   max-width: 80%; }
@@ -3092,6 +3093,9 @@ label {
 
 .content .messagebox {
   margin: 15% auto 0 auto; }
+
+.content ul .messagebox {
+  margin: 0 auto; }
 
 #userprofile_body .content p {
   margin: 1em 2em 0 2em; }

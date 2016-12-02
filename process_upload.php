@@ -123,7 +123,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 							$movedfile = pathinfo($_FILES['file']['name']);
 							if (in_array(strtolower($movedfile['extension']),allowedMimeAndExtensions('extension')) && in_array($_FILES['file']['type'],allowedMimeAndExtensions('image','mime'))) {
 								// createThumbs($userpath.$username.$folder.'/',onlyValidChar($_FILES['file']['name']),200);
-								generate_image_thumbnail($userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']),$userpath.$username.$folder.'/thumbs/'.onlyValidChar($_FILES['file']['name']));
+								generate_image_thumbnail($userpath.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? $username : $original_username).$folder.'/'.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? explode('/',$original_username)[0].'__' : '').onlyValidChar($_FILES['file']['name']),$userpath.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? $username : $original_username).$folder.'/thumbs/'.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? explode('/',$original_username)[0].'__' : '').onlyValidChar($_FILES['file']['name']));
 							}
 							if (in_array(strtolower($movedfile['extension']),allowedMimeAndExtensions('extension')) && in_array($_FILES['file']['type'],allowedMimeAndExtensions('video','mime'))) {
 								$video = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']);
