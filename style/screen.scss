@@ -324,9 +324,15 @@ body {
 }
 
 .grid-sizer, .grid-item { 
-	width: 22.5%; 
+	// width: 15%; 
 	box-sizing: border-box;
-	margin: 0.5%;
+	// margin: 0.5%;
+	// min-width: 150px;
+	text-align: center;
+}
+.grid-item img {
+	display: block;
+	margin: 0 auto;
 }
 #admin_menu,#user_menu {
 	position: fixed; 
@@ -490,6 +496,9 @@ li .usercontrols form {
 }
 #pictures_list .public_sharename {
 	display: none;
+}
+#pictures_list li {
+	min-width: 8em;
 }
 #pictures_list li:hover .public_sharename {
 	display: block;
@@ -659,7 +668,7 @@ input {
 	position: relative;
 	z-index: 7000;
 }
-#username_display .notloggedin,#username_view {
+#username_display .notloggedin,#username_view i {
 	color: red;
 }
 #username_view {
@@ -676,6 +685,8 @@ input {
 	float: none;
 	height: 5em;
 	overflow: hidden;
+	min-width: 8em;
+	line-height: 2.1em;
 }
 .user_management_form input {
 	display: initial;
@@ -689,6 +700,15 @@ input {
 }
 #user_management_container .messagebox {
 	margin: 0 auto;
+}
+#userlist_body li.heading {
+	position: relative;
+	line-height: 1.6em;
+}
+#searchusers {
+	position: absolute; 
+	right: 1em;
+	top: 0;
 }
 .button,input[type=submit],input[type=button],button {
   padding: .75em;
@@ -740,6 +760,9 @@ label {
 	color: $main-light;
 	line-height: 2.75em;
 	font-weight: bold;
+}
+.checkboxlabel {
+	line-height: initial;
 }
 #configform {
 	max-width: 80%;
@@ -863,9 +886,6 @@ label {
 	width: 15em;
 	overflow: hidden;
 	margin: 0 auto;
-}
-.hidden {
-	display: none;
 }
 .tech-slideshow {
   height: 7.5em;
@@ -1577,6 +1597,10 @@ label {
 	background-image: url("images/ui-icons_cd0a0a_256x240.png");
 }
 .ui-icon-triangle-1-s { background-position: -64px -16px; }
+
+.hidden {
+	display: none !important;
+}
 
 @media screen and (max-width: 70em) {
 	#mainmenu {

@@ -1,3 +1,7 @@
 #username // password // userrole // allow userlist link // diskspace-setting
 admin // $1$UTeoLgkN$pQ5vgrzryRE.ojyl7xBR41 // admin // 1 // 1048585000 // gallery
 user //  $1$UTeoLgkN$pQ5vgrzryRE.ojyl7xBR41 // user // 1
+test // $2y$10$iQa5qJtpriF9fUvb/MhZCOyLVc5zAwOSDXurpMXOqg717W/cj78a. // user
+test2 // $2y$10$qchhhOvtAOfRw/kswRbYaO4HRPuAkBM4KlhmNRbSqnP/JBIRhDF6S // user
+test4 // $2y$10$6hFapORyqjt7IFNmbQhik.nyYDivFHVza2CfX9ip8zblZKQ8sUtrK // user
+test3 // $2y$10$3zKJVzFAfuKGp8TRnYvOeO0/iwCRDayy6Ty9yQqKS14SA9CkpuGXG // user

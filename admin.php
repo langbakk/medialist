@@ -176,7 +176,7 @@ echo '<div id="setup_container" class="admincontainer">
 						}
 					}
 echo '		<p class="'.$hidden.'">
-						<label class="left" for="'.$name.'"><span data-tooltip="'.$desc.'"><i class="fa fa-question-circle"></i></span> '.$label.'</label>';
+						<label class="left'.(($checkbox == true) ? ' checkboxlabel' : '').'" for="'.$name.'"><span data-tooltip="'.$desc.'"><i class="fa fa-question-circle"></i></span> '.$label.'</label>';
 						if ($checkbox == true) {
 							echo '<input class="configinput" type="checkbox" id="'.$name.'" name="'.$name.'" '.$required.' '.(($content == 'true') ? 'checked' : '').'>';
 						} else {
@@ -221,12 +221,13 @@ echo '			<p class="buttoncontainer">
 					// echo $updated_username.' '.$updated_password.' '.$updated_usertype.' '.$updated_userlistlink.' '.$updated_userdiskspace;
 				}
 				$formusername = trim($user[0]);
-				echo '<label for="username_'.$formusername.'">Username<br>
+				// var_dump($c % 6 == false);
+				echo '<label '.((($c != 1) && (($c % 6) !== 0)) ? 'style="height: 2.5em;"' : '').' for="username_'.$formusername.'"><span class="'.((($c != 1) && (($c % 6) !== 0)) ? 'hidden' : '').'">Username<br></span>
 					<input id="username_'.$formusername.'" type="text" disabled value="'.$formusername.'"></label>
 					<input type="hidden" name="username" value="'.$formusername.'">
-					<label for="password_'.$formusername.'">Password<br>
+					<label '.((($c != 1) && (($c % 6) !== 0)) ? 'style="height: 2.5em;"' : '').' for="password_'.$formusername.'"><span class="'.((($c != 1) && (($c % 6) !== 0)) ? 'hidden' : '').'">Password<br></span>
 					<input id="password_'.$formusername.'" name="password" type="text" disabled placeholder="New password"></label>
-					<label for="usertype_'.$formusername.'">Usertype<br>
+					<label '.((($c != 1) && (($c % 6) !== 0)) ? 'style="height: 2.5em;"' : '').' for="usertype_'.$formusername.'"><span class="'.((($c != 1) && (($c % 6) !== 0)) ? 'hidden' : '').'">Usertype<br></span>
 					<select id="usertype_'.$formusername.'" name="usertype" autocomplete="off">';
 						foreach ($usertypes as $utkey => $utvalue) {
 							$setvalue = (isset($_POST['usertype']) && ($_POST['username'] == $formusername)) ? $_POST['usertype'] : $utvalue;
@@ -234,11 +235,11 @@ echo '			<p class="buttoncontainer">
 							echo '<option value="'.$utvalue.'" '.$selected.'>'.ucfirst($utvalue).'</option>';
 						}
 					echo '</select></label>
-					<label for="userlistlink_'.$formusername.'">Show in userlist<br>
+					<label '.((($c != 1) && (($c % 6) !== 0)) ? 'style="height: 2.5em;"' : '').' for="userlistlink_'.$formusername.'"><span class="'.((($c != 1) && (($c % 6) !== 0)) ? 'hidden' : '').'">Show in userlist<br></span>
 					<input id="userlistlink_'.$formusername.'" type="checkbox" name="userlistlink" '.(($user[3] == 1) ? 'checked' : '').'></label>
-					<label for="userdiskspace_'.$formusername.'">Disk space<br>
+					<label '.((($c != 1) && (($c % 6) !== 0)) ? 'style="height: 2.5em;"' : '').' for="userdiskspace_'.$formusername.'"><span class="'.((($c != 1) && (($c % 6) !== 0)) ? 'hidden' : '').'">Disk space<br></span>
 					<input id="userdiskspace_'.$formusername.'" type="text" name="userdiskspace" value="'.(!empty($user[4]) ? $user[4] : $defaultsize).'"></label>
-					<label for="userstartpage_'.$formusername.'">Preferred startpage<br>
+					<label '.((($c != 1) && (($c % 6) !== 0)) ? 'style="height: 2.5em;"' : '').' for="userstartpage_'.$formusername.'"><span class="'.((($c != 1) && (($c % 6) !== 0)) ? 'hidden' : '').'">Preferred startpage<br></span>
 					<select id="userstartpage_'.$formusername.'" name="userstartpage" autocomplete="off">';
 					foreach (Config::read('menu_array') as $menukey => $menuvalue) {
 						if ($menuvalue != 'login' &&  $menuvalue != 'register' && $menuvalue != 'home') {
@@ -248,7 +249,7 @@ echo '			<p class="buttoncontainer">
 						}
 					}
 					echo '</select></label>
-					<input type="submit" name="submit_userchanges" value="Save">
+					<input type="submit" name="submit_userchanges" value="Save" '.((($c != 1) && (($c % 6) !== 0)) ? 'style="margin-top: -2.5em;"' : '').'>
 				</form>';
 			}
 			file_put_contents('conf/.userlist', $newuserlist);

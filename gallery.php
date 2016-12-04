@@ -77,7 +77,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 					if ($folder == 'pictures/thumbs') { $folder = 'pictures'; };
 					echo '<div class="container">
 							<h2>'.ucfirst($folder).'</h2>
-						<ul id="'.$folder.'_list"'.(($folder == 'pictures' || $folder == 'video') ? ' class="grid"' : '').'><li class="grid-sizer"></li>';
+						<ul id="'.$folder.'_list"'.(($folder == 'pictures' || $folder == 'video') ? ' class="grid"' : '').'>';
 						$id_number = 0;
 					while (list ($key, $val) = each ($filelist)) {
 						if ($val != "." && $val != ".." && in_array(getExtension(strtolower($val)),allowedMimeAndExtensions('extension'))) {

@@ -219,8 +219,8 @@ function displayMenu($baseurl, $usedb = false) {
 		foreach ($menuArray as $key => $value) {
 			$menutext = pathinfo($key);
 			$useurl = $menutext['basename'];
-			$page = (isset($_GET['page'])) ? $_GET['page'] : 'index';
-		
+			$page = (isset($_GET['page']) && !empty($_GET['page'])) ? $_GET['page'] : 'index';
+
 			if (!$isloggedin) {
 				if ($key != 'userlist' && $key != 'userprofile' && $key != 'moderate') {
 					if ($allow_public == false && ($key != 'gallery' && $key != 'upload')) {
