@@ -145,7 +145,6 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 			$content = 'That user doesn\'t exist on the server';
 		}
 		echo '<p class="messagebox visible '.$status.'">'.$content.'</p>';
-// echo '<p class="messagebox warning visible">'.(($username == 'public/') ? '1 There are no public uploads to show' : '2 This user hasn\'t uploaded anything. Tell them to get their butt in gear!').'</p>' : (($user_exist == false && (trim($exploded_user_array[0]) != trim(explode('/',$username)[0]))) ? '<p class="messagebox error visible">3 That user doesn\'t exist on the server</p>' : '<p class="messagebox info visible">4 There are no public uploads to show. <a href="upload">Upload files</a></p>')).'</div>';
 	if ($show_quotes == true) { // this setting can be changed in config.php
 		include 'quotes.php';
 	}
