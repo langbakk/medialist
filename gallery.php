@@ -144,10 +144,10 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 		} elseif ($username == 'public/') {
 			$status = 'info';
 			$content = 'There are no public uploads to show. <a href="upload">Upload files</a>';
-		} elseif ($user_exist == false && (trim($exploded_user_array[0]) != trim(explode('/',$original_username)[0]))) {
+		} elseif ($user_exist == false) {
 			$status = 'error';
-			$content = 'That user doesn\'t exist on the server';
-		}
+			$content = 'The user doesn\'t exist on the server';
+		} 
 		echo '<p class="messagebox visible '.$status.'">'.$content.'</p>';
 	if ($show_quotes == true) { // this setting can be changed in config.php
 		include 'quotes.php';
