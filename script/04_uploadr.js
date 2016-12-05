@@ -18,6 +18,17 @@ $(document).ready(function() {
   		$('#pictures_list').css({'max-width':'59em'});
 	});
 
+	if (Modernizr.touch) {
+		if ($('#lightbox_wrapper').hasClass('visible')) {
+			if ($('#lightbox_container span').is('visible')) {
+				$('#lightbox_container span').on('touch',function() {
+					$(this).blur();
+				});
+			}
+		}
+	}
+
+
 	if (GetURLParameter() == '/userprofile') {
 		$('.deletefile').click(function(e) {
 			$this = $(this);
