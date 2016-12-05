@@ -392,7 +392,7 @@ $(document).ready(function() {
 				$('#lightbox_container img').remove();
 				$('#lightbox_container').append(image);
 		    	if (viewportSize.getWidth() <= 480) {
-		    		image.onload = function() { $('#lightbox_wrapper').css({'left':0,'width':'100%','padding':'1em','box-sizing':'border-box'}).find('#lightbox_container img').css({'width':'100%','height':'initial'}); $('.closebutton,.nextbutton,.prevbutton').css({'top':'20em'}); $('.prevbutton').css({'left':'3em'}); $('.nextbutton').css({'right':'3em'}); $('.closebutton').css({'left':'50%','margin-left':'-1.25em'}); window.URL.revokeObjectURL(image.src);};
+		    		image.onload = function() { $('#lightbox_wrapper').css({'width':'100%','padding':'1em','box-sizing':'border-box'}).find('#lightbox_container img').css({'width':'100%','height':'initial'}); $('.closebutton,.nextbutton,.prevbutton').css({'top':'20em'}); $('.prevbutton').css({'left':'3em'}); $('.nextbutton').css({'right':'3em'}); $('.closebutton').css({'left':'50%','margin-left':'-1.25em'}); window.URL.revokeObjectURL(image.src);};
 		    	} else {
 					image.onload = function() { window.URL.revokeObjectURL(image.src);};
 				}
