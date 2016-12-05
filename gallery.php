@@ -148,7 +148,8 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 			$status = 'error';
 			$content = 'The user doesn\'t exist on the server';
 		} 
-		echo '<p class="messagebox visible '.$status.'">'.$content.'</p>';
+		echo '<p class="messagebox visible '.$status.'">'.$content.'</p>
+		</div>';
 	if ($show_quotes == true) { // this setting can be changed in config.php
 		include 'quotes.php';
 	}

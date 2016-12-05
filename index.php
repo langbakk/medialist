@@ -49,11 +49,17 @@ echo '</header>
 	} 
 echo '
 	</div>
-	<div id="updateinfo" class="messagebox"></div>
-	</div>
-	<div id="lightbox_wrapper" class="hidden"><div id="lightbox_container"><span class="closebutton">X</span><span class="nextbutton">&gt;</span><span class="prevbutton">&lt;</span></div></div>
 	<footer>
 	</footer>
+		<div id="updateinfo" class="messagebox"></div>
+	</div>
+	<div id="lightbox_wrapper" class="hidden">
+		<div id="lightbox_container">
+			<span class="closebutton">X</span>
+			<span class="nextbutton">&gt;</span>
+			<span class="prevbutton">&lt;</span>
+		</div>
+	</div>
 </body>
 </html>';
 ?>
