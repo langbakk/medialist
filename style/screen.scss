@@ -162,7 +162,7 @@ a {
 	&:visited {
 		color: $visited-link-color;
 	}
-	&:hover {
+	&:hover,&:focus {
 		color: $hover-link-color;
 	}
 	& + .usercontrols {
@@ -190,7 +190,7 @@ form  a[href="register"] {
 #mainmenu a {
 	color: $visited-link-color;
 }
-#mainmenu .active a,#mainmenu li a:hover {
+#mainmenu .active a,#mainmenu li a:hover,#mainmenu li a:focus {
 	background: $main-light;
 	color: $main-dark-transparent;
 	font-weight: bold;
@@ -298,7 +298,7 @@ body {
 	position: relative;
     cursor: pointer;
 }
-[data-tooltip]:hover::after{
+[data-tooltip]:hover::after,[data-tooltip]:focus::after {
     background: $main-light;
     border-radius: .2em;
     bottom: 2em;
@@ -312,7 +312,7 @@ body {
     min-width: 15em;
     line-height: 1em;
 }
-[data-tooltip]:hover::before{
+[data-tooltip]:hover::before,[data-tooltip]:focus::before {
     border: solid;
     border-color: $main-light transparent;
     border-width: .5em .5em 0 .5em;
@@ -353,7 +353,7 @@ body {
 #settings_list li {
 	padding: 0;
 }
-#admin_menu:hover ~ #settings_list,#settings_list:hover {
+#admin_menu:hover ~ #settings_list,#settings_list:hover,#admin_menu:focus ~ #settings_list, #settings_list:focus {
 	display: block;
 	z-index: 50000;
 }
@@ -362,7 +362,7 @@ body {
 	padding: .3em 0;
 	display: block;
 }
-#settings_list:hover a:hover {
+#settings_list:hover a:hover,#settings_list:focus a:focus {
 	color: $hover-secondary-link-color;
 	font-weight: bold;
 }
@@ -470,7 +470,7 @@ li .usercontrols form {
 [id$='_list'] li .usercontrols,#user_filelist li .usercontrols {
 	display: none;
 }
-[id$='_list'] li:hover .usercontrols,#user_filelist li:hover .usercontrols {
+[id$='_list'] li:hover .usercontrols,#user_filelist li:hover .usercontrols,[id$='_list'] li:focus .usercontrols,#user_filelist li:focus .usercontrols {
 	display: block;
 	z-index: 1000;
 }
@@ -500,7 +500,7 @@ li .usercontrols form {
 #pictures_list li {
 	min-width: 8em;
 }
-#pictures_list li:hover .public_sharename {
+#pictures_list li:hover .public_sharename,#pictures_list li:focus .public_sharename {
 	display: block;
 	position: absolute;
 	bottom: 0;
@@ -516,7 +516,7 @@ li .usercontrols form {
 #documents_list li .usercontrols,#audio_list li .usercontrols, #applications_list li .usercontrols {
 	padding: .2em .5em 0 0;
 }
-#documents_list li:hover,#audio_list li:hover,#applications_list li:hover {
+#documents_list li:hover,#audio_list li:hover,#applications_list li:hover,#documents_list li:focus,#audio_list li:focus,#applications_list li:focus {
 	background: #666;
 }
 #user_filelist li .filename {
@@ -740,13 +740,13 @@ input[type=file] {
 	margin-bottom: 1em;
 	&.inactive {
 		background-color: #cecece;
-		&:hover {
+		&:hover,&:focus {
 			background-color: #a3a3a3;
 		}
 	}
 	&.active {
 		background-color: #a7cfdf; 
-		&:hover {
+		&:hover,&:focus {
 			background-color: #82bbd1; 
 		}
 	}
@@ -911,7 +911,7 @@ label {
   background-position: 0 -10em;
   animation: moveSlideshow 15s linear infinite;
 }
-.tech-slideshow:hover .mover-2 {
+.tech-slideshow:hover .mover-2,.tech-slideshow:focus .mover-2 {
   opacity: 1;
   animation-duration: 50s;
 }
@@ -1191,10 +1191,10 @@ label {
 	margin: 16px;
 	min-height: 100px; 
 }
-.dropzone .dz-preview:hover {
+.dropzone .dz-preview:hover,.dropzone .dz-preview:focus {
 	z-index: 1000; 
 }
-.dropzone .dz-preview:hover .dz-details {
+.dropzone .dz-preview:hover .dz-details,.dropzone .dz-preview:focus .dz-details {
 	opacity: 1; 
 }
 .dropzone .dz-preview.dz-file-preview .dz-image {
@@ -1222,10 +1222,10 @@ label {
 	cursor: pointer;
 	border: none; 
 }
-.dropzone .dz-preview .dz-remove:hover {
+.dropzone .dz-preview .dz-remove:hover,.dropzone .dz-preview .dz-remove:focus {
 	text-decoration: underline; 
 }
-.dropzone .dz-preview:hover .dz-details {
+.dropzone .dz-preview:hover .dz-details,.dropzone .dz-preview:focus .dz-details {
 	opacity: 1; 
 }
 .dropzone .dz-preview .dz-details {
@@ -1249,15 +1249,15 @@ label {
 .dropzone .dz-preview .dz-details .dz-filename {
 	white-space: nowrap;
 }
-.dropzone .dz-preview .dz-details .dz-filename:hover span {
+.dropzone .dz-preview .dz-details .dz-filename:hover span,.dropzone .dz-preview .dz-details .dz-filename:focus span {
 	border: 1px solid rgba(200, 200, 200, 0.8);
 	background-color: rgba(255, 255, 255, 0.8); 
 }
-.dropzone .dz-preview .dz-details .dz-filename:not(:hover) {
+.dropzone .dz-preview .dz-details .dz-filename:not(:hover),.dropzone .dz-preview .dz-details .dz-filename:not(:focus) {
 	overflow: hidden;
 	text-overflow: ellipsis; 
 }
-.dropzone .dz-preview .dz-details .dz-filename:not(:hover) span {
+.dropzone .dz-preview .dz-details .dz-filename:not(:hover) span,.dropzone .dz-preview .dz-details .dz-filename:not(:focus) span {
 	border: 1px solid transparent; 
 }
 .dropzone .dz-preview .dz-details .dz-filename span, .dropzone .dz-preview .dz-details .dz-size span {
@@ -1265,7 +1265,7 @@ label {
 	padding: 0 0.4em;
 	border-radius: 3px; 
 }
-.dropzone .dz-preview:hover .dz-image img {
+.dropzone .dz-preview:hover .dz-image img,.dropzone .dz-preview:focus .dz-image img {
 	-webkit-transform: scale(1.05, 1.05);
 	-moz-transform: scale(1.05, 1.05);
 	-ms-transform: scale(1.05, 1.05);
@@ -1373,7 +1373,7 @@ label {
 .dropzone .dz-preview.dz-error .dz-error-message {
 	display: block; 
 }
-.dropzone .dz-preview.dz-error:hover .dz-error-message {
+.dropzone .dz-preview.dz-error:hover .dz-error-message,.dropzone .dz-preview.dz-error:focus .dz-error-message {
 	opacity: 1;
 	pointer-events: auto; 
 }
@@ -1410,7 +1410,7 @@ label {
 	border-right: 6px solid transparent;
 	border-bottom: 6px solid #be2626; 
 }
-#mainmenu .active .activearrow,#mainmenu li:hover .activearrow {
+#mainmenu .active .activearrow,#mainmenu li:hover .activearrow,#mainmenu li:focus .activearrow {
 	position: absolute;
 	top: initial;
 	bottom: 0;
@@ -1461,7 +1461,7 @@ label {
 .closebutton,.nextbutton,.prevbutton {
 	display: none;
 }
-#lightbox_wrapper:hover .closebutton, #lightbox_wrapper:hover .nextbutton, #lightbox_wrapper:hover .prevbutton {
+#lightbox_wrapper:hover .closebutton, #lightbox_wrapper:hover .nextbutton, #lightbox_wrapper:hover .prevbutton,#lightbox_wrapper:focus .closebutton, #lightbox_wrapper:focus .nextbutton, #lightbox_wrapper:focus .prevbutton {
 	display: block;
 }
 .closebutton,.nextbutton,.prevbutton {
@@ -1478,7 +1478,7 @@ label {
 	box-sizing: border-box;
 	border: 1px solid rgba(88,88,88,0.85);
 }
-.closebutton:hover,.nextbutton:hover,.prevbutton:hover {
+.closebutton:hover,.nextbutton:hover,.prevbutton:hover,.closebutton:focus,.nextbutton:focus,.prevbutton:focus {
 	background: rgba(0,0,0,0.75);
 	color: $hilight;
 	border: 1px solid #AAA;
@@ -1527,7 +1527,7 @@ label {
 		li {
 			padding: .75em 0;
 		}
-		li:hover {
+		li:hover,li:focus {
 			background: $hilight-contrast;
 			color: $main-dark;
 		}
