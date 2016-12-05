@@ -12,7 +12,7 @@ if (!$isloggedin && (isset($_GET['imgfile']) || isset($_GET['docfile']) || isset
 	$username = (stripos($_SERVER['QUERY_STRING'], '__') === true && !empty($_SERVER['QUERY_STRING'])) ? $querystring[0].'/' : 'public/';
 	$filename = (array_key_exists(1,$querystring)) ? explode('&',$querystring[1])[0] : explode('&',$querystring[0])[0];
 	// logThis('showfile_processing','secondfilename'.$filename."\r\n",FILE_APPEND);
-} elseif (!empty($_SERVER['QUERY_STRING']) && $username != 'public/' && array_reverse(explode('/',$_SERVER['HTTP_REFERER']))[0] != 'moderate') {
+} elseif (!empty($_SERVER['QUERY_STRING']) && $username != 'public/' && (!empty($_SERVER['HTTP_REFERER']) && array_reverse(explode('/',$_SERVER['HTTP_REFERER']))[0] != 'moderate')) {
 	$potential_public_file = explode('__',explode('=',$_SERVER['QUERY_STRING'])[1])[0];
 	for ($i = 0; $i < count($user_array); $i++) {
 		$exploded_user_array = explode('//',$user_array[$i]);
