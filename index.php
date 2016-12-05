@@ -61,9 +61,9 @@ echo '
 	</div>
 	<div id="lightbox_wrapper" class="hidden">
 		<div id="lightbox_container">
-			<span class="closebutton">X</span>
-			<span class="nextbutton">&gt;</span>
-			<span class="prevbutton">&lt;</span>
+			<span class="no-touch closebutton">X</span>
+			<span class="no-touch nextbutton">&gt;</span>
+			<span class="no-touch prevbutton">&lt;</span>
 		</div>
 	</div>
 </body>
