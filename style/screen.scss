@@ -738,10 +738,14 @@ input {
 .button_register {
 	background: $info-color;
 	color: $main-light !important;
+	display: inline-block;
+	margin-bottom: 1em;
 }
 .button_login {
 	background: $success-color;
 	color: $main-light !important;
+	display: inline-block;
+	margin-bottom: 1em;
 }
 input[type=file] {
 	overflow: hidden;
