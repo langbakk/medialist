@@ -735,17 +735,33 @@ input {
   -webkit-transition: color 0.4s ease, background 0.8s ease, border-color 0.4s ease;
   transition: color 0.4s ease, background 0.8s ease, border-color 0.4s ease;
 }
-.button_register {
+.button_register,.button_register:visited {
 	background: $info-color;
-	color: $main-light !important;
+	color: $info-background;
 	display: inline-block;
 	margin-bottom: 1em;
+	border-color: $info-background;
 }
-.button_login {
+.button_register:hover,.button_register:focus {
+	background: $info-background;
+	color: $info-color;
+	-webkit-transition: color 0.4s ease, background 0.8s ease, border-color 0.4s ease;
+	transition: color 0.4s ease, background 0.8s ease, border-color 0.4s ease;
+	border-color: $info-color;
+}
+.button_login,.button_login:visited {
 	background: $success-color;
-	color: $main-light !important;
+	color: $success-background;
 	display: inline-block;
 	margin-bottom: 1em;
+	border-color: $success-background;
+}
+.button_login:hover,.button_login:focus {
+	background: $success-background;
+	color: $success-color;
+	-webkit-transition: color 0.4s ease, background 0.8s ease, border-color 0.4s ease;
+	transition: color 0.4s ease, background 0.8s ease, border-color 0.4s ease;
+	border-color: $success-color;
 }
 input[type=file] {
 	overflow: hidden;
