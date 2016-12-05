@@ -40,9 +40,15 @@ echo '</header>
 	} elseif ($allow_public == true || $isloggedin) {
 		echo $display->getPage();
 		if (!isset($_GET['page']) || empty($_GET['page'])) {
-			echo '<div class="container">';
-			include_once('index.html');					
-			echo '</div>';
+			echo '<div class="container">
+				<h2>Welcome to Uploadr</h2>
+				<div class="content">
+					<p>Hi. You\'ve found Uploadr. This is a file-storage/upload-whatever-you-want type of site, which enables you to '.(!$isloggedin ? '<a href="register">create a user</a> and' : '').' upload to your private account (and share publicly, if you want)'.(!$isloggedin ? ', or just go to <a href="upload">upload</a> and start uploading stuff.' : '.').' '.(!$isloggedin ? 'If you already have an account, you can <a href="login">log in here</a>.' : '').' There are some limits as to what <a href="allowed_filetypes">type of files</a> you can upload, but most video, image and documents should work without having to adjust the config.</p>'.
+					(!$isloggedin ? 
+					'<a href="register" class="button_register button">Register here</a>
+					<a href="login" class="button_login button">Login here</a>' : '').'
+				</div>
+			</div>';
 		}
 	} elseif (!$isloggedin && $use_login == true && (empty($current_page) || $current_page == 'index' || $current_page == 'frontpage' || $current_page == 'login')) {
 		echo $display->getLogin();

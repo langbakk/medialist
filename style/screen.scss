@@ -735,6 +735,14 @@ input {
   -webkit-transition: color 0.4s ease, background 0.8s ease, border-color 0.4s ease;
   transition: color 0.4s ease, background 0.8s ease, border-color 0.4s ease;
 }
+.button_register {
+	background: $info-color;
+	color: $main-light !important;
+}
+.button_login {
+	background: $success-color;
+	color: $main-light !important;
+}
 input[type=file] {
 	overflow: hidden;
 	margin-bottom: 1em;
