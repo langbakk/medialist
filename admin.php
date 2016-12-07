@@ -6,7 +6,8 @@ $currentvars = '';
 $list_of_setupnames = ['websitename','dbhost','dbport','dbname','dbusername','dbpassword','prefix','allow_public','allow_userlist','use_login','show_quotes','use_db','debug','rootfolder','main_support_email','unique_key'];
 $menu_array = 	[0 => ['href'=>'#user_management_container','menutext'=>'User management'],
 				 1 => ['href'=>'#change_settings_container','menutext'=>'Change settings'],
-				 2 => ['href'=>'#setup_container','menutext'=>'Setup config file']
+				 2 => ['href'=>'#setup_container','menutext'=>'Setup config file'],
+				 3 => ['href'=>'#htaccess_container','menutext'=>'Modify .htaccess']
 				];
 
 echo '<div class="container">
@@ -257,6 +258,26 @@ echo '			<p class="buttoncontainer">
 				echo '<p class="messagebox success visible">You updated the user</p>';
 			}
 		echo '<!-- end user_management_container --></div>
+		<div class="admincontainer" id="htaccess_container">
+			<h2>Modify .htaccess-file</h2>
+			<p class="messagebox warning visisble">You should not modify this unless you experience trouble with links or redirects, or other issues that might be considered problems with server-config (Apache)</p>';
+			if (isset($_POST['submit_htaccessupdate'])) {
+				rename($_SERVER['DOCUMENT_ROOT'].'/.htaccess',$_SERVER['DOCUMENT_ROOT'].'/.htaccess_old');
+				file_put_contents($_SERVER['DOCUMENT_ROOT'].'/.htaccess',$_POST['htaccesscontent'],LOCK_EX);
+				echo '<p class="messagebox success visible">You\'ve updated the .htaccess-file</p>';
+			}
+			echo '<form method="post" action="#htaccess_container" class="htaccessform">';
+				$gethtaccess = (file_exists($_SERVER['DOCUMENT_ROOT'].'/.htaccess') ? file($_SERVER['DOCUMENT_ROOT'].'/.htaccess', FILE_IGNORE_NEW_LINES) : '');
+				$lines_in_htaccess = (file_exists($_SERVER['DOCUMENT_ROOT'].'/.htaccess') ? count(file($_SERVER['DOCUMENT_ROOT'].'/.htaccess', FILE_IGNORE_NEW_LINES)) : '');
+				$content = '';
+				$height = $lines_in_htaccess * 1.3;
+			    for ($i=0; $i < $lines_in_htaccess; $i++) {
+					$content .= $gethtaccess[$i]."\r\n";
+			    }
+		echo '<label>Modify / change .htaccess</label><br>
+		<textarea id="htaccesscontent" name="htaccesscontent" style="min-height: '.$height.'em;">'.$content.'</textarea>
+		<input type="submit" name="submit_htaccessupdate" value="Save .htaccess">
+		</div>
 	</div>';
 } else {
 	echo '<p class="messagebox error visible">You do not have access to this page</p>';

@@ -644,7 +644,7 @@ form {
 		min-width: 5em;
 	}
 }
-input {
+input,textarea {
 	text-align: center;
 	margin: 0 auto;
 	display: block;
@@ -655,6 +655,11 @@ input {
 		width: 20em;
 		line-height: 3em;
 	}
+}
+textarea {
+	min-width: 80%;
+	text-align: left;
+	line-height: 1.5em !important;
 }
 #username,#password {
 	margin-bottom: 1em;
@@ -697,9 +702,6 @@ input {
 }
 .user_management_form input[type=submit] {
 	margin-top: -3.5em;
-}
-#user_management_container .messagebox {
-	margin: 0 auto;
 }
 #userlist_body li.heading {
 	position: relative;
@@ -1172,6 +1174,12 @@ label {
 .content .messagebox {
 	margin: 15% auto 0 auto;
 }
+.admincontainer .messagebox {
+	margin: 0 auto;
+}
+#htaccess_container label {
+	float: none;
+}
 .content ul .messagebox {
 	margin: 0 auto;
 }
@@ -1462,18 +1470,20 @@ label {
 	position: absolute;
 	left: 50%;
 	top: 50%;
-	margin-top: 1.5em;
+	margin-top: .5em;
 	transform: translate(-50%,-50%);
 	z-index: 7000;
 	padding: 1.5em;
-	background: rgba(0,0,0,0.7);
+	background: #000; //rgba(0,0,0,0.7);
 	border: 1px solid #AAA;
 	box-sizing: border-box;
+	height: 90%;
 }
+// #lightbox_container,#lightbox_container img {
+// 	height: 100%;
+// }
 #lightbox_container,#lightbox_container img {
-	height: 100%;
-}
-#lightbox_container img {
+	max-height: 100%;
 	max-width: 100%;
 }
 #overlay {

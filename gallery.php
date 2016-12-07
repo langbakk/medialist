@@ -13,7 +13,7 @@ if ($isloggedin) {
 
 for ($i = 0; $i < count($user_array); $i++) {
 	$exploded_user_array = explode('//',$user_array[$i]);
-	$user_exist = ((!$isloggedin && ($allow_public == true) && !isset($_GET['user'])) ? true : ((isset($_GET['user']) && $_GET['user'] == 'public' && ($allow_public == true)) ? true : (($username == trim($exploded_user_array[0]).'/') ? true : false)));
+	$user_exist = ((!$isloggedin && ($allow_public == true) && !isset($_GET['user'])) ? false : ((isset($_GET['user']) && $_GET['user'] == 'public' && ($allow_public == true)) ? true : (($username == trim($exploded_user_array[0]).'/') ? true : false)));
 	if ($user_exist == true) {
 		break;
 	}
@@ -135,7 +135,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 	}
 
 	echo '<div class="container '.(($allempty == 0) ? 'visible' : 'hidden').'">';
-		if ($user_exist == true && (trim($exploded_user_array[0]) == trim(explode('/',$original_username)[0]))) {
+		if ($user_exist == true && (trim($exploded_user_array[0]) == trim(explode('/',$username)[0]))) {
 			$status = 'info';
 			$content = 'You haven\'t uploaded anything. <a href="upload">Upload files</a>';
 		} elseif ($user_exist == true) {
