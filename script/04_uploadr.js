@@ -28,6 +28,27 @@ $(document).ready(function() {
 		}
 	}
 
+	$('#add_user').click(function() {
+		var menupages = [];
+		$('[id^=userstartpage_] option').each(function() {
+			menupages.push($(this).val());
+		})
+		var content = '<form method="post" action="update_userlist.php" class="user_management_form">';
+		content += '<label style="height: 2.5em;" for="username_new"><span class="hidden">Username<br></span><input id="username_new" name="username" type="text" value=""></label>';
+		content += '<label style="height: 2.5em;" for="password_new"><span class="hidden">Password<br></span><input id="password_new" name="password" type="text" placeholder="Enter password"></label>';
+		content += '<label style="height: 2.5em;" for="usertype_new"><span class="hidden">Usertype<br></span><select id="usertype_new" name="usertype" autocomplete="off"><option value="admin">Admin</option><option value="user" selected>User</option></select></label><label style="height: 2.5em;" for="userlistlink_new"><span class="hidden">Show in userlist<br></span><input id="userlistlink_new" type="checkbox" name="userlistlink"></label>';
+		content += '<label style="height: 2.5em;" for="userdiskspace_new"><span class="hidden">Disk space<br></span><input id="userdiskspace_new" type="text" name="userdiskspace" value="536870912"></label>';
+		content += '<label style="height: 2.5em;" for="userstartpage_new"><span class="hidden">Preferred startpage<br></span><select id="userstartpage_new" name="userstartpage" autocomplete="off">';
+		$.each(menupages, function(index, value) {
+			value = value.substr(0,1).toUpperCase() + value.substr(1);
+			content += '<option value="'+value+'">'+value+'</option>';
+		});
+		content += '</select></label>';
+		content += '<input type="submit" name="submit_userchanges" value="Save" style="margin-top: -2.5em;"></form>';
+		$(this).before(content);
+		$(this).prev('form').find('select').selectmenu({ width: '10em' });
+	})
+
 
 	if (GetURLParameter() == '/userprofile') {
 		$('.deletefile').click(function(e) {

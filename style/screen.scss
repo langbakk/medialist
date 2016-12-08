@@ -250,6 +250,9 @@ body {
 .fa-remove::before {
 	content: "\f00d"
 }
+.removeuser .fa-remove::before {
+	color: $error-background;
+}
 .fa-check::before {
 	content: "\f00c"
 }
@@ -430,7 +433,7 @@ li > img {
 	vertical-align: bottom;
 	border: .1em solid white;
 }
-li span:not(.public_sharename):not(.filename):not(.filesize):not(.filelist_image),li .usercontrols {
+li span:not(.public_sharename):not(.filename):not(.filesize):not(.filelist_image):not(.labeltext):not(.ui-selectmenu-button):not(.ui-selectmenu-button > span),li .usercontrols {
 	display: block;
 	position: absolute;
 	top: 0;
@@ -644,6 +647,14 @@ form {
 		min-width: 5em;
 	}
 }
+.removeuser {
+	position: absolute;
+	top: 50%;
+	transform: translate(0,-50%);
+}
+.admincontainer ul li:nth-of-type(5) .removeuser,.admincontainer ul li:first-of-type .removeuser {
+	top: 60%;
+}
 input,textarea {
 	text-align: center;
 	margin: 0 auto;
@@ -690,8 +701,9 @@ textarea {
 	float: none;
 	height: 5em;
 	overflow: hidden;
-	min-width: 8em;
+	min-width: 6em;
 	line-height: 2.1em;
+	margin: 0 .15em;
 }
 .user_management_form input {
 	display: initial;
@@ -702,6 +714,7 @@ textarea {
 }
 .user_management_form input[type=submit] {
 	margin-top: -3.5em;
+	margin-left: .15em;
 }
 #userlist_body li.heading {
 	position: relative;

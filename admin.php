@@ -195,21 +195,25 @@ echo '			<p class="buttoncontainer">
 			</form>
 		<!-- end setup_container --></div>
 		<div id="user_management_container" class="admincontainer">
-		<h2>User management</h2>';
+		<h2>User management</h2>
+			<ul>';
 			$usertypes = ['admin','user'];
-			$newuserlist = '#username // password // userrole // allow userlist link // diskspace-setting'."\r\n";
+			// $newuserlist = '#username // password // userrole // allow userlist link // diskspace-setting'."\r\n";
 			$c = 0;
 			foreach ($user_array as $uakey => $uavalue) {
 				$c++;
-				echo '<form method="post" action="#user_management_container" class="user_management_form">';
+				echo '<li><form method="post" action="update_userlist.php" class="removeuser">
+				 	<label title="Delete user"><i class="fa fa-remove"></i></label>
+				 	</form>';
+				echo '<form method="post" action="update_userlist.php" class="user_management_form">';
 				$user = explode('//',$uavalue);
-				if (isset($_POST['submit_userchanges']) && ($_POST['username'] == trim($user[0]))) {
-					$newuserlist .= '';
-				} elseif ($c == count($user_array)) {
-					$newuserlist .= $uavalue;
-				} else  {
-					$newuserlist .= $uavalue."\r\n";	
-				}
+				// if (isset($_POST['submit_userchanges']) && ($_POST['username'] == trim($user[0]))) {
+				// 	$newuserlist .= '';
+				// } elseif ($c == count($user_array)) {
+				// 	$newuserlist .= $uavalue;
+				// } else  {
+				// 	$newuserlist .= $uavalue."\r\n";	
+				// }
 				
 				if (isset($_POST['submit_userchanges']) && ($_POST['username'] == trim($user[0]))) {
 					$updated_username = $_POST['username'];
@@ -223,25 +227,13 @@ echo '			<p class="buttoncontainer">
 				}
 				$formusername = trim($user[0]);
 				// var_dump($c % 6 == false);
-				echo '<label '.((($c != 1) && (($c % 6) !== 0)) ? 'style="height: 2.5em;"' : '').' for="username_'.$formusername.'"><span class="'.((($c != 1) && (($c % 6) !== 0)) ? 'hidden' : '').'">Username<br></span>
-					<input id="username_'.$formusername.'" type="text" disabled value="'.$formusername.'"></label>
-					<input type="hidden" name="username" value="'.$formusername.'">
-					<label '.((($c != 1) && (($c % 6) !== 0)) ? 'style="height: 2.5em;"' : '').' for="password_'.$formusername.'"><span class="'.((($c != 1) && (($c % 6) !== 0)) ? 'hidden' : '').'">Password<br></span>
-					<input id="password_'.$formusername.'" name="password" type="text" disabled placeholder="New password"></label>
-					<label '.((($c != 1) && (($c % 6) !== 0)) ? 'style="height: 2.5em;"' : '').' for="usertype_'.$formusername.'"><span class="'.((($c != 1) && (($c % 6) !== 0)) ? 'hidden' : '').'">Usertype<br></span>
-					<select id="usertype_'.$formusername.'" name="usertype" autocomplete="off">';
+				echo '<label '.((($c != 1) && (($c % 6) !== 0)) ? 'style="height: 2.5em;"' : '').' for="username_'.$formusername.'"><span class="labeltext '.((($c != 1) && (($c % 6) !== 0)) ? 'hidden' : '').'">Username<br></span><input id="username_'.$formusername.'" type="text" disabled value="'.$formusername.'"></label><input type="hidden" name="username" value="'.$formusername.'"><label '.((($c != 1) && (($c % 6) !== 0)) ? 'style="height: 2.5em;"' : '').' for="password_'.$formusername.'"><span class="labeltext '.((($c != 1) && (($c % 6) !== 0)) ? 'hidden' : '').'">Password<br></span><input id="password_'.$formusername.'" name="password" type="text" disabled placeholder="New password"></label><label '.((($c != 1) && (($c % 6) !== 0)) ? 'style="height: 2.5em;"' : '').' for="usertype_'.$formusername.'"><span class="labeltext '.((($c != 1) && (($c % 6) !== 0)) ? 'hidden' : '').'">Usertype<br></span><select id="usertype_'.$formusername.'" name="usertype" autocomplete="off">';
 						foreach ($usertypes as $utkey => $utvalue) {
 							$setvalue = (isset($_POST['usertype']) && ($_POST['username'] == $formusername)) ? $_POST['usertype'] : $utvalue;
 							$selected = ((isset($_POST['usertype']) && ($_POST['username'] == $formusername) && $_POST['usertype'] == $utvalue) ? 'selected' : (((!isset($_POST['usertype']) || ($_POST['username'] != $formusername)) && trim($user[2]) == $utvalue) ? 'selected' : '')); 
 							echo '<option value="'.$utvalue.'" '.$selected.'>'.ucfirst($utvalue).'</option>';
 						}
-					echo '</select></label>
-					<label '.((($c != 1) && (($c % 6) !== 0)) ? 'style="height: 2.5em;"' : '').' for="userlistlink_'.$formusername.'"><span class="'.((($c != 1) && (($c % 6) !== 0)) ? 'hidden' : '').'">Show in userlist<br></span>
-					<input id="userlistlink_'.$formusername.'" type="checkbox" name="userlistlink" '.(($user[3] == 1) ? 'checked' : '').'></label>
-					<label '.((($c != 1) && (($c % 6) !== 0)) ? 'style="height: 2.5em;"' : '').' for="userdiskspace_'.$formusername.'"><span class="'.((($c != 1) && (($c % 6) !== 0)) ? 'hidden' : '').'">Disk space<br></span>
-					<input id="userdiskspace_'.$formusername.'" type="text" name="userdiskspace" value="'.(!empty($user[4]) ? $user[4] : $defaultsize).'"></label>
-					<label '.((($c != 1) && (($c % 6) !== 0)) ? 'style="height: 2.5em;"' : '').' for="userstartpage_'.$formusername.'"><span class="'.((($c != 1) && (($c % 6) !== 0)) ? 'hidden' : '').'">Preferred startpage<br></span>
-					<select id="userstartpage_'.$formusername.'" name="userstartpage" autocomplete="off">';
+					echo '</select></label><label '.((($c != 1) && (($c % 6) !== 0)) ? 'style="height: 2.5em;"' : '').' for="userlistlink_'.$formusername.'"><span class="labeltext '.((($c != 1) && (($c % 6) !== 0)) ? 'hidden' : '').'">Userlist<br></span><input id="userlistlink_'.$formusername.'" type="checkbox" name="userlistlink" '.(($user[3] == 1) ? 'checked' : '').'></label><label '.((($c != 1) && (($c % 6) !== 0)) ? 'style="height: 2.5em;"' : '').' for="userdiskspace_'.$formusername.'"><span class="labeltext '.((($c != 1) && (($c % 6) !== 0)) ? 'hidden' : '').'">Disk space<br></span><input id="userdiskspace_'.$formusername.'" type="text" name="userdiskspace" value="'.(!empty($user[4]) ? $user[4] : $defaultsize).'"></label><label '.((($c != 1) && (($c % 6) !== 0)) ? 'style="height: 2.5em;"' : '').' for="userstartpage_'.$formusername.'"><span class="labeltext '.((($c != 1) && (($c % 6) !== 0)) ? 'hidden' : '').'">Preferred startpage<br></span><select id="userstartpage_'.$formusername.'" name="userstartpage" autocomplete="off">';
 					foreach (Config::read('menu_array') as $menukey => $menuvalue) {
 						if ($menuvalue != 'login' &&  $menuvalue != 'register' && $menuvalue != 'home') {
 							$setvalue = (isset($_POST['userstartpage']) && ($_POST['username'] == $formusername)) ? $_POST['userstartpage'] : $_SESSION['userstartpage'];
@@ -249,11 +241,11 @@ echo '			<p class="buttoncontainer">
 							echo '<option value="'.$menuvalue.'" '.$selected.'>'.ucfirst($menuvalue).'</option>';
 						}
 					}
-					echo '</select></label>
-					<input type="submit" name="submit_userchanges" value="Save" '.((($c != 1) && (($c % 6) !== 0)) ? 'style="margin-top: -2.5em;"' : '').'>
-				</form>';
+					echo '</select></label><input type="submit" name="submit_userchanges" value="Save" '.((($c != 1) && (($c % 6) !== 0)) ? 'style="margin-top: -2.5em;"' : '').'>
+				</form></li>';
 			}
-			file_put_contents('conf/.userlist', $newuserlist);
+			echo '</ul><button id="add_user" name="add_user">Add user</button>';
+			// file_put_contents('conf/.userlist', $newuserlist);
 			if (isset($_POST['submit_userchanges'])) {
 				echo '<p class="messagebox success visible">You updated the user</p>';
 			}
@@ -276,7 +268,7 @@ echo '			<p class="buttoncontainer">
 			    }
 		echo '<label>Modify / change .htaccess</label><br>
 		<textarea id="htaccesscontent" name="htaccesscontent" style="min-height: '.$height.'em;">'.$content.'</textarea>
-		<input type="submit" name="submit_htaccessupdate" value="Save .htaccess">
+		<input type="submit" name="submit_htaccessupdate" value="Save .htaccess"></form>
 		</div>
 	</div>';
 } else {

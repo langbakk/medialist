@@ -7,7 +7,7 @@ RewriteEngine on
 RewriteRule (script|style|users|webgfx|translations|setup|)/(.+)$ $1/$2 [NC,QSA,L]
 
 #The following rule allows the mentioned files to go through
-RewriteRule ^(current_uploads.php|showfile.php|approvefile.php|deletefile.php|language.php|quotes.php|retrieve_folder.php|check_email.php|config.php|delete_setup.php|functions.php|get_settings.php|get_update_info.php|get_userinfo.php|license.txt|login.php|process_search.php|process_setup.php|returnmessages.php|send_email.php|statistics_processing.php|update_settings.php|upload.php|update_cookie.php|process_upload.php|create_public_link.php)$ $1 [L,QSA]
+RewriteRule ^(current_uploads.php|update_userlist.php|showfile.php|approvefile.php|deletefile.php|language.php|quotes.php|retrieve_folder.php|check_email.php|config.php|delete_setup.php|functions.php|get_settings.php|get_update_info.php|get_userinfo.php|license.txt|login.php|process_search.php|process_setup.php|returnmessages.php|send_email.php|statistics_processing.php|update_settings.php|upload.php|update_cookie.php|process_upload.php|create_public_link.php)$ $1 [L,QSA]
 
 #The following rule sends direct links to the mentioned files back to index
 RewriteRule ^(coreclass.php|coreclass|functions.php|functions|language.php|language)$ index
