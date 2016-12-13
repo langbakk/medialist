@@ -28,6 +28,22 @@ $(document).ready(function() {
 		}
 	}
 
+	$(document).on('click','.slider-button',function() {
+		var affectedInput = $(this).parent().next('input[type=checkbox]').attr('id'),
+			affectedInputVal = (($('#'+affectedInput).prop('checked') == true) ? 'off' : 'on'),
+			affectedInputName = $('#'+affectedInput).prop('name'),
+			affectedForm = $(this).parents('form').attr('id');
+		if ($(this).text().toUpperCase() == 'NO') {
+			$(this).addClass('on').html('YES').parent().next('input[type="checkbox"]').prop('checked', true);
+		} else if ($(this).text().toUpperCase() == 'NEI') {
+			$(this).addClass('on').html('JA').parent().next('input[type="checkbox"]').prop('checked', true);
+		} else if ($(this).text().toUpperCase() == 'YES') {
+			$(this).removeClass('on').html('NO').parent().next('input[type="checkbox"]').prop('checked', false);
+		} else if ($(this).text().toUpperCase() == 'JA') {
+			$(this).removeClass('on').html('NEI').parent().next('input[type="checkbox"]').prop('checked', false);
+		}
+	})
+	
 	$('#add_user').click(function() {
 		var menupages = [];
 		$('[id^=userstartpage_] option').each(function() {
@@ -49,6 +65,16 @@ $(document).ready(function() {
 		$(this).prev('form').find('select').selectmenu({ width: '10em' });
 	})
 
+	$('.removeuser').click(function(e) {
+		e.preventDefault();
+		var $this = $(this),
+			getUser = $(this).next('form').find('input[type=hidden]').val();
+		$.post('update_userlist.php',{username:getUser,deleteuser:true}, function(data) {
+			data = $.parseJSON(data);
+			showUpdateInfo(''+data.content+'',''+data.infotype+'');
+			$this.parents('li').remove();
+		})
+	})
 
 	if (GetURLParameter() == '/userprofile') {
 		$('.deletefile').click(function(e) {

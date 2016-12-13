@@ -1,6 +1,6 @@
 .DS_Store
 setup_/*
-conf/.userlist*
+conf/*.userlist
 *2.php
 new_*.php
 old_*.php

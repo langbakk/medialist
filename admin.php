@@ -3,12 +3,35 @@
 $getconfigvars = file_exists('conf/config.php') ? file('conf/config.php', FILE_IGNORE_NEW_LINES) : '';
 $lines_in_configfile = file_exists('conf/config.php') ? count(file('conf/config.php')) : '';
 $currentvars = '';
-$list_of_setupnames = ['websitename','dbhost','dbport','dbname','dbusername','dbpassword','prefix','allow_public','allow_userlist','use_login','show_quotes','use_db','debug','rootfolder','main_support_email','unique_key'];
+$list_of_setupnames = ['websitename','dbhost','dbport','dbname','dbusername','dbpassword','prefix','allow_public','allow_userlist','use_login','show_quotes','use_db','debug','moderation_queue','rootfolder','main_support_email','unique_key'];
+$list_of_settings = ['allow_public','allow_userlist','use_login','show_quotes','use_db','debug','moderation_queue'];
 $menu_array = 	[0 => ['href'=>'#user_management_container','menutext'=>'User management'],
 				 1 => ['href'=>'#change_settings_container','menutext'=>'Change settings'],
 				 2 => ['href'=>'#setup_container','menutext'=>'Setup config file'],
 				 3 => ['href'=>'#htaccess_container','menutext'=>'Modify .htaccess']
 				];
+
+if (isset($_POST['settignsname']) || isset($_POST['configcreation'])) {
+	$writevars = '';
+	for ($i=0; $i < $lines_in_configfile; $i++) {
+		if (strstr($getconfigvars[$i], '=')) {
+			$first = strstr($getconfigvars[$i], '=', true);
+			$last = strstr($getconfigvars[$i], '=');
+			if (substr($first,0,1) == '$') {
+				$name = str_replace('$','',rtrim($first));
+				$writevar = isset($_POST[$name]) ? $_POST[$name] : '';
+				if (isset($_POST[$name])) {
+					$writevar = (((in_array($name,$list_of_settings) == true) && $writevar == 'on') ? 1 : (((in_array($name,$list_of_settings) == true) && $writevar == '') ? 0 : $writevar));
+					$getconfigvars[$i] = '$'.$name.' = \''.$writevar.'\';';
+				}
+			}
+		}
+		if (isset($_POST['configcreation'])) {
+			$writevars .= $getconfigvars[$i]."\n";
+			file_put_contents('conf/config.php', $writevars);
+		}
+	}
+}
 
 echo '<div class="container">
 	<h2>Control panel</h2>';
@@ -21,9 +44,109 @@ echo '<div class="container">
 	}
 	echo '</ul>';
 
-echo '<div id="setup_container" class="admincontainer">
+echo '<div id="change_settings_container" class="admincontainer">
+	<h2>Change settings</h2>
+		<form method="post" id="settingsform" class="configform" action="#settingsform">';
+		for ($i=0; $i < $lines_in_configfile; $i++) {
+			if (strstr($getconfigvars[$i], '=')) {
+				$first = strstr($getconfigvars[$i], '=', true);
+				$remove_content = array('=',' ','\'',';');
+				$replace_content = array('','','','');
+				$last = str_replace($remove_content,$replace_content,strstr($getconfigvars[$i], '='));
+				$settingsname = str_replace('$','',rtrim($first));
+				if (in_array($settingsname,$list_of_settings)) {
+					switch ($settingsname) {
+						case 'allow_public':
+							$label = 'Allow public access';
+							$desc = 'Allow for non logged in users to upload and view public files';
+							$required = 'required="required"';
+							$content = $last;
+							$checkbox = true;
+							$hidden = '';																
+							break;	
+						case 'allow_userlist':
+							$label = 'Allow showing userlist';
+							$desc = 'Allow for showing userlist of users who hasn\'t turned this off in their settings';
+							$required = 'required="required"';
+							$content = $last;
+							$checkbox = true;
+							$hidden = '';								
+							break;		
+						case 'use_login':
+							$label = 'Use login/registreing';
+							$desc = 'Allow for users to register and log in';
+							$required = 'required="required"';
+							$content = $last;
+							$checkbox = true;
+							$hidden = '';								
+							break;	
+						case 'debug':
+							$label = 'Show debug-messages';
+							$desc = 'Shows debug messages on different pages, and logs to log-folder. Should not be used on production site';
+							$required = 'required="required"';
+							$content = $last;
+							$checkbox = true;
+							$hidden = '';								
+							break;	
+						case 'show_quotes':
+							$label = 'Show quotes on Gallery-page';
+							$desc = 'Shows short quotes by famous people on the Gallery page';
+							$required = 'required="required"';
+							$content = $last;
+							$checkbox = true;
+							$hidden = '';								
+							break;	
+						case 'use_db':
+							$label = 'Use database';
+							$desc = 'Shows setup-information for database, and allows for database backend';
+							$required = 'required="required"';
+							$content = $last;
+							$checkbox = true;
+							$hidden = '';								
+							break;
+						case 'moderation_queue':
+							$label = 'Use moderation queue';
+							$desc = 'If this is on, every upload (apart from those by admins) are queued for moderation before posted on the page';
+							$required = 'required="required"';
+							$content = $last;
+							$checkbox = true;
+							$hidden = '';
+							break;
+					};
+					$setvar = (isset($_POST['settingschange'])) ? $_POST[$settingsname] : '';
+					if ($getconfigvars[$i] == '$'.$settingsname.' = \'\';') {
+						$getconfigvars[$i] = '$'.$settingsname.' = \''.$setvar.'\';';
+					}
+					if (!file_exists('conf/config.php')) {
+						if ($settignsname == 'inactive') {
+							$content = '600';
+						} elseif ($settingsname == 'rootfolder') {
+							$content = '/';
+						} else {
+							$content = '';
+						}
+					}
+echo '		<p class="'.$hidden.'">
+						<label class="left'.(($checkbox == true) ? ' checkboxlabel' : '').'" for="'.$settingsname.'"><i class="tooltiphover fa fa-question-circle"><span data-tooltip="'.$desc.'"></span></i> '.$label.'</label>';
+						if ($checkbox == true) {
+							echo '<span class="slider-frame"><span id="'.$settingsname.'_slider" class="'.(($content == 1) ? 'on' : '').' slider-button slider_checkbox">'.(($content == 1) ? 'YES' : 'NO').'</span></span>';
+							echo '<input class="slider_checkbox" type="checkbox" name="'.$settingsname.'_slider" id="'.$settingsname.'" '.(($content == 1) ? 'checked' : '').'>';
+						} else {
+						echo '<input class="configinput" type="text" id="'.$name.'" name="'.$settingsname.'" value="'.$content.'" '.$required.' tabindex="'.$i.'">';
+						}
+						echo '<span class="infobox right"><span class="left"></span></span>
+					</p>';
+					}
+				}
+			}
+			echo '<p class="buttoncontainer">
+					<input class="success button" type="submit" id="settingschange" name="settingschange" value="Change settings" tabindex="'.($i + 1).'">
+				</p>
+			</form>
+</div>
+<div id="setup_container" class="admincontainer">
 		<h2>Setup the config-file</h2>
-			<form method="post" id="configform" class="configform" action="/setup/process_setup.php">';
+			<form method="post" id="configform" class="configform" action="#setup_container">';
 
 			for ($i=0; $i < $lines_in_configfile; $i++) {
 				if (strstr($getconfigvars[$i], '=')) {
@@ -31,9 +154,9 @@ echo '<div id="setup_container" class="admincontainer">
 					$remove_content = array('=',' ','\'',';');
 					$replace_content = array('','','','');
 					$last = str_replace($remove_content,$replace_content,strstr($getconfigvars[$i], '='));
-					$name = str_replace('$','',rtrim($first));
-					if (in_array($name,$list_of_setupnames)) {
-						switch ($name) {
+					$configname = str_replace('$','',rtrim($first));
+					if (in_array($configname,$list_of_setupnames)) {
+						switch ($configname) {
 							case 'websitename':
 								$label = 'Website name';
 								$desc = 'Enter the name used for the website';
@@ -45,10 +168,10 @@ echo '<div id="setup_container" class="admincontainer">
 							case 'dbhost':
 								$label = 'Database Hostname';
 								$desc  = 'Enter the hostname (or IP) for your database';
-								$required = 'required="required"';
+								$required = ($use_db == 1) ? 'required="required"' : '';
 								$content = $last;
 								$checkbox = false;
-								$hidden = (Config::read('use_db') == true) ? '' : 'hidden';
+								$hidden = ($use_db == 1) ? '' : 'hidden';
 								break;
 							case 'dbport':
 								$label = 'Database Port';
@@ -56,23 +179,23 @@ echo '<div id="setup_container" class="admincontainer">
 								$required = '';
 								$content = $last;
 								$checkbox = false;
-								$hidden = (Config::read('use_db') == true) ? '' : 'hidden';
+								$hidden = ($use_db == 1) ? '' : 'hidden';
 								break;
 							case 'dbname':
 								$label = 'Database Name';
 								$desc  = 'Enter your database name. If you don\'t know, you can try using \'localhost\'';
-								$required = 'required="required"';
+								$required = ($use_db == 1) ? 'required="required"' : '';
 								$content = $last;
 								$checkbox = false;								
-								$hidden = (Config::read('use_db') == true) ? '' : 'hidden';								
+								$hidden = ($use_db == 1) ? '' : 'hidden';								
 								break;
 							case 'dbusername':
 								$label = 'Database Username';
 								$desc  = 'Enter the username for your database';
-								$required = 'required="required"';
+								$required = ($use_db == 1) ? 'required="required"' : '';
 								$content = $last;
 								$checkbox = false;								
-								$hidden = (Config::read('use_db') == true) ? '' : 'hidden';								
+								$hidden = ($use_db == 1) ? '' : 'hidden';								
 								break;
 							case 'dbpassword':
 								$label = 'Database Password';
@@ -80,7 +203,7 @@ echo '<div id="setup_container" class="admincontainer">
 								$required = '';
 								$content = $last;
 								$checkbox = false;	
-								$hidden = (Config::read('use_db') == true) ? '' : 'hidden';															
+								$hidden = ($use_db == 1) ? '' : 'hidden';															
 								break;
 							case 'prefix':
 								$label = 'Database table-prefix';
@@ -88,7 +211,7 @@ echo '<div id="setup_container" class="admincontainer">
 								$required = '';
 								$content = $last;
 								$checkbox = false;								
-								$hidden = (Config::read('use_db') == true) ? '' : 'hidden';								
+								$hidden = ($use_db == 1) ? '' : 'hidden';								
 								break;
 							case 'allow_public':
 								$label = 'Allow public access';
@@ -138,6 +261,14 @@ echo '<div id="setup_container" class="admincontainer">
 								$checkbox = true;
 								$hidden = '';								
 								break;
+							case 'moderation_queue':
+								$label = 'Use moderation queue';
+								$desc = 'If this is on, every upload (apart from those by admins) are queued for moderation before posted on the page';
+								$required = 'required="required"';
+								$content = $last;
+								$checkbox = true;
+								$hidden = '';
+								break;								
 							case 'rootfolder':
 								$label = 'Installation folder on webhost';
 								$desc  = 'If this is the root folder, leave it as /, if not, enter the folder in the following format: /installfolder/';
@@ -163,25 +294,36 @@ echo '<div id="setup_container" class="admincontainer">
 								$checkbox = false;	
 								$hidden = '';																
 						};
-					$setvar = (isset($_POST['configcreation'])) ? $_POST[$name] : '';
-					if ($getconfigvars[$i] == '$'.$name.' = \'\';') {
-						$getconfigvars[$i] = '$'.$name.' = \''.$setvar.'\';';
+						$_POST['allow_public'] = isset($_POST['allow_public']) ? $_POST['allow_public'] : 0;
+						$_POST['allow_userlist'] = isset($_POST['allow_userlist']) ? $_POST['allow_userlist'] : 0;
+						$_POST['use_login'] = isset($_POST['use_login']) ? $_POST['use_login'] : 0;
+						$_POST['debug'] = isset($_POST['debug']) ? $_POST['debug'] : 0;
+						$_POST['show_quotes'] = isset($_POST['show_quotes']) ? $_POST['show_quotes'] : 0;
+						$_POST['use_db'] = isset($_POST['use_db']) ? $_POST['use_db'] : 0;
+						$_POST['moderation_queue'] = isset($_POST['moderation_queue']) ? $_POST['moderation_queue'] : 0;
+					$setvar = (isset($_POST['configcreation'])) ? $_POST[$configname] : '';
+
+					if ($getconfigvars[$i] == '$'.$configname.' = \'\';') {
+						$getconfigvars[$i] = '$'.$configname.' = \''.$setvar.'\';';
 					}
 					if (!file_exists('conf/config.php')) {
-						if ($name == 'inactive') {
+						if ($configname == 'inactive') {
 							$content = '600';
-						} elseif ($name == 'rootfolder') {
+						} elseif ($configname == 'rootfolder') {
 							$content = '/';
 						} else {
 							$content = '';
 						}
 					}
 echo '		<p class="'.$hidden.'">
-						<label class="left'.(($checkbox == true) ? ' checkboxlabel' : '').'" for="'.$name.'"><span data-tooltip="'.$desc.'"><i class="fa fa-question-circle"></i></span> '.$label.'</label>';
+						<label class="left'.(($checkbox == true) ? ' checkboxlabel' : '').'" for="'.$configname.'"><i class="tooltiphover fa fa-question-circle"><span data-tooltip="'.$desc.'"></span></i> '.$label.'</label>';
 						if ($checkbox == true) {
-							echo '<input class="configinput" type="checkbox" id="'.$name.'" name="'.$name.'" '.$required.' '.(($content == 'true') ? 'checked' : '').'>';
+							echo '<span class="slider-frame"><span id="'.$configname.'_slider" class="'.(($content == 1) ? 'on' : '').' slider-button slider_checkbox">'.(($content == 1) ? 'YES' : 'NO').'</span></span>';
+							echo '<input class="slider_checkbox" type="checkbox" name="'.$configname.'" id="'.$configname.'" '.(($content == 1) ? 'checked' : '').'>';
+
+							// echo '<input class="configinput" type="checkbox" id="'.$configname.'" name="'.$configname.'" '.$required.' '.(($content == 'true') ? 'checked' : '').'>';
 						} else {
-						echo '<input class="configinput" type="text" id="'.$name.'" name="'.$name.'" value="'.$content.'" '.$required.' tabindex="'.$i.'">';
+						echo '<input class="configinput" type="text" id="'.$configname.'" name="'.$configname.'" value="'.$content.'" '.$required.' tabindex="'.$i.'">';
 						}
 						echo '<span class="infobox right"><span class="left"></span></span>
 					</p>';
@@ -203,7 +345,7 @@ echo '			<p class="buttoncontainer">
 			foreach ($user_array as $uakey => $uavalue) {
 				$c++;
 				echo '<li><form method="post" action="update_userlist.php" class="removeuser">
-				 	<label title="Delete user"><i class="fa fa-remove"></i></label>
+				 	<label><i class="tooltiphover fa fa-remove"><span data-tooltip="Delete user"></span></i></label>
 				 	</form>';
 				echo '<form method="post" action="update_userlist.php" class="user_management_form">';
 				$user = explode('//',$uavalue);

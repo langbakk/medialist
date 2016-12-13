@@ -161,34 +161,42 @@ body {
 .fa-file-code-o::before {
   content: ""; }
 
-[data-tooltip] {
+.tooltiphover, .tooltiphover [data-tooltip] {
   display: inline;
   position: relative;
-  cursor: pointer; }
+  cursor: pointer;
+  font-weight: bold; }
 
-[data-tooltip]:hover::after, [data-tooltip]:focus::after {
+.tooltiphover:hover [data-tooltip]::after, .tooltiphover:focus [data-tooltip]::after {
   background: #F9FAF8;
   border-radius: .2em;
   bottom: 2em;
   color: #000;
   content: attr(data-tooltip);
-  left: 20%;
+  left: -2em;
   padding: .4em 1em;
   position: absolute;
   z-index: 100;
   max-width: 20em;
   min-width: 15em;
-  line-height: 1em; }
+  line-height: 1em;
+  font-family: sans-serif; }
 
-[data-tooltip]:hover::before, [data-tooltip]:focus::before {
+#user_management_container [data-tooltip]:hover::after, #user_management_container [data-tooltip]:focus::after {
+  bottom: 2.75em; }
+
+.tooltiphover:hover [data-tooltip]::before, .tooltiphover:focus [data-tooltip]::before {
   border: solid;
   border-color: #F9FAF8 transparent;
   border-width: .5em .5em 0 .5em;
   bottom: 1.5em;
   content: '';
-  left: .2em;
+  left: -1em;
   position: absolute;
   z-index: 100; }
+
+#user_management_container [data-tooltip]:hover::before, #user_management_container [data-tooltip]:focus::before {
+  bottom: 2.25em; }
 
 .grid-sizer, .grid-item {
   box-sizing: border-box;
@@ -598,6 +606,9 @@ textarea {
   margin-top: -3.5em;
   margin-left: .15em; }
 
+#user_management_container ul, #user_management_container li {
+  overflow: visible; }
+
 #userlist_body li.heading {
   position: relative;
   line-height: 1.6em; }
@@ -685,17 +696,69 @@ label {
 .checkboxlabel {
   line-height: initial; }
 
-#configform {
-  max-width: 80%; }
+#configform, #settingsform {
+  max-width: 60%; }
 
-#configform p {
+#configform p, #settingsform p {
   margin: 0; }
 
-#configform p label {
+#configform p label, #settingsform p label {
   max-width: 20em;
   min-width: 15em;
   text-align: left;
-  text-align-last: initial; }
+  text-align-last: initial;
+  line-height: 2.3em; }
+
+#settingsform {
+  max-width: 40%; }
+
+.slider-frame {
+  background-color: #222;
+  border-radius: 0.3em;
+  display: block;
+  height: 1.6em;
+  width: 5.3em;
+  margin: 0.2em auto 0 auto;
+  display: inline-block; }
+  .slider-frame + input[type=checkbox] {
+    visibility: hidden;
+    min-width: 5px;
+    position: absolute; }
+
+.slider-button {
+  background: #fa4444;
+  border-radius: 0.3em 0 0 0.3em;
+  color: #FFF;
+  cursor: pointer;
+  display: block !important;
+  font-size: 0.8em;
+  font-weight: bold;
+  height: 2em;
+  line-height: 2em;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  -webkit-transition: all 0.25s ease-in-out;
+  -moz-transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
+  width: 50%; }
+
+.slider-button.on {
+  margin-left: 50%;
+  background: #508c14;
+  border-radius: 0 0.3em 0.3em 0; }
+
+.slider-button:before {
+  position: absolute;
+  display: block;
+  width: 3.3em;
+  height: 1em;
+  background: rgba(255, 255, 255, 0.25);
+  content: '';
+  border-radius: .3em 0 0 0; }
+
+.slider-button.on::before {
+  border-radius: 0 0.3em 0 0; }
 
 #upload, .content {
   text-align: center;
