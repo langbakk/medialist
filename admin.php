@@ -11,7 +11,15 @@ $menu_array = 	[0 => ['href'=>'#user_management_container','menutext'=>'User man
 				 3 => ['href'=>'#htaccess_container','menutext'=>'Modify .htaccess']
 				];
 
-if (isset($_POST['settignsname']) || isset($_POST['configcreation'])) {
+if (isset($_POST['settingschange']) || isset($_POST['configcreation'])) {
+	$_POST['allow_public'] = isset($_POST['allow_public']) ? $_POST['allow_public'] : 0;
+	$_POST['allow_userlist'] = isset($_POST['allow_userlist']) ? $_POST['allow_userlist'] : 0;
+	$_POST['use_login'] = isset($_POST['use_login']) ? $_POST['use_login'] : 0;
+	$_POST['debug'] = isset($_POST['debug']) ? $_POST['debug'] : 0;
+	$_POST['show_quotes'] = isset($_POST['show_quotes']) ? $_POST['show_quotes'] : 0;
+	$_POST['use_db'] = isset($_POST['use_db']) ? $_POST['use_db'] : 0;
+	$_POST['moderation_queue'] = isset($_POST['moderation_queue']) ? $_POST['moderation_queue'] : 0;
+
 	$writevars = '';
 	for ($i=0; $i < $lines_in_configfile; $i++) {
 		if (strstr($getconfigvars[$i], '=')) {
@@ -21,15 +29,19 @@ if (isset($_POST['settignsname']) || isset($_POST['configcreation'])) {
 				$name = str_replace('$','',rtrim($first));
 				$writevar = isset($_POST[$name]) ? $_POST[$name] : '';
 				if (isset($_POST[$name])) {
-					$writevar = (((in_array($name,$list_of_settings) == true) && $writevar == 'on') ? 1 : (((in_array($name,$list_of_settings) == true) && $writevar == '') ? 0 : $writevar));
-					$getconfigvars[$i] = '$'.$name.' = \''.$writevar.'\';';
+					$writevar = (((in_array($name,$list_of_settings) === true) && $writevar === 'on') ? 1 : (((in_array($name,$list_of_settings) === true) && ($writevar == '' || $writevar == 0)) ? 0 : $writevar));
+					if ($writevar == 1 || $writevar == 0) {
+						$getconfigvars[$i] = '$'.$name.' = '.$writevar.';';
+					} else {
+						$getconfigvars[$i] = '$'.$name.' = \''.$writevar.'\';';	
+					}
 				}
 			}
 		}
-		if (isset($_POST['configcreation'])) {
+		// if (isset($_POST['configcreation'])) {
 			$writevars .= $getconfigvars[$i]."\n";
 			file_put_contents('conf/config.php', $writevars);
-		}
+		// }
 	}
 }
 
@@ -46,7 +58,7 @@ echo '<div class="container">
 
 echo '<div id="change_settings_container" class="admincontainer">
 	<h2>Change settings</h2>
-		<form method="post" id="settingsform" class="configform" action="#settingsform">';
+		<form method="post" id="settingsform" class="configform" action="#change_settings_container">';
 		for ($i=0; $i < $lines_in_configfile; $i++) {
 			if (strstr($getconfigvars[$i], '=')) {
 				$first = strstr($getconfigvars[$i], '=', true);
@@ -130,7 +142,7 @@ echo '		<p class="'.$hidden.'">
 						<label class="left'.(($checkbox == true) ? ' checkboxlabel' : '').'" for="'.$settingsname.'"><i class="tooltiphover fa fa-question-circle"><span data-tooltip="'.$desc.'"></span></i> '.$label.'</label>';
 						if ($checkbox == true) {
 							echo '<span class="slider-frame"><span id="'.$settingsname.'_slider" class="'.(($content == 1) ? 'on' : '').' slider-button slider_checkbox">'.(($content == 1) ? 'YES' : 'NO').'</span></span>';
-							echo '<input class="slider_checkbox" type="checkbox" name="'.$settingsname.'_slider" id="'.$settingsname.'" '.(($content == 1) ? 'checked' : '').'>';
+							echo '<input class="slider_checkbox" type="checkbox" name="'.$settingsname.'" id="'.$settingsname.'" '.(($content == 1) ? 'checked' : '').'>';
 						} else {
 						echo '<input class="configinput" type="text" id="'.$name.'" name="'.$settingsname.'" value="'.$content.'" '.$required.' tabindex="'.$i.'">';
 						}
@@ -164,6 +176,7 @@ echo '		<p class="'.$hidden.'">
 								$content = $last;
 								$checkbox = false;
 								$hidden = '';
+								$class = '';
 								break;
 							case 'dbhost':
 								$label = 'Database Hostname';
@@ -172,6 +185,7 @@ echo '		<p class="'.$hidden.'">
 								$content = $last;
 								$checkbox = false;
 								$hidden = ($use_db == 1) ? '' : 'hidden';
+								$class = 'dbinput';
 								break;
 							case 'dbport':
 								$label = 'Database Port';
@@ -180,6 +194,7 @@ echo '		<p class="'.$hidden.'">
 								$content = $last;
 								$checkbox = false;
 								$hidden = ($use_db == 1) ? '' : 'hidden';
+								$class = 'dbinput';
 								break;
 							case 'dbname':
 								$label = 'Database Name';
@@ -188,6 +203,7 @@ echo '		<p class="'.$hidden.'">
 								$content = $last;
 								$checkbox = false;								
 								$hidden = ($use_db == 1) ? '' : 'hidden';								
+								$class = 'dbinput';
 								break;
 							case 'dbusername':
 								$label = 'Database Username';
@@ -195,7 +211,8 @@ echo '		<p class="'.$hidden.'">
 								$required = ($use_db == 1) ? 'required="required"' : '';
 								$content = $last;
 								$checkbox = false;								
-								$hidden = ($use_db == 1) ? '' : 'hidden';								
+								$hidden = ($use_db == 1) ? '' : 'hidden';	
+								$class = 'dbinput';															
 								break;
 							case 'dbpassword':
 								$label = 'Database Password';
@@ -203,7 +220,8 @@ echo '		<p class="'.$hidden.'">
 								$required = '';
 								$content = $last;
 								$checkbox = false;	
-								$hidden = ($use_db == 1) ? '' : 'hidden';															
+								$hidden = ($use_db == 1) ? '' : 'hidden';
+								$class = 'dbinput';								
 								break;
 							case 'prefix':
 								$label = 'Database table-prefix';
@@ -211,7 +229,8 @@ echo '		<p class="'.$hidden.'">
 								$required = '';
 								$content = $last;
 								$checkbox = false;								
-								$hidden = ($use_db == 1) ? '' : 'hidden';								
+								$hidden = ($use_db == 1) ? '' : 'hidden';
+								$class = 'dbinput';								
 								break;
 							case 'allow_public':
 								$label = 'Allow public access';
@@ -219,7 +238,8 @@ echo '		<p class="'.$hidden.'">
 								$required = 'required="required"';
 								$content = $last;
 								$checkbox = true;
-								$hidden = '';																
+								$hidden = '';
+								$class = '';																
 								break;	
 							case 'allow_userlist':
 								$label = 'Allow showing userlist';
@@ -228,6 +248,7 @@ echo '		<p class="'.$hidden.'">
 								$content = $last;
 								$checkbox = true;
 								$hidden = '';								
+								$class = '';								
 								break;		
 							case 'use_login':
 								$label = 'Use login/registreing';
@@ -235,7 +256,8 @@ echo '		<p class="'.$hidden.'">
 								$required = 'required="required"';
 								$content = $last;
 								$checkbox = true;
-								$hidden = '';								
+								$hidden = '';
+								$class = '';																
 								break;	
 							case 'debug':
 								$label = 'Show debug-messages';
@@ -243,7 +265,8 @@ echo '		<p class="'.$hidden.'">
 								$required = 'required="required"';
 								$content = $last;
 								$checkbox = true;
-								$hidden = '';								
+								$hidden = '';	
+								$class = '';															
 								break;	
 							case 'show_quotes':
 								$label = 'Show quotes on Gallery-page';
@@ -251,7 +274,8 @@ echo '		<p class="'.$hidden.'">
 								$required = 'required="required"';
 								$content = $last;
 								$checkbox = true;
-								$hidden = '';								
+								$hidden = '';
+								$class = '';																
 								break;	
 							case 'use_db':
 								$label = 'Use database';
@@ -259,7 +283,8 @@ echo '		<p class="'.$hidden.'">
 								$required = 'required="required"';
 								$content = $last;
 								$checkbox = true;
-								$hidden = '';								
+								$hidden = '';	
+								$class = '';															
 								break;
 							case 'moderation_queue':
 								$label = 'Use moderation queue';
@@ -268,6 +293,7 @@ echo '		<p class="'.$hidden.'">
 								$content = $last;
 								$checkbox = true;
 								$hidden = '';
+								$class = '';								
 								break;								
 							case 'rootfolder':
 								$label = 'Installation folder on webhost';
@@ -275,7 +301,8 @@ echo '		<p class="'.$hidden.'">
 								$required = 'required="required"';
 								$content = !empty($last) ? $last : '/';
 								$checkbox = false;	
-								$hidden = '';								
+								$hidden = '';	
+								$class = '';															
 								break;
 							case 'main_support_email':
 								$label = 'Support Email';
@@ -283,7 +310,8 @@ echo '		<p class="'.$hidden.'">
 								$required = 'required="required"';
 								$content = $last;
 								$checkbox = false;	
-								$hidden = '';								
+								$hidden = '';
+								$class = '';																
 								break;
 							case 'unique_key':
 								$label = 'Unique encryption key';
@@ -292,15 +320,16 @@ echo '		<p class="'.$hidden.'">
 								$randomkey = generateRandomString(true,true,true,'',20);
 								$content = !empty($last) ? $last : $randomkey;
 								$checkbox = false;	
-								$hidden = '';																
+								$hidden = '';	
+								$class = '';																							
 						};
-						$_POST['allow_public'] = isset($_POST['allow_public']) ? $_POST['allow_public'] : 0;
-						$_POST['allow_userlist'] = isset($_POST['allow_userlist']) ? $_POST['allow_userlist'] : 0;
-						$_POST['use_login'] = isset($_POST['use_login']) ? $_POST['use_login'] : 0;
-						$_POST['debug'] = isset($_POST['debug']) ? $_POST['debug'] : 0;
-						$_POST['show_quotes'] = isset($_POST['show_quotes']) ? $_POST['show_quotes'] : 0;
-						$_POST['use_db'] = isset($_POST['use_db']) ? $_POST['use_db'] : 0;
-						$_POST['moderation_queue'] = isset($_POST['moderation_queue']) ? $_POST['moderation_queue'] : 0;
+						// $_POST['allow_public'] = isset($_POST['allow_public']) ? $_POST['allow_public'] : 0;
+						// $_POST['allow_userlist'] = isset($_POST['allow_userlist']) ? $_POST['allow_userlist'] : 0;
+						// $_POST['use_login'] = isset($_POST['use_login']) ? $_POST['use_login'] : 0;
+						// $_POST['debug'] = isset($_POST['debug']) ? $_POST['debug'] : 0;
+						// $_POST['show_quotes'] = isset($_POST['show_quotes']) ? $_POST['show_quotes'] : 0;
+						// $_POST['use_db'] = isset($_POST['use_db']) ? $_POST['use_db'] : 0;
+						// $_POST['moderation_queue'] = isset($_POST['moderation_queue']) ? $_POST['moderation_queue'] : 0;
 					$setvar = (isset($_POST['configcreation'])) ? $_POST[$configname] : '';
 
 					if ($getconfigvars[$i] == '$'.$configname.' = \'\';') {
@@ -315,7 +344,7 @@ echo '		<p class="'.$hidden.'">
 							$content = '';
 						}
 					}
-echo '		<p class="'.$hidden.'">
+echo '		<p class="'.$hidden.' '.$class.'">
 						<label class="left'.(($checkbox == true) ? ' checkboxlabel' : '').'" for="'.$configname.'"><i class="tooltiphover fa fa-question-circle"><span data-tooltip="'.$desc.'"></span></i> '.$label.'</label>';
 						if ($checkbox == true) {
 							echo '<span class="slider-frame"><span id="'.$configname.'_slider" class="'.(($content == 1) ? 'on' : '').' slider-button slider_checkbox">'.(($content == 1) ? 'YES' : 'NO').'</span></span>';

@@ -13,11 +13,12 @@ if ($isloggedin) {
 
 for ($i = 0; $i < count($user_array); $i++) {
 	$exploded_user_array = explode('//',$user_array[$i]);
-	$user_exist = ((!$isloggedin && ($allow_public == true) && !isset($_GET['user'])) ? false : ((isset($_GET['user']) && $_GET['user'] == 'public' && ($allow_public == true)) ? true : (($username == trim($exploded_user_array[0]).'/') ? true : false)));
+	$user_exist = ((!$isloggedin && ($allow_public == true) && !isset($_GET['user'])) ? true : ((isset($_GET['user']) && $_GET['user'] == 'public' && ($allow_public == true)) ? true : (($username == trim($exploded_user_array[0]).'/') ? true : false)));
 	if ($user_exist == true) {
 		break;
 	}
 }
+
 
 if (!is_dir($userpath.$username)) {
 	mkdir($userpath.$username, 0744, true);

@@ -33,6 +33,16 @@ $(document).ready(function() {
 			affectedInputVal = (($('#'+affectedInput).prop('checked') == true) ? 'off' : 'on'),
 			affectedInputName = $('#'+affectedInput).prop('name'),
 			affectedForm = $(this).parents('form').attr('id');
+			if (affectedInputVal == 'off') {
+				$('#'+affectedInput).removeAttr('checked');
+				if (affectedInput == 'use_db') {
+					$('.dbinput').each(function() {
+						$(this).addClass('hidden').find('input').removeAttr('required');
+					})
+				}
+			} else {
+				$('#'+affectedInput).prop('checked',true);
+			}
 		if ($(this).text().toUpperCase() == 'NO') {
 			$(this).addClass('on').html('YES').parent().next('input[type="checkbox"]').prop('checked', true);
 		} else if ($(this).text().toUpperCase() == 'NEI') {
@@ -257,7 +267,7 @@ $(document).ready(function() {
 	
 	if (GetURLParameter() == '/gallery') {
 		if ($('.container > #pictures_list').length > 0) {
-			var endResult = ($('#pictures_list li').length * 10) + 10;
+			var endResult = $('#pictures_list li').length * 10;
 			$('#pictures_list').parents('.container').css(({'max-width':endResult+'em','min-width':'20em'}));
 		}
 	}

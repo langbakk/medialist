@@ -301,7 +301,7 @@ li > img {
   vertical-align: bottom;
   border: .1em solid white; }
 
-li span:not(.public_sharename):not(.filename):not(.filesize):not(.filelist_image):not(.labeltext):not(.ui-selectmenu-button):not(.ui-selectmenu-button > span), li .usercontrols {
+li span:not(.public_sharename):not(.filename):not(.filesize):not(.filelist_image):not(.labeltext):not(.ui-selectmenu-button):not(.ui-selectmenu-button > span) {
   display: block;
   position: absolute;
   top: 0;
@@ -313,7 +313,11 @@ li span a, li .usercontrols a {
   padding: 0 .3em; }
 
 li .usercontrols {
-  line-height: 2em; }
+  line-height: 2em;
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0; }
   li .usercontrols .approvefile .fa-check {
     color: #508c14; }
 
@@ -338,7 +342,7 @@ li .usercontrols form {
 [id$='_list'] li .usercontrols, #user_filelist li .usercontrols {
   display: none; }
 
-[id$='_list'] li:hover .usercontrols, #user_filelist li:hover .usercontrols, [id$='_list'] li:focus .usercontrols, #user_filelist li:focus .usercontrols {
+[id$='_list'] li:hover .usercontrols {
   display: block;
   z-index: 1000; }
 
@@ -1175,9 +1179,6 @@ label {
 
 .dropzone .dz-preview.dz-file-preview .dz-details {
   opacity: 1; }
-
-.dropzone .dz-preview.dz-image-preview {
-  background: #444; }
 
 .dropzone .dz-preview.dz-image-preview .dz-details {
   -webkit-transition: opacity .2s linear;

@@ -9,7 +9,7 @@ if (isset($_POST['submit_logout'])) {
 		session_unset();
 		header('refresh: 0');
 } elseif (isset($_POST['submit_login']) && $username != '' && $password != '') {
-	if ($use_db === false) {
+	if ($use_db === 0) {
 		$success = false;
 		for ($i = 0; $i < count($user_array); $i++) {
 			$exploded_user_array = explode('//',$user_array[$i]);
@@ -55,7 +55,7 @@ if (isset($_POST['submit_logout'])) {
 	}
 } 
 
-if (Config::read('moderation_queue') == true) {
+if (Config::read('moderation_queue') === 1) {
 	if (!is_dir($userpath.'moderation/')) {
 		mkdir($userpath.'moderation/', 0744, true);
 	}
@@ -73,7 +73,7 @@ if (Config::read('moderation_queue') == true) {
 }	
 
 if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == false) || !isset($_SESSION['loggedin'])) {
-		if ($allow_public == true && !$isloggedin) {
+		if ($allow_public === 1 && !$isloggedin) {
 		echo '<p class="messagebox info visible remove_box">'.mb_ucfirst(__LOGIN_INFO_MESSAGE).'</p>';
 	}
 echo '<h2>'.str_replace(' ','',mb_ucfirst(__LOGIN)).'</h2>
