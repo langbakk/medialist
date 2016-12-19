@@ -1409,11 +1409,10 @@ label {
   margin-top: .5em;
   transform: translate(-50%, -50%);
   z-index: 7000;
-  padding: 1.5em;
+  padding: .5em;
   background: #000;
   border: 1px solid #AAA;
-  box-sizing: border-box;
-  height: 90%; }
+  box-sizing: border-box; }
 
 #lightbox_container, #lightbox_container img {
   max-height: 100%;

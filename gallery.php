@@ -2,10 +2,6 @@
 
 $original_username = $username;
 $username = (isset($_GET['user'])) ? $_GET['user'].'/' : $username;
-// $exploded_user_array = explode('//',$user_array[$i]);
-// $username_exist = false;
-// var_dump($exploded_user_array);
-// if ($isloggedin && ($username == trim($exploded_user_array[0])) &
 
 if ($isloggedin) {
 	echo '<span id="username_view">You\'re viewing: <i>'.explode('/',$username)[0].'</i></span>';
@@ -18,7 +14,6 @@ for ($i = 0; $i < count($user_array); $i++) {
 		break;
 	}
 }
-
 
 if (!is_dir($userpath.$username)) {
 	mkdir($userpath.$username, 0744, true);
@@ -94,12 +89,12 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 									<i class="fa fa-share-alt" title="Share file"></i>
 								</a>';
 								if (($isloggedin && $isadmin) || ($isloggedin && $original_username == $username) || (is_array($document_name) && strtolower($document_name[0]) == strtolower(explode('/',$original_username)[0]))) {
-								$usercontrols .= '<a class="deletefile" href="'.$baseurl.'deletefile.php">
+								$usercontrols .= '<a class="deletefile" href="'.$processpath.'deletefile.php">
 									<i class="fa fa-remove" title="Delete file"></i>
 								</a>';
 								}
 								if ((($isloggedin && $isadmin) || ($original_username == $username)) && $username != 'public/') {
-								$usercontrols .= '<form method="post" action="create_public_link.php"><input type="checkbox" id="'.$folder.'_'.$id_number.'" class="hidden make_public" title="Make public" '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 'checked' : '')).' value="'.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 1 : 0)).'"><label title="'.(is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 'Undo &quot;make file public&quot;' : 'Make file public').'" for="'.$folder.'_'.$id_number.'"><i class="makepublic fa '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 'fa-check-square' : 'fa-square')).'"></i></label></form>';
+								$usercontrols .= '<form method="post" action="'.$processpath.'create_public_link.php.php"><input type="checkbox" id="'.$folder.'_'.$id_number.'" class="hidden make_public" title="Make public" '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 'checked' : '')).' value="'.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 1 : 0)).'"><label title="'.(is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 'Undo &quot;make file public&quot;' : 'Make file public').'" for="'.$folder.'_'.$id_number.'"><i class="makepublic fa '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$val) ? 'fa-check-square' : 'fa-square')).'"></i></label></form>';
 								}
 							$usercontrols .= '</div>';
 							if (getExtension($val) && ($folder == 'documents' || $folder == 'audio' || $folder == 'applications')) {
@@ -155,5 +150,4 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 		include 'quotes.php';
 	}
 }
-//echo '</div>';
 ?>

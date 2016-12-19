@@ -1,7 +1,5 @@
 <?php
 if (!session_id()) { session_start(); };
-require_once('conf/config.php');
-require_once('functions.php');
 
 if ($isloggedin) {
 
@@ -36,11 +34,11 @@ echo '<div class="container">
 	$currentsorttype = '<span class="sortlinks"><span class="sortlinktext">Filelist is currently sorted by </span>'.((isset($_COOKIE['setsort']) && $_COOKIE['setsort'] == 'sortbysize') ? 'size' : ((isset($_COOKIE['setsort']) && $_COOKIE['setsort'] == 'sortbydate') ? 'date' : ((isset($_COOKIE['setsort']) && $_COOKIE['setsort'] == 'sortbyname') || !isset($_COOKIE['setsort']) ? 'name' : ''))).'</span>';
 
 	if (isset($_COOKIE['setsort']) && $_COOKIE['setsort'] == 'sortbydate') {
-		$output = '<a href="update_cookie.php?setsort=sortbysize"><span class="sortlinktext">Sort by </span>size</a></span>'.$currentsorttype.'<span class="sortlinks"><a href="update_cookie.php?setsort=sortbyname"><span class="sortlinktext">Sort by </span>name</a>';
+		$output = '<a href="'.$processpath.'update_cookie.php?setsort=sortbysize"><span class="sortlinktext">Sort by </span>size</a></span>'.$currentsorttype.'<span class="sortlinks"><a href="'.$processpath.'update_cookie.php?setsort=sortbyname"><span class="sortlinktext">Sort by </span>name</a>';
 	} elseif (isset($_COOKIE['setsort']) && $_COOKIE['setsort'] == 'sortbysize') {
-		$output = '<a href="update_cookie.php?setsort=sortbyname"><span class="sortlinktext">Sort by </span>name</a></span>'.$currentsorttype.'<span class="sortlinks"><a href="update_cookie.php?setsort=sortbydate"><span class="sortlinktext">Sort by </span>date</a>';
+		$output = '<a href="'.$processpath.'update_cookie.php?setsort=sortbyname"><span class="sortlinktext">Sort by </span>name</a></span>'.$currentsorttype.'<span class="sortlinks"><a href="'.$processpath.'update_cookie.php?setsort=sortbydate"><span class="sortlinktext">Sort by </span>date</a>';
 	} else {
-		$output = '<a href="update_cookie.php?setsort=sortbysize"><span class="sortlinktext">Sort by </span>size</a></span>'.$currentsorttype.'<span class="sortlinks"><a href="update_cookie.php?setsort=sortbydate"><span class="sortlinktext">Sort by </span>date</a>';
+		$output = '<a href="'.$processpath.'update_cookie.php?setsort=sortbysize"><span class="sortlinktext">Sort by </span>size</a></span>'.$currentsorttype.'<span class="sortlinks"><a href="'.$processpath.'update_cookie.php?setsort=sortbydate"><span class="sortlinktext">Sort by </span>date</a>';
 	}
 	echo '<span class="sortlinks">'.$output.'</span></div>';
 }

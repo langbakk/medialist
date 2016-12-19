@@ -1,6 +1,6 @@
 <?php
-require_once('conf/config.php');
-require_once('functions.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/conf/config.php');
+require_once($processpath.'functions.php');
 
 // var_dump($_POST);
 
@@ -12,6 +12,7 @@ if ($_SERVER['HTTP_REFERER'] == $baseurl.'admin') {
 			$c++;
 			$user = explode('//',$uavalue);
 			if (isset($_POST['submit_userchanges']) && (trim($_POST['username']) == trim($user[0]))) {
+				// echo 'this happened';
 				$updated_username = isset($_POST['username']) ? trim($_POST['username']) : trim($user[0]);
 				$updated_password = isset($_POST['password']) ? $_POST['password'] : trim($user[1]);
 				$updated_usertype = isset($_POST['usertype']) ? $_POST['usertype'] : trim($user[2]);
@@ -23,7 +24,7 @@ if ($_SERVER['HTTP_REFERER'] == $baseurl.'admin') {
 				$newuserlist .= $uavalue."\r\n";	
 			}
 		}
-		if (isset($_POST['submit_userchanges']) &&  !in_array(trim($_POST['username']),$user_array)) {
+		if (isset($_POST['submit_userchanges']) && (trim($_POST['username']) != trim($user[0]))) {
 			$updated_username = isset($_POST['username']) ? trim($_POST['username']) : '';
 			$updated_password = isset($_POST['password']) ? valueCrypt::vC_pwHash($_POST['password']) : '';
 			$updated_usertype = isset($_POST['usertype']) ? $_POST['usertype'] : '';
@@ -32,8 +33,8 @@ if ($_SERVER['HTTP_REFERER'] == $baseurl.'admin') {
 			$updated_userstartpage = (isset($_POST['userstartpage'])) ? strtolower(trim($_POST['userstartpage'])) : '';
 			$newuserlist .= $updated_username.' // '.$updated_password.' // '.$updated_usertype.' // '.$updated_userlistlink.' // '.$updated_userdiskspace.' // '.$updated_userstartpage;
 		}
-		unlink('conf/.userlist');
-		file_put_contents('conf/.userlist', $newuserlist);
+		unlink($confpath.'.userlist');
+		file_put_contents($confpath.'.userlist', $newuserlist);
 	} elseif (isset($_POST['deleteuser']) && isset($_POST['username'])) {
 		$newuserlist = '#username // password // userrole // allow userlist link // diskspace-setting // preferred startpage'."\r\n";
 		$c = 0;
@@ -44,8 +45,8 @@ if ($_SERVER['HTTP_REFERER'] == $baseurl.'admin') {
 				$newuserlist .= $uavalue."\r\n";
 			} 
 		}
-		unlink('conf/.userlist');
-		file_put_contents('conf/.userlist', $newuserlist);
+		unlink($confpath.'.userlist');
+		file_put_contents($confpath.'.userlist', $newuserlist);
 		$content = $_POST['username'].' was removed';
 		$infotype = 'success';
 	}	

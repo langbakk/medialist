@@ -43,8 +43,8 @@ function mb_ucfirst($string, $encoding='UTF-8') {
     return mb_strtoupper($firstChar, $encoding) . $then;
 }
 
-function allowedMimeAndExtensions($type, $mimetype = '', $filename = 'conf/.allowed_mimetypes') {
-	$list = file($filename, FILE_IGNORE_NEW_LINES);
+function allowedMimeAndExtensions($type, $mimetype = '', $filename = '.allowed_mimetypes') {
+	$list = file(Config::read('confpath').$filename, FILE_IGNORE_NEW_LINES);
 	$allowed_types = ['image','video','audio','application','text','documents'];
 	$allowed_files = [];
 	$allowedfiles_replace = [];
@@ -340,5 +340,18 @@ function format_size($size) {
 	}
 	$endIndex = strpos($size, '.')+3;
 	return substr( $size, 0, $endIndex).' '.$units[$i];
+}
+
+function getcookie($name) {
+    $cookies = [];
+    $headers = headers_list();
+    foreach($headers as $header) {
+        if (strpos($header, 'Set-Cookie: ') === 0) {
+            $value = str_replace('&', urlencode('&'), substr($header, 12));
+            parse_str(current(explode(';', $value, 1)), $pair);
+            $cookies = array_merge_recursive($cookies, $pair);
+        }
+    }
+    return $cookies[$name];
 }
 ?>

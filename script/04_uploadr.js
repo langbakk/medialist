@@ -59,7 +59,7 @@ $(document).ready(function() {
 		$('[id^=userstartpage_] option').each(function() {
 			menupages.push($(this).val());
 		})
-		var content = '<form method="post" action="update_userlist.php" class="user_management_form">';
+		var content = '<form method="post" action="process_files/update_userlist.php" class="user_management_form">';
 		content += '<label style="height: 2.5em;" for="username_new"><span class="hidden">Username<br></span><input id="username_new" name="username" type="text" value=""></label>';
 		content += '<label style="height: 2.5em;" for="password_new"><span class="hidden">Password<br></span><input id="password_new" name="password" type="text" placeholder="Enter password"></label>';
 		content += '<label style="height: 2.5em;" for="usertype_new"><span class="hidden">Usertype<br></span><select id="usertype_new" name="usertype" autocomplete="off"><option value="admin">Admin</option><option value="user" selected>User</option></select></label><label style="height: 2.5em;" for="userlistlink_new"><span class="hidden">Show in userlist<br></span><input id="userlistlink_new" type="checkbox" name="userlistlink"></label>';
@@ -79,7 +79,7 @@ $(document).ready(function() {
 		e.preventDefault();
 		var $this = $(this),
 			getUser = $(this).next('form').find('input[type=hidden]').val();
-		$.post('update_userlist.php',{username:getUser,deleteuser:true}, function(data) {
+		$.post('process_files/update_userlist.php',{username:getUser,deleteuser:true}, function(data) {
 			data = $.parseJSON(data);
 			showUpdateInfo(''+data.content+'',''+data.infotype+'');
 			$this.parents('li').remove();
@@ -94,7 +94,7 @@ $(document).ready(function() {
 			var thisListID = $(this).parents('ul').prop('id');
 			var thisListFolder = $(this).closest('li').prevAll('li.heading:first').text().toLowerCase();
 			var thisFile = $(this).parents('li').find('.filename').text();
-			$.post('deletefile.php', { filename:thisListFolder+'/'+thisFile,username:userName }, function(data) { 
+			$.post('process_files/deletefile.php', { filename:thisListFolder+'/'+thisFile,username:userName }, function(data) { 
 				data = $.parseJSON(data);
 				showUpdateInfo(''+data.content+'',''+data.infotype+'');
 				if ((($this.parents('li').prev('li').hasClass('heading')) === true) && ((($this.parents('li').next('li').hasClass('heading')) === true) || ($this.parents('li').next('li').length == 0))) {
@@ -109,14 +109,14 @@ $(document).ready(function() {
 			var thisListFolder = $(this).parents('li').prevAll('li.heading:first').text().toLowerCase();
 			var thisFile = $(this).parents('li').find('.filename').text();
 			if ($this.val() == 0) {
-				$.post('create_public_link.php',{filename:thisListFolder+'/'+thisFile}, function(data) {
+				$.post('process_files/create_public_link.php',{filename:thisListFolder+'/'+thisFile}, function(data) {
 					data = $.parseJSON(data);
 					showUpdateInfo(''+data.content+'',''+data.infotype+'');
 					$this.prop('checked',true).val(1);
 					$this.next('label').find('i').addClass('fa-check-square').removeClass('fa-square');
 				})	
 			} else {
-				$.post('deletefile.php', { deletepublic:true,filename:thisListFolder+'/'+thisFile }, function(data) {
+				$.post('process_files/deletefile.php', { deletepublic:true,filename:thisListFolder+'/'+thisFile }, function(data) {
 		            data = $.parseJSON(data);
 		            showUpdateInfo(''+data.content+'',''+data.infotype+'');
 		            $this.prop('checked',false).val(0);
@@ -151,14 +151,16 @@ $(document).ready(function() {
 	        var thisListID = $(this).parents('ul').prop('id');
 	        var thisListFolder = $(this).parents('ul').prop('id').split('_')[0];
 			var thisFile = $(this).parents('li').find('a:first').attr('href').split('=')[1].split('&')[0];
-			$.post('deletefile.php', { filename:thisListFolder+'/'+thisFile,username:userName }, function(data) { 
+			$.post('process_files/deletefile.php', { filename:thisListFolder+'/'+thisFile,username:userName }, function(data) { 
 	            data = $.parseJSON(data);
 	            showUpdateInfo(''+data.content+'',''+data.infotype+'');
-	            $this.parents('li').remove();
-	       //      $('.pictures > a > img').each(function() {
-	    			// var getImgDimension = $(this).position();    
-	    			// $(this).parent('a').next('span').css({'width':'4em','position':'absolute','left':getImgDimension.left});  
-	       //  	}) 
+	            if (data.infotype == 'success') {
+	            	$this.parents('li').remove();	
+	            	if ($('.container > #pictures_list').length > 0) {
+						var endResult = $('#pictures_list li').length * 10;
+						$('#pictures_list').parents('.container').css(({'max-width':endResult+'em','min-width':'20em'}));
+					}
+	            }
 			masonryGrid.imagesLoaded().progress(function() {
   				masonryGrid.masonry();
 			});
@@ -176,7 +178,7 @@ $(document).ready(function() {
 			var thisListID = $(this).parents('ul').prop('id');
 			var thisListFolder = $(this).parents('ul').prop('id').split('_')[0];
 			var thisFile = $(this).parents('li').find('a:first').attr('href').split('=')[1].split('&')[0];
-			$.post('approvefile.php',{ filename:thisListFolder+'/'+thisFile }, function(data) {
+			$.post('process_files/approvefile.php',{ filename:thisListFolder+'/'+thisFile }, function(data) {
 				data = $.parseJSON(data);
 				showUpdateInfo(''+data.content+'',''+data.infotype+'');
 				$this.parents('li').remove();
@@ -199,14 +201,14 @@ $(document).ready(function() {
 			var thisListFolder = $(this).parents('ul').prop('id').split('_')[0];
 			var thisFile = $(this).parents('li').find('a:first').attr('href').split('=')[1];
 			if ($this.val() == 0) {
-				$.post('create_public_link.php',{filename:thisListFolder+'/'+thisFile}, function(data) {
+				$.post('process_files/create_public_link.php',{filename:thisListFolder+'/'+thisFile}, function(data) {
 					data = $.parseJSON(data);
 					showUpdateInfo(''+data.content+'',''+data.infotype+'');
 					$this.prop('checked',true).val(1);
 					$this.next('label').find('i').addClass('fa-check-square').removeClass('fa-square');
 				})	
 			} else {
-				$.post('deletefile.php', { deletepublic:true,filename:thisListFolder+'/'+thisFile,username:'public' }, function(data) {
+				$.post('process_files/deletefile.php', { deletepublic:true,filename:thisListFolder+'/'+thisFile,username:'public' }, function(data) {
 		            data = $.parseJSON(data);
 		            showUpdateInfo(''+data.content+'',''+data.infotype+'');
 		            $this.prop('checked',false).val(0);
@@ -220,7 +222,7 @@ $(document).ready(function() {
 		var thisContent = $(this).val();
 		if (thisContent != 'No file selected') {
 			$(this).removeClass('inactive').addClass('active');
-			$.post('retrieve_folder.php',{ currentfile:thisContent }, function(data) { 
+			$.post('process_files/retrieve_folder.php',{ currentfile:thisContent }, function(data) { 
 				if (data != '') {
 					data = $.parseJSON(data);
 					for (var key in data) {
@@ -258,7 +260,7 @@ $(document).ready(function() {
 	$('.sortlinks a').click(function(e) {
 		e.preventDefault();
 		var urlParam = $(this).attr('href').split('=')[1];
-		$.post('update_cookie.php',{'setsort':urlParam}, function(data) {
+		$.post('process_files/update_cookie.php',{'setsort':urlParam}, function(data) {
 			data = $.parseJSON(data);
 			showUpdateInfo(''+data.content+'',''+data.infotype+'');
 			window.location.reload(true);
@@ -438,7 +440,6 @@ $(document).ready(function() {
     			requestType = requestLink.split('?')[1].split('=')[0],
     			requestFile = requestLink.split('?')[1].split('=')[1],
     			requestFileExt = requestFile.split('.').reverse()[0];
-    			console.log(requestFileExt);
 	    if (requestType == 'imgfile') {    	
 	   		$.ajax({
 	          url: 'showfile.php',
@@ -485,6 +486,82 @@ $(document).ready(function() {
 			$('#directlink').simulate('click');
 			$('#directlink').remove();
 		}
+    })
+
+$(document).keydown(function(e) {
+    	// e.preventDefault();
+    	if ($('#lightbox_wrapper').hasClass('visible')) {
+	    	if (e.which == 37 || e.which == 39) {
+		    	var $this = $(this);
+			    	if (e.which == 39 && $('a[href$="'+linkName[1]+'"]').parents('.pictures').prev('li.pictures').length == 0) {
+			    		fetchFile = $('.pictures:last-of-type').find('a').attr('href').split('/').reverse()[0].split('?')[1];
+			    		linkName = $('.pictures:last-of-type').find('a').attr('href').split('=');
+			    	} else if (e.which == 37 && $('a[href$="'+linkName[1]+'"]').parents('.pictures').next('li.pictures').length == 0) {
+			    		fetchFile = $('.pictures:first-of-type').find('a').attr('href').split('/').reverse()[0].split('?')[1];
+			    		linkName = $('.pictures:first-of-type').find('a').attr('href').split('=');
+			    	} else if (e.which == 39 && $('a[href$="'+linkName[1]+'"]').parents('.pictures').prev('li.pictures').length != 0)  {
+			    		fetchFile = $('a[href$="'+linkName[1]+'"]').parents('.pictures').prev('li.pictures').find('a').attr('href').split('/').reverse()[0].split('?')[1];
+			    		linkName = $('a[href$="'+linkName[1]+'"]').parents('.pictures').prev('li.pictures').find('a').attr('href').split('=');
+			    	} else if (e.which == 37) {
+			    		fetchFile = $('a[href$="'+linkName[1]+'"]').parents('.pictures').next('li.pictures').find('a').attr('href').split('/').reverse()[0].split('?')[1];
+			    		linkName = $('a[href$="'+linkName[1]+'"]').parents('.pictures').next('li.pictures').find('a').attr('href').split('=');
+			    	} else {
+			    		linkName = $(this).attr('href').split('=');
+			    		fetchFile = $this[0]['href'].split('/').reverse()[0].split('?')[1];
+			    	}
+			    	var joinLink = linkName.join('='),
+		    			requestLink = (($this[0]['search'] != undefined) ? $this[0]['search'] : joinLink),
+		    			requestType = requestLink.split('?')[1].split('=')[0],
+		    			requestFile = requestLink.split('?')[1].split('=')[1],
+		    			requestFileExt = requestFile.split('.').reverse()[0];
+			    if (requestType == 'imgfile') {    	
+			   		$.ajax({
+			          url: 'showfile.php',
+			          type: 'GET',
+			          dataType: 'binary',
+			          data: fetchFile,
+			          responseType: 'blob',
+			          processData: false,
+			          success: function(result) {
+			          	var image = new Image();
+						image.src = URL.createObjectURL(result);
+						if ($('#overlay').length <= 0) {
+							$('body').append('<div id="overlay"></div>');
+						}
+						if ($('#lightbox_wrapper').hasClass('hidden')) {
+							$('#lightbox_wrapper').removeClass('hidden').addClass('visible');
+							$('header,#username_view,#username_display').addClass('hidden');
+						}
+						$('#lightbox_container img').remove();
+						$('#lightbox_container').append(image);
+				    	if (viewportSize.getWidth() <= 480) {
+				    		image.onload = function() { $('#lightbox_wrapper').css({'width':'100%','padding':'2em','box-sizing':'border-box'}).find('#lightbox_container img').css({'width':'100%','height':'initial'}); $('.closebutton,.nextbutton,.prevbutton').css({'top':'50%','transform':'translate(0,-50%)','height':'2em','width':'2em','line-height':'2em'}); $('.prevbutton').css({'left':'0'}); $('.nextbutton').css({'right':'0'}); $('.closebutton').css({'top':'0','right':'0'}); window.URL.revokeObjectURL(image.src);};
+				    	} else {
+							image.onload = function() { window.URL.revokeObjectURL(image.src);};
+						}
+						 $('#overlay,.closebutton').on('click',function(e) {
+					    	$('#overlay').remove();
+					    	$('#lightbox_wrapper').removeClass('visible').addClass('hidden');
+					    	$('#lightbox_container img').remove();
+					    	$('header,#username_display,#username_view').removeClass('hidden');
+					    })
+						$(document).keyup(function(e) {
+							if (e.which == 27) {
+						    	$('#overlay').remove();
+						    	$('#lightbox_wrapper').removeClass('visible').addClass('hidden');
+						    	$('#lightbox_container img').remove();
+						    	$('header,#username_display,#username_view').removeClass('hidden');
+							}					
+						})
+			          }
+					}); 
+				} else if (requestType == 'vidfile') {
+					$('body').append('<a href="showfile.php'+requestLink+'" id="directlink" class="hidden">Direct Link</a>');
+					$('#directlink').simulate('click');
+					$('#directlink').remove();
+				}
+			} 
+		} 
     })
 
     if ($('[id^=filelist_] li:last-of-type').hasClass('heading')) {

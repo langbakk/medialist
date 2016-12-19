@@ -1,7 +1,7 @@
 <?php
 
-if (file_exists('functions.php')) {
-    require_once('functions.php');
+if (file_exists($processpath.'functions.php')) {
+    require_once($processpath.'functions.php');
 }
 
 if (file_exists($_SERVER['DOCUMENT_ROOT'].'/conf/config.php')) {
@@ -137,12 +137,6 @@ class valueCrypt {
     }
 
     public static function vC_pwHash($value,$db_value = '') {
-        // $key = Config::read('unique_key');
-        // $key = bin2hex(openssl_random_pseudo_bytes(16));
-        // $method = Config::read('method');
-        // $salt = crypt($value, $key);
-        // $salt = mcrypt_create_iv(64);
-        // var_dump($salt);
         $password = false;
         if (empty($db_value)) {
             $password = password_hash($value,PASSWORD_DEFAULT);   
@@ -171,9 +165,9 @@ class PageView {
     }
 
     function runSetup() {
-        if (file_exists('conf/config.php')) {
-            // unlink('conf/config.php');
-        }
+        // if (file_exists('conf/config.php')) {
+        //     // unlink('conf/config.php');
+        // }
         if (is_dir('setup')) {
             $path = 'setup/';
             include $path.'index.php';
@@ -217,7 +211,7 @@ class PageView {
                     // $sqlcore = "SELECT * FROM persdb_content WHERE content_page = '$page' AND (group_access = '$usergroup' OR group_access = 0) AND language = '$userlanguage'";
                 }
             } else {
-                    // $sqlcore = "SELECT * FROM persdb_content WHERE content_page = '$page' AND (group_access = '$usergroup' OR group_access = 0) AND language = '$userlanguage'";
+                // $sqlcore = "SELECT * FROM persdb_content WHERE content_page = '$page' AND (group_access = '$usergroup' OR group_access = 0) AND language = '$userlanguage'";
             }
                 // $core = Core::getInstance();
                 // $stmt = $core->dbh->prepare($sqlcore);              

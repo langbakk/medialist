@@ -3,11 +3,8 @@ ob_start();
 if (!session_id()) { session_start(); };
 
 	require_once('conf/config.php');
-	require_once('language.php');
-	require_once('functions.php'); 
-// if ($current_page != 'upload') {
-// 	file_put_contents('.current_uploads','');
-// }
+	require_once('language/language.php');
+	require_once($processpath.'functions.php'); 
 
 $display = new PageView();
 

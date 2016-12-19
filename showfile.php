@@ -1,6 +1,6 @@
 <?php
 require_once('conf/config.php');
-require_once('functions.php');
+require_once($processpath.'functions.php');
 logThis('showfile_processing',"\r\n");
 if (!session_id()) { session_start(); };
 $username = (($isloggedin && isset($_GET['user'])) ? $_GET['user'].'/' : ((!$isloggedin) ? 'public/' : $username));

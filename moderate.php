@@ -60,7 +60,7 @@ if ($isadmin) {
 								<a class="deletefile" href="'.$baseurl.'deletefile.php">
 									<i class="fa fa-remove" title="Delete file"></i>
 								</a>
-								<a class="approvefile" href="'.$baseurl.'approvefile.php">
+								<a class="approvefile" href="'.$processpath.'approvefile.php">
 									<i class="fa fa-check" title="Approve file"></i>
 								</a>
 							</div>';

@@ -373,10 +373,10 @@ echo '			<p class="buttoncontainer">
 			$c = 0;
 			foreach ($user_array as $uakey => $uavalue) {
 				$c++;
-				echo '<li><form method="post" action="update_userlist.php" class="removeuser">
+				echo '<li><form method="post" action="'.$processpath.'update_userlist.php" class="removeuser">
 				 	<label><i class="tooltiphover fa fa-remove"><span data-tooltip="Delete user"></span></i></label>
 				 	</form>';
-				echo '<form method="post" action="update_userlist.php" class="user_management_form">';
+				echo '<form method="post" action="'.$processpath.'update_userlist.php" class="user_management_form">';
 				$user = explode('//',$uavalue);
 				// if (isset($_POST['submit_userchanges']) && ($_POST['username'] == trim($user[0]))) {
 				// 	$newuserlist .= '';

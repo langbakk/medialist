@@ -1,10 +1,12 @@
 <?php
-require_once('conf/config.php');
-require_once('functions.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/conf/config.php');
+require_once($processpath.'functions.php');
 if (isset($_POST['setsort'])) {
-	setcookie('setsort',$_POST['setsort']);
+	$posted = $_POST['setsort'];
+	setcookie('setsort',$_POST['setsort'],time() + 31536000, '/');
+	$cookie = isset($_COOKIE['setsort']) ? $_COOKIE['setsort'] : '';
 	if ($debug == true) {
-		logThis('cookiesetsort','setsort is set to: '.$_POST['setsort'].' and cookie is set to: '.$_COOKIE['setsort'].''."\r\n",FILE_APPEND);
+		logThis('cookiesetsort','setsort is set to: '.$posted.' and cookie is set to: '.getcookie('setsort').''."\r\n",FILE_APPEND);
 	}
 }
 if(isset($_POST['setsort']) && !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {

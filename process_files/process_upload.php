@@ -1,7 +1,7 @@
 <?php
 if (!session_id()) { session_start(); };
-require_once('conf/config.php');
-require_once('functions.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/conf/config.php');
+require_once($processpath.'functions.php');
 $returnmessage = json_encode(["content"=>"Error Error Error","infotype"=>"error"]);
 $changereturnheader = 0;
 $original_username = $username;
@@ -50,15 +50,15 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 			}
 			
 			$directories = [1 => '/pictures', 2 => '/pictures/thumbs', 3 => '/video', 4 => '/video/thumbs', 5 => '/audio', 6 => '/documents', 7 => '/applications'];
-			if (!is_dir($userpath.$username)) {
-				mkdir($userpath.$username, 0744, true);
+			if (!is_dir($document_root.'/'.$userpath.$username)) {
+				mkdir($document_root.'/'.$userpath.$username, 0744, true);
 			}
-			if (is_dir($userpath.$username)) {
+			if (is_dir($document_root.'/'.$userpath.$username)) {
 				$foldercreated = false;
 				foreach ($directories as $key => $dir) {
-					if (!is_dir($userpath.$username.$dir)) {
-						mkdir($userpath.$username.$dir, 0744, true);
-						file_put_contents($userpath.$username.$dir.'/.gitignore','# Ignore everything in this directory'."\r\n".'*'."\r\n".'# Except this file'."\r\n".'!.gitignore');
+					if (!is_dir($document_root.'/'.$userpath.$username.$dir)) {
+						mkdir($document_root.'/'.$userpath.$username.$dir, 0744, true);
+						file_put_contents($document_root.'/'.$userpath.$username.$dir.'/.gitignore','# Ignore everything in this directory'."\r\n".'*'."\r\n".'# Except this file'."\r\n".'!.gitignore');
 						$foldercreated = true;
 					}
 				}
@@ -66,15 +66,15 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 			} 
 			if (Config::read('moderation_queue') == true) {
 				$username = 'moderation/';
-				if (!is_dir($userpath.$username)) {
-					mkdir($userpath.$username, 0744, true);
+				if (!is_dir($document_root.'/'.$userpath.$username)) {
+					mkdir($document_root.'/'.$userpath.$username, 0744, true);
 				}
-				if (is_dir($userpath.$username)) {
+				if (is_dir($document_root.'/'.$userpath.$username)) {
 					$foldercreated = false;
 					foreach ($directories as $key => $dir) {
-						if (!is_dir($userpath.$username.$dir)) {
-							mkdir($userpath.$username.$dir, 0744, true);
-							file_put_contents($userpath.$username.$dir.'/.gitignore','# Ignore everything in this directory'."\r\n".'*'."\r\n".'# Except this file'."\r\n".'!.gitignore');
+						if (!is_dir($document_root.'/'.$userpath.$username.$dir)) {
+							mkdir($document_root.'/'.$userpath.$username.$dir, 0744, true);
+							file_put_contents($document_root.'/'.$userpath.$username.$dir.'/.gitignore','# Ignore everything in this directory'."\r\n".'*'."\r\n".'# Except this file'."\r\n".'!.gitignore');
 							$foldercreated = true;
 						}
 					}
@@ -83,7 +83,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 			}	
 
 			if (isset($_FILES['file']) && $returnerror == false) {
-				if (($_FILES['file']['size'] + foldersize($userpath.$username) < $storage_limit)) {
+				if (($_FILES['file']['size'] + foldersize($document_root.'/'.$userpath.$username) < $storage_limit)) {
 					if (in_array($_FILES['file']['type'], allowedMimeAndExtensions('','mime'))) {
 						if (in_array($_FILES['file']['type'], allowedMimeAndExtensions('audio','mime'))) {
 							$folder = 'audio';
@@ -92,42 +92,46 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 						}
 						 elseif (in_array($_FILES['file']['type'], allowedMimeAndExtensions('video','mime'))) {
 							$folder = 'video';
-						} elseif (in_array($_FILES['file']['type'], allowedMimeAndExtensions('documents','mime'))) { //} || in_array($_FILES['file']['type'], allowedMimeAndExtensions('text','mime'))) {
+						} elseif (in_array($_FILES['file']['type'], allowedMimeAndExtensions('documents','mime'))) { 
 							$folder = 'documents';
 						} elseif (in_array($_FILES['file']['type'], allowedMimeAndExtensions('application','mime'))) {
 							$folder = 'applications';
 						}
 						$filename = $_FILES['file']['name'];
-						if (file_exists(''.$userpath.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? $username : $original_username).$folder.'/'.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? explode('/',$original_username)[0].'__' : '').onlyValidChar($_FILES['file']['name']))) {
+						if (file_exists(''.$document_root.'/'.$userpath.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? $username : $original_username).$folder.'/'.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? explode('/',$original_username)[0].'__' : '').onlyValidChar($_FILES['file']['name']))) {
 							if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 								$returnmessage = json_encode(["content"=>"$filename already exist","infotype"=>"error"]);
 							}						
 						} else {
 							if ((Config::read('moderation_queue') == true) && (Config::read('usertype') != 'admin')) {
-								move_uploaded_file($_FILES['file']['tmp_name'],''.$userpath.$username.$folder.'/'.explode('/',$original_username)[0].'__'.onlyValidChar($_FILES['file']['name']));
+								move_uploaded_file($_FILES['file']['tmp_name'],''.$document_root.'/'.$userpath.$username.$folder.'/'.explode('/',$original_username)[0].'__'.onlyValidChar($_FILES['file']['name']));
 								$moderation_queue = true;
 							} else {
-								move_uploaded_file($_FILES['file']['tmp_name'],''.$userpath.$original_username.$folder.'/'.onlyValidChar($_FILES['file']['name']));	
+								move_uploaded_file($_FILES['file']['tmp_name'],''.$document_root.'/'.$userpath.$original_username.$folder.'/'.onlyValidChar($_FILES['file']['name']));	
 							}
 							if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 								$returnmessage = json_encode(["content"=>"You uploaded $filename","infotype"=>"success"]);
 							}
 							$movedfile = pathinfo($_FILES['file']['name']);
 							if (in_array(strtolower($movedfile['extension']),allowedMimeAndExtensions('extension')) && in_array($_FILES['file']['type'],allowedMimeAndExtensions('image','mime'))) {
-								generate_image_thumbnail($userpath.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? $username : $original_username).$folder.'/'.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? explode('/',$original_username)[0].'__' : '').onlyValidChar($_FILES['file']['name']),$userpath.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? $username : $original_username).$folder.'/thumbs/'.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? explode('/',$original_username)[0].'__' : '').onlyValidChar($_FILES['file']['name']));
+								generate_image_thumbnail($document_root.'/'.$userpath.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? $username : $original_username).$folder.'/'.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? explode('/',$original_username)[0].'__' : '').onlyValidChar($_FILES['file']['name']),$document_root.'/'.$userpath.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? $username : $original_username).$folder.'/thumbs/'.(((Config::read('moderation_queue') == true) && ($usertype != 'admin')) ? explode('/',$original_username)[0].'__' : '').onlyValidChar($_FILES['file']['name']));
 							}
 							if (in_array(strtolower($movedfile['extension']),allowedMimeAndExtensions('extension')) && in_array($_FILES['file']['type'],allowedMimeAndExtensions('video','mime'))) {
-								$video = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/'.onlyValidChar($_FILES['file']['name']);
-								$thumbnail = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/thumbs/'.onlyValidChar($_FILES['file']['name']).'.jpg';
+								if ((Config::read('moderation_queue') == true) && (Config::read('usertype') != 'admin')) {
+									$video = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/'.explode('/',$original_username)[0].'__'.onlyValidChar($_FILES['file']['name']);
+									$thumbnail = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/thumbs/'.explode('/',$original_username)[0].'__'.onlyValidChar($_FILES['file']['name']).'.jpg';
+								} else {
+									$video = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$original_username.$folder.'/'.onlyValidChar($_FILES['file']['name']);
+									$thumbnail = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$original_username.$folder.'/thumbs/'.onlyValidChar($_FILES['file']['name']).'.jpg';
+								}
+								logThis('video_upload',$video."\r\n".$thumbnail,FILE_APPEND);
 	    						$get_frames = shell_exec("/usr/local/bin/ffmpeg -nostats -i $video -vcodec copy -f rawvideo -y /dev/null 2>&1 | grep frame | awk '{split($0,a,\"fps\")}END{print a[1]}' | sed 's/.*= *//'");
 	    						$stills_number = floor($get_frames / 200);
 	    						$output = shell_exec("/usr/local/bin/ffmpeg -y -i $video -frames 1 -q:v 1 -vf 'select=not(mod(n\,$stills_number)),scale=-1:120,tile=100x1' $thumbnail");
 							}
-							//updateCurrentUploads('.current_uploads',$_FILES['file']['name']);
 						}
 					} else {
 						if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {		
-							// echo 'this filetype is not allowed 1';
 							$changereturnheader = 1;
 							$returnmessage = json_encode(["content"=>"The filetype you tried to upload is not allowed","infotype"=>"error"]);
 						}
@@ -138,20 +142,16 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 				}
 			} elseif ($returnerror == true) {
 				if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-					// echo 'error-message return';
 					$returnmessage = json_encode(["content"=>"$returnerrorcontent","infotype"=>"error"]);
 				}
 			} else {
 				if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-					// echo 'filetype not allowed 2';
 					$changereturnheader = 1;
 					$returnmessage = json_encode(["content"=>"The filetype you tried to upload is not allowed","infotype"=>"error"]);
 				}
 			}
 		}
-	//echo returnCurrentUploads('.current_uploads');
 		if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-			// echo 'returnmsg';
 			if ($changereturnheader == 1) {
 				http_response_code(415);
 			}

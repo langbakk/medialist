@@ -1,7 +1,7 @@
 <?php
 if (!session_id()) { session_start(); };
-require_once('conf/config.php');
-require_once('functions.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/conf/config.php');
+require_once($processpath.'functions.php');
 
 $currentcontent = (isset($_POST['currentfile'])) ? $_POST['currentfile'] : '';
 

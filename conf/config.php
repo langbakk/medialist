@@ -53,7 +53,7 @@ $debug = 1;
 //this is the default size storage space set for users
 $defaultsize = 536870912;
 //turns on or off moderation-queue
-$moderation_queue = 0;
+$moderation_queue = 1;
 
 //sets the site as deactivated temporarily (1/0)
 //$deactivated = 0; //currently not in use
@@ -115,7 +115,11 @@ $baseurl = $httptype.'://'.$domain.$rootfolder.'';
 // $baseurl = $rootfolder;
 $conf_folder = 'conf/'; // here's all the configuration-files
 $confpath = $document_root.$rootfolder.$conf_folder;
+define('CONFPATH',$document_root.$rootfolder.$conf_folder);
 $csspath = $baseurl.'css/'; // here's all the CSS-files
+$process_folder = 'process_files/'; //here's all the "behind the scenes"-files (upload, delete and so on)
+$processpath = $document_root.$rootfolder.$process_folder;
+$processwebpath = $baseurl.$process_folder; //web-url for the process-folder
 $script_folder = 'script/'; // here's all the js-files
 $scriptpath = $document_root.$rootfolder.$script_folder; // file-path to the script-folder
 $scriptwebpath = $baseurl.$script_folder; // web-url for the script-folder
@@ -185,8 +189,8 @@ $todaydate = $date.' '.$time;
 $currentsemesteryear = $currentyear;
 $currentsemestershortcode = ($currentsemesteryear.'-08-01' > $date) ? 'v' : 'h';
 
-if (file_exists($document_root.$rootfolder.'coreclass.php')) {
-	require_once($document_root.$rootfolder.'coreclass.php');	
+if (file_exists($processpath.'coreclass.php')) {
+	require_once($processpath.'coreclass.php');	
 }
 
 ?>
