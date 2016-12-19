@@ -102,7 +102,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 								$extension = (($fileext == 'txt') ? 'text-o' : (($fileext == 'xls' || $fileext == 'xlsx') ? 'excel-o' : (($fileext == 'doc' || $fileext == 'docx') ? 'word-o' : (($fileext == 'mp3' || $fileext == 'webm') ? 'audio-o' : (($fileext == 'dmg') ? 'o' : $fileext.'-o')))));
 								$fileicon = '<i class="dark-background fa fa-file-'.$extension.'"></i>';
 							}
-							$document_name = ((is_array($document_name) && $folder == 'documents') ? '<span class="public_sharename">(Uploaded by '.$document_name[0].') - '.$document_name[1].'</span>' : (is_array($document_name) ? '<span class="public_sharename">(Uploaded by '.$document_name[0].')</span>' : '<span class="public_sharename">'.rtrim(trim($document_name),'_-').'</span>'));
+							$document_name = ((is_array($document_name) && $folder == 'documents') ? '<span class="public_sharename">(Uploaded by '.$document_name[0].') - '.$document_name[1].'</span>' : (is_array($document_name) ? '<span class="public_sharename">(Uploaded by '.$document_name[0].') '.$document_name[1].'</span>' : '<span class="public_sharename">'.rtrim(trim($document_name),'_-').'</span>'));
 							if ($folder == 'video') {
 								$getvidfile = 'showfile.php?vidfile='.$val.'';
 							}

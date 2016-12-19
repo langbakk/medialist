@@ -363,13 +363,10 @@ li .usercontrols form {
 .helper {
   cursor: help; }
 
-#pictures_list {
-  max-width: 80%; }
-
 #pictures_list .public_sharename {
   display: none; }
 
-#pictures_list li {
+#pictures_list li, #video_list li {
   min-width: 8em; }
 
 #pictures_list li:hover .public_sharename, #pictures_list li:focus .public_sharename {
@@ -381,6 +378,9 @@ li .usercontrols form {
   color: rgba(249, 250, 248, 0.875);
   background: rgba(0, 0, 0, 0.875);
   padding: .3em 0; }
+
+#video_list .public_sharename {
+  min-width: 12.5em; }
 
 #documents_list li, #audio_list li, #applications_list li {
   line-height: 1.6em; }
@@ -865,7 +865,7 @@ label {
 
 .tech-slideshow {
   height: 7.5em;
-  max-width: 10em;
+  max-width: 12.5em;
   margin: .75em auto;
   position: relative;
   overflow: hidden;

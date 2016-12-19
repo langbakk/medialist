@@ -4,7 +4,7 @@ $getconfigvars = file_exists('conf/config.php') ? file('conf/config.php', FILE_I
 $lines_in_configfile = file_exists('conf/config.php') ? count(file('conf/config.php')) : '';
 $currentvars = '';
 $list_of_setupnames = ['websitename','dbhost','dbport','dbname','dbusername','dbpassword','prefix','allow_public','allow_userlist','use_login','show_quotes','use_db','debug','moderation_queue','rootfolder','main_support_email','unique_key'];
-$list_of_settings = ['allow_public','allow_userlist','use_login','show_quotes','use_db','debug','moderation_queue'];
+$list_of_settings = ['allow_public','allow_userlist','use_login','show_quotes','debug','moderation_queue'];
 $menu_array = 	[0 => ['href'=>'#user_management_container','menutext'=>'User management'],
 				 1 => ['href'=>'#change_settings_container','menutext'=>'Change settings'],
 				 2 => ['href'=>'#setup_container','menutext'=>'Setup config file'],
@@ -93,7 +93,7 @@ echo '<div id="change_settings_container" class="admincontainer">
 							$hidden = '';								
 							break;	
 						case 'debug':
-							$label = 'Show debug-messages';
+							$label = 'Write log-files';
 							$desc = 'Shows debug messages on different pages, and logs to log-folder. Should not be used on production site';
 							$required = 'required="required"';
 							$content = $last;
@@ -108,14 +108,6 @@ echo '<div id="change_settings_container" class="admincontainer">
 							$checkbox = true;
 							$hidden = '';								
 							break;	
-						case 'use_db':
-							$label = 'Use database';
-							$desc = 'Shows setup-information for database, and allows for database backend';
-							$required = 'required="required"';
-							$content = $last;
-							$checkbox = true;
-							$hidden = '';								
-							break;
 						case 'moderation_queue':
 							$label = 'Use moderation queue';
 							$desc = 'If this is on, every upload (apart from those by admins) are queued for moderation before posted on the page';
@@ -260,7 +252,7 @@ echo '		<p class="'.$hidden.'">
 								$class = '';																
 								break;	
 							case 'debug':
-								$label = 'Show debug-messages';
+								$label = 'Write log-files';
 								$desc = 'Shows debug messages on different pages, and logs to log-folder. Should not be used on production site';
 								$required = 'required="required"';
 								$content = $last;
