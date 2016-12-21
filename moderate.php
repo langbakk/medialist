@@ -95,6 +95,9 @@ if ($isadmin) {
 				}
 			}
 		}
+		if ($allempty == 0) {
+			echo '<p class="messagebox visible warning">There are no files to moderate</p>';
+		}
 } else {
 	echo '<div class="container"><p class="messagebox visible error">You don\'t have access to this page</p></div>';
 }

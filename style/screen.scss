@@ -178,6 +178,13 @@ a {
 	&.makepublic.fa-square {
 		background: $main-light;
 	}
+	&.uppercasefirst {
+		display: block;
+		margin-top: .5em;
+		&::first-letter {
+			text-transform: uppercase;
+		}
+	}
 }
 form  a[href="register"] {
 	text-decoration: none;
@@ -655,6 +662,21 @@ form {
 	display: block;
 	margin: 0 auto;
 }
+#paypalform {
+	.ui-selectmenu-button {
+		min-width: 15em;
+		margin-left: -3em;
+	}
+	.ui-selectmenu-menu {
+		max-width: 15.5em;
+	}
+	input[type=submit] {
+		margin-top: -1.9em;
+	}
+}
+#paypalform input[type=submit] {
+	display: inline-block;
+}
 #user_registration_form, #loginform {
 	max-width: 25em;
 	margin-top: 2em;
@@ -838,9 +860,9 @@ label {
 	text-align-last: initial;
 	line-height: 2.3em;
 }
-#settingsform {
-	max-width: 40%;
-}
+// #settingsform {
+// 	max-width: 40%;
+// }
 
 .slider-frame {
   background-color: #222;
@@ -1262,7 +1284,7 @@ label {
 .admincontainer .messagebox {
 	margin: 0 auto;
 }
-#htaccess_container label {
+#htaccess_container label,#allowedmimetypes_container label {
 	float: none;
 }
 .content ul .messagebox {
@@ -1643,7 +1665,7 @@ label {
 	border: .1em solid $border-color;
 	border-top: 0;
 	ul {
-		border-bottom: 0.1em solid $header-background;
+		// border-bottom: 0.1em solid $header-background;
 		background: $main-dark;
 		font-size: .75em;
 		margin-top: 0;
@@ -1767,6 +1789,19 @@ label {
 		margin: 2.5em auto;
 	}
 }
+@media screen and (max-width: 45em) {
+	#paypalform label {
+		display: block;
+		float: none;
+	}
+	#paypalform .ui-selectmenu-button {
+		margin-left: 0;
+	}
+	#paypalform input[type="submit"] {
+		margin-top: 0;
+		display: block;
+	}
+}
 @media screen and (max-width: 40em) {
 	.diskspacetitle {
 		display: none;
@@ -1812,5 +1847,12 @@ label {
 	}
 	#userprofile_body .content p.diskspaceinfo {
 		margin-left: -1em;
+	}
+	#user_filelist li {
+		display: block;
+		span {
+			margin: .5em auto;
+			display: block;
+		}
 	}
 }

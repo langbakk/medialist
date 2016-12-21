@@ -120,8 +120,24 @@ echo '<div class="container">
 echo '</div>
 	<div class="content" id="settings">
 		<h3>Settings</h3>
-			<input type="button" id="resetlocalstorage" value="Reset localstorage" title="This resets all removed info-containers and similar changes done to the website by the user">
-	</div>
+			<input type="button" id="resetlocalstorage" value="Reset site-wide settings" title="This resets all removed info-containers and similar changes done to the website by the user">';
+			if (Config::read('use_paypal') == 1) {
+				echo '<form id="paypalform" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+					<input type="hidden" name="cmd" value="_s-xclick">
+					<input type="hidden" name="hosted_button_id" value="'.$paypal_key.'">
+					<input type="hidden" name="on0" value="Size selection">
+					<label>Upgrade storage limit</label>
+					<select name="os0">
+						<option value="1 GB">1 GB : $2,99 USD - monthly</option>
+						<option value="2 GB">2 GB : $4,99 USD - monthly</option>
+						<option value="5 GB">5 GB : $12,99 USD - monthly</option>
+					</select>
+					<input type="hidden" name="currency_code" value="USD">
+					<input type="submit" name="submit" value="Subscribe">
+					<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+				</form>';
+			}
+	echo '</div>
 </div>';
 } else {
 	header('Location: login');

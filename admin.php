@@ -3,12 +3,13 @@
 $getconfigvars = file_exists('conf/config.php') ? file('conf/config.php', FILE_IGNORE_NEW_LINES) : '';
 $lines_in_configfile = file_exists('conf/config.php') ? count(file('conf/config.php')) : '';
 $currentvars = '';
-$list_of_setupnames = ['websitename','dbhost','dbport','dbname','dbusername','dbpassword','prefix','allow_public','allow_userlist','use_login','show_quotes','use_db','debug','moderation_queue','rootfolder','main_support_email','unique_key'];
-$list_of_settings = ['allow_public','allow_userlist','use_login','show_quotes','debug','moderation_queue'];
+$list_of_setupnames = ['websitename','dbhost','dbport','dbname','dbusername','dbpassword','prefix','allow_public','allow_userlist','use_login','show_quotes','use_paypal','paypal_key','use_db','debug','moderation_queue','rootfolder','main_support_email','unique_key'];
+$list_of_settings = ['allow_public','allow_userlist','use_login','show_quotes','use_paypal','paypal_key','debug','moderation_queue'];
 $menu_array = 	[0 => ['href'=>'#user_management_container','menutext'=>'User management'],
 				 1 => ['href'=>'#change_settings_container','menutext'=>'Change settings'],
 				 2 => ['href'=>'#setup_container','menutext'=>'Setup config file'],
-				 3 => ['href'=>'#htaccess_container','menutext'=>'Modify .htaccess']
+				 3 => ['href'=>'#htaccess_container','menutext'=>'Modify .htaccess'],
+				 4 => ['href'=>'#allowedmimetypes_container','menutext'=>'Change filetypes']
 				];
 
 if (isset($_POST['settingschange']) || isset($_POST['configcreation'])) {
@@ -17,6 +18,7 @@ if (isset($_POST['settingschange']) || isset($_POST['configcreation'])) {
 	$_POST['use_login'] = isset($_POST['use_login']) ? $_POST['use_login'] : 0;
 	$_POST['debug'] = isset($_POST['debug']) ? $_POST['debug'] : 0;
 	$_POST['show_quotes'] = isset($_POST['show_quotes']) ? $_POST['show_quotes'] : 0;
+	$_POST['use_paypal'] = isset($_POST['use_paypal']) ? $_POST['use_paypal'] : 0;
 	$_POST['use_db'] = isset($_POST['use_db']) ? $_POST['use_db'] : 0;
 	$_POST['moderation_queue'] = isset($_POST['moderation_queue']) ? $_POST['moderation_queue'] : 0;
 
@@ -29,8 +31,8 @@ if (isset($_POST['settingschange']) || isset($_POST['configcreation'])) {
 				$name = str_replace('$','',rtrim($first));
 				$writevar = isset($_POST[$name]) ? $_POST[$name] : '';
 				if (isset($_POST[$name])) {
-					$writevar = (((in_array($name,$list_of_settings) === true) && $writevar === 'on') ? 1 : (((in_array($name,$list_of_settings) === true) && ($writevar == '' || $writevar == 0)) ? 0 : $writevar));
-					if ($writevar == 1 || $writevar == 0) {
+					$writevar = (((in_array($name,$list_of_settings) === true) && $writevar === 'on') ? 1 : (((in_array($name,$list_of_settings) === true) && (empty($writevar) || $writevar === 0)) ? 0 : $writevar));
+					if ($writevar === 1 || $writevar === 0) {
 						$getconfigvars[$i] = '$'.$name.' = '.$writevar.';';
 					} else {
 						$getconfigvars[$i] = '$'.$name.' = \''.$writevar.'\';';	
@@ -74,7 +76,8 @@ echo '<div id="change_settings_container" class="admincontainer">
 							$required = 'required="required"';
 							$content = $last;
 							$checkbox = true;
-							$hidden = '';																
+							$hidden = '';
+							$class = '';															
 							break;	
 						case 'allow_userlist':
 							$label = 'Allow showing userlist';
@@ -82,7 +85,8 @@ echo '<div id="change_settings_container" class="admincontainer">
 							$required = 'required="required"';
 							$content = $last;
 							$checkbox = true;
-							$hidden = '';								
+							$hidden = '';
+							$class = '';								
 							break;		
 						case 'use_login':
 							$label = 'Use login/registreing';
@@ -90,15 +94,35 @@ echo '<div id="change_settings_container" class="admincontainer">
 							$required = 'required="required"';
 							$content = $last;
 							$checkbox = true;
-							$hidden = '';								
+							$hidden = '';
+							$class = '';								
 							break;	
+						case 'use_paypal':
+							$label = 'Use Paypal';
+							$desc = 'Show subscription with Paypal-option in user-settings';
+							$requred = 'required="required"';
+							$content = $last;
+							$checkbox = true;
+							$hidden = '';
+							$class= '';
+							break;
+						case 'paypal_key':
+							$label = 'Paypal-key';
+							$desc = 'This is the key for use with the Paypal-form - you get this by making a subscription form in your Paypal-settings, and copying the key from the code presented to you';
+							$required = 'required="required"';
+							$content = $last;
+							$checkbox = false;
+							$hidden = (((isset($_POST['use_paypal']) && $_POST['use_paypal'] === 0)) ? 'hidden' : ((isset($_POST['use_paypal']) && $_POST['use_paypal'] === 'on') ? '' : (($use_paypal === 1) ? '' : 'hidden')));
+							$class = 'paypalinput';
+							break;
 						case 'debug':
 							$label = 'Write log-files';
 							$desc = 'Shows debug messages on different pages, and logs to log-folder. Should not be used on production site';
 							$required = 'required="required"';
 							$content = $last;
 							$checkbox = true;
-							$hidden = '';								
+							$hidden = '';
+							$class = '';								
 							break;	
 						case 'show_quotes':
 							$label = 'Show quotes on Gallery-page';
@@ -106,7 +130,8 @@ echo '<div id="change_settings_container" class="admincontainer">
 							$required = 'required="required"';
 							$content = $last;
 							$checkbox = true;
-							$hidden = '';								
+							$hidden = '';
+							$class = '';								
 							break;	
 						case 'moderation_queue':
 							$label = 'Use moderation queue';
@@ -115,6 +140,7 @@ echo '<div id="change_settings_container" class="admincontainer">
 							$content = $last;
 							$checkbox = true;
 							$hidden = '';
+							$class = '';
 							break;
 					};
 					$setvar = (isset($_POST['settingschange'])) ? $_POST[$settingsname] : '';
@@ -130,13 +156,13 @@ echo '<div id="change_settings_container" class="admincontainer">
 							$content = '';
 						}
 					}
-echo '		<p class="'.$hidden.'">
+echo '		<p class="'.$hidden.' '.$class.'">
 						<label class="left'.(($checkbox == true) ? ' checkboxlabel' : '').'" for="'.$settingsname.'"><i class="tooltiphover fa fa-question-circle"><span data-tooltip="'.$desc.'"></span></i> '.$label.'</label>';
 						if ($checkbox == true) {
 							echo '<span class="slider-frame"><span id="'.$settingsname.'_slider" class="'.(($content == 1) ? 'on' : '').' slider-button slider_checkbox">'.(($content == 1) ? 'YES' : 'NO').'</span></span>';
 							echo '<input class="slider_checkbox" type="checkbox" name="'.$settingsname.'" id="'.$settingsname.'" '.(($content == 1) ? 'checked' : '').'>';
 						} else {
-						echo '<input class="configinput" type="text" id="'.$name.'" name="'.$settingsname.'" value="'.$content.'" '.$required.' tabindex="'.$i.'">';
+						echo '<input class="configinput" type="text" id="'.$settingsname.'" name="'.$settingsname.'" value="'.$content.'" '.$required.' tabindex="'.$i.'">';
 						}
 						echo '<span class="infobox right"><span class="left"></span></span>
 					</p>';
@@ -269,6 +295,24 @@ echo '		<p class="'.$hidden.'">
 								$hidden = '';
 								$class = '';																
 								break;	
+							case 'use_paypal':
+								$label = 'Use Paypal';
+								$desc = 'Show subscription with Paypal-option in user-settings';
+								$requred = 'required="required"';
+								$content = $last;
+								$checkbox = true;
+								$hidden = '';
+								$class= '';
+								break;
+							case 'paypal_key':
+								$label = 'Paypal-key';
+								$desc = 'This is the key for use with the Paypal-form - you get this by making a subscription form in your Paypal-settings, and copying the key from the code presented to you';
+								$required = 'required="required"';
+								$content = $last;
+								$checkbox = false;
+								$hidden = (((isset($_POST['use_paypal']) && $_POST['use_paypal'] === 0)) ? 'hidden' : ((isset($_POST['use_paypal']) && $_POST['use_paypal'] === 'on') ? '' : (($use_paypal === 1) ? '' : 'hidden')));
+								$class = 'paypalinput';
+								break;
 							case 'use_db':
 								$label = 'Use database';
 								$desc = 'Shows setup-information for database, and allows for database backend';
@@ -432,6 +476,28 @@ echo '			<p class="buttoncontainer">
 		echo '<label>Modify / change .htaccess</label><br>
 		<textarea id="htaccesscontent" name="htaccesscontent" style="min-height: '.$height.'em;">'.$content.'</textarea>
 		<input type="submit" name="submit_htaccessupdate" value="Save .htaccess"></form>
+		</div>
+		<div class="admincontainer" id="allowedmimetypes_container">
+			<h2>Change filetypes</h2>
+			<p class="messagebox warning visisble">You should not modify this unless you want to add more / different file- and mimetypes to allow uploads of different files</p>';
+			if (isset($_POST['submit_mimetypeupdate'])) {
+				rename($_SERVER['DOCUMENT_ROOT'].'/conf/.allowed_mimetypes',$_SERVER['DOCUMENT_ROOT'].'/conf/.allowed_mimetypes_old');
+				file_put_contents($_SERVER['DOCUMENT_ROOT'].'/conf/.allowed_mimetypes',$_POST['mimetypescontent'],LOCK_EX);
+				echo '<p class="messagebox success visible">You\'ve updated the .allowed_mimetypes-file</p>';
+			}
+			echo '<form method="post" action="#allowedmimetypes_container" class="htaccessform">';
+				$getmimetypes = (file_exists($_SERVER['DOCUMENT_ROOT'].'/conf/.allowed_mimetypes') ? file($_SERVER['DOCUMENT_ROOT'].'/conf/.allowed_mimetypes', FILE_IGNORE_NEW_LINES) : '');
+				$lines_in_mimetypes = (file_exists($_SERVER['DOCUMENT_ROOT'].'/conf/.allowed_mimetypes') ? count(file($_SERVER['DOCUMENT_ROOT'].'/conf/.allowed_mimetypes', FILE_IGNORE_NEW_LINES)) : '');
+				$content = '';
+				$height = $lines_in_mimetypes * 1.3;
+			    for ($i=0; $i < $lines_in_mimetypes; $i++) {
+			    	$linkcontent = $getmimetypes[0];
+					$content .= $getmimetypes[$i]."\r\n";
+			    }
+			    echo '<a class="uppercasefirst" href="'.array_reverse(explode(' ',$linkcontent))[0].'">'.trim(str_replace('// ','',explode(':',$linkcontent)[1])).'</a>';
+		echo '<label>Modify / change .allowed_mimetypes</label><br>
+		<textarea id="mimetypescontent" name="mimetypescontent" style="min-height: '.$height.'em;">'.$content.'</textarea>
+		<input type="submit" name="submit_mimetypeupdate" value="Save .allowed_mimetypes"></form>
 		</div>
 	</div>';
 } else {

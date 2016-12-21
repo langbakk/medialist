@@ -182,7 +182,11 @@ function generate_image_thumbnail($source_image_path, $thumbnail_image_path, $th
         case IMAGETYPE_PNG:
             $source_gd_image = imagecreatefrompng($source_image_path);
             break;
+        case IMAGETYPE_BMP:
+        	$source_gd_image = imagecreatefrombmp($source_image_path);
+        	break;
     }
+    // $source_gd_image = imagecreatefromstring(file_get_contents($source_image_path));
 	
 	if ($source_gd_image === false) {
 		return false;
@@ -206,6 +210,94 @@ function generate_image_thumbnail($source_image_path, $thumbnail_image_path, $th
     return true;
 } // end generate_image_thumbnail
 
+function imagecreatefrombmp($filename) {
+	if (!$f1 = fopen($filename,"rb")) {
+		return false;
+	}
+
+	$file = unpack("vfile_type/Vfile_size/Vreserved/Vbitmap_offset", fread($f1,14));
+	if ($file['file_type'] != 19778) {
+		return false;
+	}
+
+	$bmp = unpack('Vheader_size/Vwidth/Vheight/vplanes/vbits_per_pixel'.'/Vcompression/Vsize_bitmap/Vhoriz_resolution'.'/Vvert_resolution/Vcolors_used/Vcolors_important', fread($f1,40));
+	$bmp['colors'] = pow(2,$bmp['bits_per_pixel']);
+	if ($bmp['size_bitmap'] == 0) {
+		$bmp['size_bitmap'] = $file['file_size'] - $file['bitmap_offset'];
+	}
+	$bmp['bytes_per_pixel'] = $bmp['bits_per_pixel']/8;
+	$bmp['bytes_per_pixel2'] = ceil($bmp['bytes_per_pixel']);
+	$bmp['decal'] = ($bmp['width']*$bmp['bytes_per_pixel']/4);
+	$bmp['decal'] -= floor($bmp['width']*$bmp['bytes_per_pixel']/4);
+	$bmp['decal'] = 4-(4*$bmp['decal']);
+	if ($bmp['decal'] == 4) {
+		$bmp['decal'] = 0;	
+	} 
+	
+	$palette = [];
+	if ($bmp['colors'] < 16777216) {
+		$palette = unpack('V'.$bmp['colors'], fread($f1,$bmp['colors']*4));
+	}
+
+	$img = fread($f1,$bmp['size_bitmap']);
+	$vide = chr(0);
+
+	$res = imagecreatetruecolor($bmp['width'],$bmp['height']);
+	$p = 0;
+	$y = $bmp['height']-1;
+	while ($y >= 0) {
+    	$x=0;
+    	while ($x < $bmp['width']) {
+     		if ($bmp['bits_per_pixel'] == 24) {
+     			$color = unpack('V',substr($img,$p,3).$vide);		
+     		} elseif ($bmp['bits_per_pixel'] == 16) { 
+        		$color = unpack('n',substr($img,$p,2));
+        		$color[1] = $palette[$color[1]+1];
+     		} elseif ($bmp['bits_per_pixel'] == 8) { 
+        		$color = unpack('n',$vide.substr($img,$p,1));
+        		$color[1] = $palette[$color[1]+1];
+     		} elseif ($bmp['bits_per_pixel'] == 4) {
+        		$color = unpack('n',$vide.substr($img,floor($p),1));
+        		if (($p*2)%2 == 0) {
+        			$color[1] = ($color[1] >> 4);
+        		} else {
+        			$color[1] = ($color[1] & 0x0F);
+        		}
+        		$color[1] = $palette[$color[1]+1];
+     		} elseif ($bmp['bits_per_pixel'] == 1) {
+        		$color = unpack("n",$vide.substr($img,floor($p),1));
+        		if (($p*8)%8 == 0) {
+        			$color[1] = $color[1]>>7;
+        		} elseif (($p*8)%8 == 1) {
+        			$color[1] = ($color[1] & 0x40)>>6;
+        		} elseif (($p*8)%8 == 2) {
+        			$color[1] = ($color[1] & 0x20)>>5;
+        		} elseif (($p*8)%8 == 3) {
+        			$color[1] = ($color[1] & 0x10)>>4;
+        		} elseif (($p*8)%8 == 4) {
+        			$color[1] = ($color[1] & 0x8)>>3;	
+        		} elseif (($p*8)%8 == 5) {
+        			$color[1] = ($color[1] & 0x4)>>2;
+        		} elseif (($p*8)%8 == 6) {
+        			$color[1] = ($color[1] & 0x2)>>1;
+        		} elseif (($p*8)%8 == 7) {
+        			$color[1] = ($color[1] & 0x1);
+        		}
+        		$color[1] = $palette[$color[1]+1];
+     		} else {
+     			return false;		
+     		}
+			imagesetpixel($res,$x,$y,$color[1]);
+     		$x++;
+     		$p += $bmp['bytes_per_pixel'];
+    	}
+    	$y--;
+		$p+=$bmp['decal'];
+	}
+	fclose($f1);
+	return $res;
+}
+
 function displayMenu($baseurl, $usedb = false) {
 	if ($usedb == false) {
 		$menuArray = Config::read('menu_array');
@@ -223,17 +315,17 @@ function displayMenu($baseurl, $usedb = false) {
 
 			if (!$isloggedin) {
 				if ($key != 'userlist' && $key != 'userprofile' && $key != 'moderate') {
-					if ($allow_public == false && ($key != 'gallery' && $key != 'upload')) {
+					if ($allow_public == 0 && ($key != 'gallery' && $key != 'upload')) {
 						$main_menu .= '<li'.(($page == strtolower($menutext['filename'])) ? ' class="active"' : '').'><a href="'.(($useurl == 'index') ? '/' : $useurl).'">'.$value.'<span class="activearrow">&nbsp;</span></a></li>';
-					} elseif ($allow_public == true) {
+					} elseif ($allow_public == 1) {
 						$main_menu .= '<li'.(($page == strtolower($menutext['filename'])) ? ' class="active"' : '').'><a href="'.(($useurl == 'index') ? '/' : $useurl).'">'.$value.'<span class="activearrow">&nbsp;</span></a></li>';
 					}
 				} 
 			} else {
 				if ($key != 'login' && $key != 'register') {
-					if ($allow_userlist == false && $key != 'userlist') {
+					if ($allow_userlist == 0 && $key != 'userlist') {
 						$main_menu .= '<li'.(($page == strtolower($menutext['filename'])) ? ' class="active"' : '').'><a href="'.(($useurl == 'index') ? '/' : $useurl).'">'.$value.'<span class="activearrow">&nbsp;</span></a></li>';
-					} elseif ($allow_userlist == true) {
+					} elseif ($allow_userlist == 1 || $isadmin) {
 						$main_menu .= '<li'.(($page == strtolower($menutext['filename'])) ? ' class="active"' : '').'><a href="'.(($useurl == 'index') ? '/' : $useurl).'">'.$value.'<span class="activearrow">&nbsp;</span></a></li>';
 					}				
 				}

@@ -40,8 +40,23 @@ $(document).ready(function() {
 						$(this).addClass('hidden').find('input').removeAttr('required');
 					})
 				}
+				if (affectedInput == 'use_paypal') {
+					$('.paypalinput').each(function() {
+						$(this).addClass('hidden').find('input').removeAttr('required');
+					})
+				}
 			} else {
 				$('#'+affectedInput).prop('checked',true);
+				if (affectedInput == 'use_db') {
+					$('.dbinput').each(function() {
+						$(this).removeClass('hidden').find('input').attr('required',true);
+					})
+				}
+				if (affectedInput == 'use_paypal') {
+					$('.paypalinput').each(function() {
+						$(this).removeClass('hidden').find('input').attr('required',true);
+					})
+				}
 			}
 		if ($(this).text().toUpperCase() == 'NO') {
 			$(this).addClass('on').html('YES').parent().next('input[type="checkbox"]').prop('checked', true);
@@ -608,16 +623,16 @@ function ucfirst(text) {
 	   return text.substr(0, 1).toUpperCase() + text.substr(1);    
 }
 
-function equalHeight(group) {
-   	tallest = 0;
-		group.each(function() {
-   		thisHeight = $(this).height();
-			if(thisHeight > tallest) {
-			tallest = thisHeight;
-        }
-    })
-    group.height(tallest);
-}
+// function equalHeight(group) {
+//    	tallest = 0;
+// 		group.each(function() {
+//    		thisHeight = $(this).height();
+// 			if(thisHeight > tallest) {
+// 			tallest = thisHeight;
+//         }
+//     })
+//     group.height(tallest);
+// }
 
 function GetURLParameter(sParam) {
 	if (sParam != undefined && sParam.length > 0) {

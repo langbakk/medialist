@@ -4,6 +4,7 @@ jpeg 'image/jpeg'
 jpg 'image/jpg'
 png 'image/png'
 gif 'image/gif'
+bmp 'image/bmp'
 
 //video
 avi 'application/x-troff-msvideo'

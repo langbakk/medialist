@@ -50,6 +50,11 @@ a {
     color: #F9FAF8; }
   a.makepublic.fa-square {
     background: #F9FAF8; }
+  a.uppercasefirst {
+    display: block;
+    margin-top: .5em; }
+    a.uppercasefirst::first-letter {
+      text-transform: uppercase; }
 
 form a[href="register"] {
   text-decoration: none;
@@ -536,6 +541,17 @@ form {
   display: block;
   margin: 0 auto; }
 
+#paypalform .ui-selectmenu-button {
+  min-width: 15em;
+  margin-left: -3em; }
+#paypalform .ui-selectmenu-menu {
+  max-width: 15.5em; }
+#paypalform input[type=submit] {
+  margin-top: -1.9em; }
+
+#paypalform input[type=submit] {
+  display: inline-block; }
+
 #user_registration_form, #loginform {
   max-width: 25em;
   margin-top: 2em; }
@@ -712,9 +728,6 @@ label {
   text-align: left;
   text-align-last: initial;
   line-height: 2.3em; }
-
-#settingsform {
-  max-width: 40%; }
 
 .slider-frame {
   background-color: #222;
@@ -1116,7 +1129,7 @@ label {
 .admincontainer .messagebox {
   margin: 0 auto; }
 
-#htaccess_container label {
+#htaccess_container label, #allowedmimetypes_container label {
   float: none; }
 
 .content ul .messagebox {
@@ -1490,7 +1503,6 @@ label {
   border: 0.1em solid #CCC;
   border-top: 0; }
   .ui-selectmenu-open ul {
-    border-bottom: 0.1em solid white;
     background: #000;
     font-size: .75em;
     margin-top: 0; }
@@ -1609,6 +1621,17 @@ label {
 
   .messagebox {
     margin: 2.5em auto; } }
+@media screen and (max-width: 45em) {
+  #paypalform label {
+    display: block;
+    float: none; }
+
+  #paypalform .ui-selectmenu-button {
+    margin-left: 0; }
+
+  #paypalform input[type="submit"] {
+    margin-top: 0;
+    display: block; } }
 @media screen and (max-width: 40em) {
   .diskspacetitle {
     display: none; }
@@ -1647,6 +1670,12 @@ label {
     right: 4em; }
 
   #userprofile_body .content p.diskspaceinfo {
-    margin-left: -1em; } }
+    margin-left: -1em; }
+
+  #user_filelist li {
+    display: block; }
+    #user_filelist li span {
+      margin: .5em auto;
+      display: block; } }
 
 /*# sourceMappingURL=screen.css.map */

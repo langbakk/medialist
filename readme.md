@@ -10,12 +10,12 @@ Installation:
 * Download the repository (or clone it directly)
 * Make sure you're using **PHP > 5.3**, and that you have **mod_xsendfile activated on the server**
 * As soon as all the files are on your server, that's it - navigate to the folder where you copied the files, and start using it
-* You might want to change the user(s) in the [.userlist](conf/.userlist) (currently the admin has password admin1234, encrypted)
-* If you delete the one that is currently there without adding any new users, you will have no logins to the page - that doesn't matter, though, you can still use it as you want, but it might be useful to turn off the $use_login-setting in the [config.php](conf/config.php) (set it to false)
-* The $show_quotes is set to true (on) as default - change this to false (off) if you don't want to show quotes on the gallery-page
+* You will need to register a new user in the beginning, and change the user in [.userlist](conf/.userlist) to admin
+* The $show_quotes is set to **1** (on) as default - change this to **0** (off) if you don't want to show quotes on the gallery-page
 
-* Currently there is no setup, so the only way to create a new admin-user is to use the [register.php](register.php) and register a new user, and then delete other users from the [.userlist](conf/.userlist)
+* Currently there is no setup, so the only way to create a new admin-user is to use the [register.php](register.php) and register a new user, and then change that user to admin (change the **user** to **admin**) in the [.userlist](conf/.userlist)
 
 * Remove the .gitignore and .gitattributes-files (they won't do any harm, but they're not needed)
 
-If you want to add or remove allowed files, do that in the [.allowed_extensions](conf/.allowed_extensions) file. Add one extension per line, as those currently in the file. Remember that you also have to add the MIME-type to [.allowed_mimetypes](conf/.allowed_mimetypes) - you can find the correct MIME-types here: [The Complete List of MIME-types](https://www.sitepoint.com/web-foundations/mime-types-complete-list/)
+If you want to add or remove allowed files, do that in the [.allowed_mimetypes](conf/.allowed_mimetypes) - you can find the correct MIME-types here: [The Complete List of MIME-types](https://www.sitepoint.com/web-foundations/mime-types-complete-list/)
+You can do this from within the admin-panel (it reads and writes the files as is, so if you muck them up, you might have to resort to very colorful language while you search for backups)

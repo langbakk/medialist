@@ -41,19 +41,23 @@ $dbprefix = $prefix.'_';
 //sets public access on or off (true/false)
 $allow_public = 1;
 //sets userlist on or off
-$allow_userlist = 1;
+$allow_userlist = 0;
 //allow users to log in - if allow_public is set to false, this has to be set to true
 $use_login = 1;
 //turns quotes in gallery.php on or off (true/false)
-$show_quotes = 1;
+$show_quotes = 0;
 //turns on or off use of a database - the database-variables must be filled out before this is turned on (true/false)
+$use_paypal = 1;
+//turns on or off using Paypal to subscribe to larger amounts of storage space
+$paypal_key = 'P4DR8QH7K9EDU';
+//the key for the paypal-input to work correctly
 $use_db = 0;
 //turns on or off debug-functionality (logfiles, visible error-messages etc) (true/false)
 $debug = 1;
 //this is the default size storage space set for users
 $defaultsize = 536870912;
 //turns on or off moderation-queue
-$moderation_queue = 1;
+$moderation_queue = 0;
 
 //sets the site as deactivated temporarily (1/0)
 //$deactivated = 0; //currently not in use
