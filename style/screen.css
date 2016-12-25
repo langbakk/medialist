@@ -183,9 +183,14 @@ body {
   position: absolute;
   z-index: 100;
   max-width: 20em;
-  min-width: 15em;
+  min-width: 5em;
   line-height: 1em;
   font-family: sans-serif; }
+
+#user_filelist .tooltiphover:hover [data-tooltip]::after, #user_filelist .tooltiphover:focus [data-tooltip]::after {
+  background: #000;
+  color: #F9FAF8;
+  left: -5em; }
 
 #user_management_container [data-tooltip]:hover::after, #user_management_container [data-tooltip]:focus::after {
   bottom: 2.75em; }
@@ -199,6 +204,9 @@ body {
   left: -1em;
   position: absolute;
   z-index: 100; }
+
+#user_filelist .tooltiphover:hover [data-tooltip]::before, #user_filelist .tooltiphover:focus [data-tooltip]::before {
+  border-color: #000 transparent; }
 
 #user_management_container [data-tooltip]:hover::before, #user_management_container [data-tooltip]:focus::before {
   bottom: 2.25em; }
@@ -315,7 +323,8 @@ li span:not(.public_sharename):not(.filename):not(.filesize):not(.filelist_image
 
 li span a, li .usercontrols a {
   display: inline-block;
-  padding: 0 .3em; }
+  padding: 0 .3em;
+  text-decoration: none; }
 
 li .usercontrols {
   line-height: 2em;
@@ -341,13 +350,13 @@ li .usercontrols form {
     line-height: 2em;
     float: none;
     cursor: pointer; }
-  li .usercontrols form .makepublic.fa-check-square {
+  li .usercontrols form .makepublic.fa-check-square, li .usercontrols form .makeprivate.fa-check-square {
     color: #BDE5F8; }
 
 [id$='_list'] li .usercontrols, #user_filelist li .usercontrols {
   display: none; }
 
-[id$='_list'] li:hover .usercontrols {
+[id$='_list'] li:hover .usercontrols, #user_filelist li:hover .usercontrols, [id$='_list'] li:focus .usercontrols, #user_filelist li:focus .usercontrols {
   display: block;
   z-index: 1000; }
 
@@ -395,6 +404,12 @@ li .usercontrols form {
 
 #documents_list li:hover, #audio_list li:hover, #applications_list li:hover, #documents_list li:focus, #audio_list li:focus, #applications_list li:focus {
   background: #666; }
+
+#user_filelist {
+  overflow: visible; }
+
+#user_filelist li {
+  overflow: visible; }
 
 #user_filelist li .filename {
   max-width: 25.6em;
@@ -1425,7 +1440,8 @@ label {
   padding: .5em;
   background: #000;
   border: 1px solid #AAA;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  max-height: 100%; }
 
 #lightbox_container, #lightbox_container img {
   max-height: 100%;

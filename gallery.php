@@ -131,7 +131,7 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 	}
 
 	echo '<div class="container '.(($allempty == 0) ? 'visible' : 'hidden').'">';
-		if ($user_exist == true && (trim($exploded_user_array[0]) == trim(explode('/',$username)[0]))) {
+		if ($user_exist == true && (trim($exploded_user_array[0]) == trim(explode('/',$original_username)[0]))) {
 			$status = 'info';
 			$content = 'You haven\'t uploaded anything. <a href="upload">Upload files</a>';
 		} elseif ($user_exist == true) {

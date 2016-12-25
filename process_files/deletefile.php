@@ -15,13 +15,10 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/conf/config.php');
 		$deletefile = $_POST['filename'];
 	} 
 	$username = ((isset($_POST['username']) && !empty($_POST['username'])) ? $_POST['username'].'/' : (((isset($_POST['deletepublic'])) == true) ? 'public/' : $username));
-	// echo $document_root.'/'.$userpath.$username.$tmpfn[0].'/thumbs/'.$tmpfn[1];
-	// echo file_exists($document_root.'/'.$userpath.$username.$tmpfn[0].'/thumbs/'.$tmpfn[1]);
 	if (file_exists($document_root.'/'.$userpath.$username.$deletefile) || file_exists($document_root.'/'.$userpath.$username.$tmpfn[0].'/thumbs/'.$tmpfn[1])) {
 		if (!empty($deletefile)) {
 			$checkthumbs = explode('/',$deletefile);
 			$checkthumbs[1] = ($checkthumbs[0] == 'video') ? $checkthumbs[1].'.jpg' : $checkthumbs[1];
-			// $thumbs = ($checkthumbs[0] == 'pictures' || $checkthumbs[0] == 'video') ? unlink($document_root.'/'.$userpath.$username.$checkthumbs[0].'/thumbs/'.$checkthumbs[1]) : false;
 			if ($checkthumbs[0] == 'pictures' || $checkthumbs[0] == 'video') {
 				if (file_exists($document_root.'/'.$userpath.$username.$checkthumbs[0].'/thumbs/'.$checkthumbs[1])) {
 					unlink($document_root.'/'.$userpath.$username.$checkthumbs[0].'/thumbs/'.$checkthumbs[1]);

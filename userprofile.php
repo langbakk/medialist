@@ -91,15 +91,18 @@ echo '<div class="container">
 				if ($folder == array_reverse(explode(DIRECTORY_SEPARATOR,$fvalue['filename']))[1]) {
 					$usercontrols = '<div class="usercontrols">
 						<a class="sharefile" href="'.$baseurl.'sharefile.php">
-							<i class="fa fa-share-alt" title="Share file"></i>
+							<i class="tooltiphover fa fa-share-alt"><span data-tooltip="Share file"></span></i>
 						</a>';
 						if (($isloggedin && $isadmin) || ($isloggedin && $original_username == $username) || (is_array($document_name) && strtolower($document_name[0]) == strtolower(explode('/',$original_username)[0]))) {
 							$usercontrols .= '<a class="deletefile" href="'.$baseurl.'deletefile.php">
-								<i class="fa fa-remove" title="Delete file"></i>
+								<i class="tooltiphover fa fa-remove"><span data-tooltip="Delete file"></span></i>
 							</a>';
 						}
 						if ((($isloggedin && $isadmin) || ($original_username == $username)) && $username != 'public') {
-							$usercontrols .= '<form method="post" action="create_public_link.php"><input type="checkbox" id="'.$folder.'_'.$id_number.'" class="hidden make_public" title="Make public" '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$filename) ? 'checked' : '')).' value="'.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$filename) ? 1 : 0)).'"><label title="'.(is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$filename) ? 'Undo &quot;make file public&quot;' : 'Make file public').'" for="'.$folder.'_'.$id_number.'"><i class="makepublic fa '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$filename) ? 'fa-check-square' : 'fa-square')).'"></i></label></form>';
+							$usercontrols .= '<form method="post" action="create_public_link.php"><input type="checkbox" id="'.$folder.'_'.$id_number.'" class="hidden make_public" '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$filename) ? 'checked' : '')).' value="'.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$filename) ? 1 : 0)).'"><label for="'.$folder.'_'.$id_number.'"><i class="tooltiphover makepublic fa '.((is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$filename) ? 'fa-check-square' : 'fa-square')).'"><span data-tooltip="'.(is_link($userpath.'public/'.$folder.'/'.explode('/',$username)[0].'__'.$filename) ? 'Undo &quot;make file public&quot;' : 'Make file public').'"></span></i></label></form>';
+						}
+						if ((($isloggedin && $isadmin) || ($original_username == $username)) && $username != 'public') {
+							$usercontrols .= '<form method="post" action="make_file_private.php"><input type="checkbox" id="'.$folder.'_private_'.$id_number.'" class="hidden make_private" '.((stripos($filename,'private__') !== false) ? 'checked' : '').' value="'.((stripos($filename,'private__') !== false) ? 1 : 0).'"><label for="'.$folder.'_private_'.$id_number.'"><i class="tooltiphover makeprivate fa '.((stripos($filename,'private__') !== false) ? 'fa-check-square' : 'fa-square').'"><span data-tooltip="'.((stripos($filename,'private__') !== false) ? 'Undo &quot;make file private&quot;' : 'Make file private').'"></span></i></label></form>';
 						}
 					$usercontrols .= '</div>';
 					echo '<li><span class="filename"'.(($folder == 'documents' || $folder == 'applications' || $folder == 'audio') ? ' style="max-width: initial; word-wrap: none;"':'').'>'.$filename.'</span>'.(($folder == 'pictures') ? '<span class="filelist_image"><img src="showfile.php?imgfile='.$filename.'&thumbs=true"></span> ' : (($folder == 'video') ? '<div class="tech-slideshow">
@@ -120,7 +123,7 @@ echo '<div class="container">
 echo '</div>
 	<div class="content" id="settings">
 		<h3>Settings</h3>
-			<input type="button" id="resetlocalstorage" value="Reset site-wide settings" title="This resets all removed info-containers and similar changes done to the website by the user">';
+			<input type="button" id="resetlocalstorage" value="Show hidden info-boxes" title="This resets all removed info-containers and similar changes done to the website by the user">';
 			if (Config::read('use_paypal') == 1) {
 				echo '<form id="paypalform" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 					<input type="hidden" name="cmd" value="_s-xclick">

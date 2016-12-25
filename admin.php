@@ -494,7 +494,11 @@ echo '			<p class="buttoncontainer">
 			    	$linkcontent = $getmimetypes[0];
 					$content .= $getmimetypes[$i]."\r\n";
 			    }
-			    echo '<a class="uppercasefirst" href="'.array_reverse(explode(' ',$linkcontent))[0].'">'.trim(str_replace('// ','',explode(':',$linkcontent)[1])).'</a>';
+			    if (!empty($linkcontent)) {
+			    	if (stripos($linkcontent,':') !== false) {
+			    		echo '<a class="uppercasefirst" href="'.array_reverse(explode(' ',$linkcontent))[0].'">'.trim(str_replace('// ','',explode(':',$linkcontent)[1])).'</a>';
+			    	}
+			    }
 		echo '<label>Modify / change .allowed_mimetypes</label><br>
 		<textarea id="mimetypescontent" name="mimetypescontent" style="min-height: '.$height.'em;">'.$content.'</textarea>
 		<input type="submit" name="submit_mimetypeupdate" value="Save .allowed_mimetypes"></form>
