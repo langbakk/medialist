@@ -15,7 +15,7 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/conf/config.php');
 		$deletefile = $_POST['filename'];
 	} 
 	$username = ((isset($_POST['username']) && !empty($_POST['username'])) ? $_POST['username'].'/' : (((isset($_POST['deletepublic'])) == true) ? 'public/' : $username));
-	if (file_exists($document_root.'/'.$userpath.$username.$deletefile) || file_exists($document_root.'/'.$userpath.$username.$tmpfn[0].'/thumbs/'.$tmpfn[1])) {
+	if ((file_exists($document_root.'/'.$userpath.$username.$deletefile)) || (file_exists($document_root.'/'.$userpath.$username.$tmpfn[0].'/thumbs/'.$tmpfn[1])) || (is_link($document_root.'/'.$userpath.$username.$deletefile))) {
 		if (!empty($deletefile)) {
 			$checkthumbs = explode('/',$deletefile);
 			$checkthumbs[1] = ($checkthumbs[0] == 'video') ? $checkthumbs[1].'.jpg' : $checkthumbs[1];

@@ -62,10 +62,17 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 					$filelist[] = $file;
 				}
 				natsort ($filelist);
-				$remove_from_filelist = ['.','..','.DS_Store','index.html','.htaccess','.gitignore','Thumbs.db','thumbs.db','thumbs'];
+				$remove_from_filelist = ['.','..','.DS_Store','index.html','.htaccess','.gitignore','Thumbs.db','thumbs.db','thumbs','private__'];
 				foreach ($remove_from_filelist as $key => $value) {
 					if (($key_rff = array_search($value, $filelist)) !== false) {
 	 					unset($filelist[$key_rff]);
+					}
+					if (($value == 'private__') && (isset($_SESSION['username']) && ($_SESSION['username'] != explode('/',$username)[0]))) {
+						foreach ($filelist as $fkey => $fvalue) {
+							if (stripos($fvalue,$value) !== false && $_SESSION['usertype'] != 'admin') {
+								unset($filelist[$fkey]);
+							}
+						}
 					}
 				}
 				if (!empty($filelist)) {

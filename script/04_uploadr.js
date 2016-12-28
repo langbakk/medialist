@@ -140,7 +140,7 @@ $(document).ready(function() {
 			}
 		})
 		$('.make_private').click(function(e) {
-			console.log('make private clicked');
+			// console.log('make private clicked');
 			$this = $(this);
 			e.preventDefault();
 			var thisListFolder = $(this).parents('li').prevAll('li.heading:first').text().toLowerCase();
@@ -152,6 +152,14 @@ $(document).ready(function() {
 						$this.prop('checked',true).val(1);
 						$this.next('label').find('i').addClass('fa-check-square').removeClass('fa-square');
 						$this.parents('li').find('.filename').text('private__'+thisFile);
+						if ($this.parents('form').prev('form').find('input').val() == 1) {
+							$.post('process_files/deletefile.php', { deletepublic:true,filename:thisListFolder+'/'+thisFile }, function(data) {
+					            data = $.parseJSON(data);
+					            showUpdateInfo(''+data.content+'',''+data.infotype+'');
+					            $this.parents('form').prev('form').find('input').prop('checked',false).val(0);
+					            $this.parents('form').prev('form').find('i').addClass('fa-square').removeClass('fa-check-square');
+				        	})
+						}
 					} else {
 						$this.prop('checked',false).val(0);
 						$this.next('label').find('i').addClass('fa-square').removeClass('fa-check-square');

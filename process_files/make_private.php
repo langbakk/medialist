@@ -13,7 +13,7 @@ if ($_SESSION['username'] == explode('/',$username)[0]) {
 				rename($document_root.'/'.$userpath.$username.$checkthumbs[0].'/thumbs/'.$checkthumbs[1],$document_root.'/'.$userpath.$username.$checkthumbs[0].'/thumbs/private__'.$checkthumbs[1]);
 			}
 		} elseif ($checkthumbs[0] == 'video') {
-			rename($document_root.'/'.$userpath.$username.$checkthumbs[0].'/thumbs/'.$checkthumbs[1].'.jpg',$document_root.'/'.$userpath.$username.$checkthumbs[0].'/thumbs/private__'.$checkthumbs[1].'jpg');
+			rename($document_root.'/'.$userpath.$username.$checkthumbs[0].'/thumbs/'.$checkthumbs[1].'.jpg',$document_root.'/'.$userpath.$username.$checkthumbs[0].'/thumbs/private__'.$checkthumbs[1].'.jpg');
 		}
 		if (stripos($document_root.'/'.$userpath.$username.$checkthumbs[0].'/'.$checkthumbs[1],'private__') !== false) {
 			rename($document_root.'/'.$userpath.$username.$symbolic,$document_root.'/'.$userpath.$username.$checkthumbs[0].'/'.(explode('__',$checkthumbs[1])[1]));
