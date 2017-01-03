@@ -119,15 +119,27 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 							if (in_array(strtolower($movedfile['extension']),allowedMimeAndExtensions('extension')) && in_array($_FILES['file']['type'],allowedMimeAndExtensions('video','mime'))) {
 								if ((Config::read('moderation_queue') == true) && (Config::read('usertype') != 'admin')) {
 									$video = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/'.explode('/',$original_username)[0].'__'.onlyValidChar($_FILES['file']['name']);
-									$thumbnail = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/thumbs/'.explode('/',$original_username)[0].'__'.onlyValidChar($_FILES['file']['name']).'.jpg';
+									$still = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/thumbs/'.onlyValidChar($_FILES['file']['name'].'.jpg');									
+									$thumbnail = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/thumbs/'.explode('/',$original_username)[0].'__'.onlyValidChar($_FILES['file']['name']).'.gif';
+									$palette = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$username.$folder.'/thumbs/palette.png';
 								} else {
 									$video = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$original_username.$folder.'/'.onlyValidChar($_FILES['file']['name']);
-									$thumbnail = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$original_username.$folder.'/thumbs/'.onlyValidChar($_FILES['file']['name']).'.jpg';
+									$still = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$original_username.$folder.'/thumbs/'.onlyValidChar($_FILES['file']['name'].'.jpg');
+									$thumbnail = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$original_username.$folder.'/thumbs/'.onlyValidChar($_FILES['file']['name']).'.gif';
+									$palette = $_SERVER['DOCUMENT_ROOT'].'/'.$userpath.$original_username.$folder.'/thumbs/palette.png';
 								}
 								logThis('video_upload',$video."\r\n".$thumbnail,FILE_APPEND);
-	    						$get_frames = shell_exec("/usr/local/bin/ffmpeg -nostats -i $video -vcodec copy -f rawvideo -y /dev/null 2>&1 | grep frame | awk '{split($0,a,\"fps\")}END{print a[1]}' | sed 's/.*= *//'");
-	    						$stills_number = floor($get_frames / 200);
-	    						$output = shell_exec("/usr/local/bin/ffmpeg -y -i $video -frames 1 -q:v 1 -vf 'select=not(mod(n\,$stills_number)),scale=-1:120,tile=100x1' $thumbnail");
+	    						// $get_frames = shell_exec("/usr/local/bin/ffmpeg -nostats -i $video -vcodec copy -f rawvideo -y /dev/null 2>&1 | grep frame | awk '{split($0,a,\"fps\")}END{print a[1]}' | sed 's/.*= *//'");
+	    						// $stills_number = floor($get_frames / 200);
+	    						// $output = shell_exec("/usr/local/bin/ffmpeg -y -i $video -frames 1 -q:v 1 -vf 'select=not(mod(n\,$stills_number)),scale=-1:120,tile=100x1' $thumbnail");
+	    						
+	    						// $output = shell_exec("/usr/local/bin/ffmpeg -i $video -vf scale=320:-1 -r 10 -f image2pipe -vcodec ppm - | /usr/local/Cellar/imagemagick/6.9.2-10/bin/convert -delay 5 -loop 0 - gif:- | /usr/local/Cellar/imagemagick/6.9.2-10/bin/convert -layers Optimize - $thumbnail");
+	    						shell_exec("/usr/local/bin/ffmpeg -y -ss 30 -t 3 -i $video -vf 'fps=10,scale=320:-1:flags=lanczos,palettegen' $palette");
+	    						$output1 = shell_exec("/usr/local/bin/ffmpeg -ss 00:00:05 -i $video -vf 'scale=220:-1:flags=lanczos' -vframes 1 -q:v 2 $still");
+	    						$output = shell_exec("/usr/local/bin/ffmpeg -ss 30 -t 30 -i $video -i $palette -filter_complex 'fps=10,scale=220:-1:flags=lanczos[x];[x][1:v]paletteuse' $thumbnail");
+	    						unlink($palette);
+	    						// /usr/local/bin/ffmpeg -ss 30 -t 3 -i /Applications/MAMP/htdocs/uploadr/users/admin/video/Live_On_The_Bate_Anal_Dildo_Ramming_Pornhubcom.mp4 -i /Applications/MAMP/htdocs/uploadr/users/admin/video/thumbs/palette.png -filter_complex 'fps=10,scale=320:-1:flags=lanczos[x];[x][1:v]paletteuse' /Applications/MAMP/htdocs/uploadr/users/admin/video/thumbs/output.gif
+
 							}
 						}
 					} else {
@@ -137,7 +149,6 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 						}
 					}
 				} else {
-					echo 'exceeding diskspace';
 					$returnmessage = json_encode(["content"=>"The file will exceed your available diskspace. Delete some of the files already uploaded to make room","infotype"=>"error"]);
 				}
 			} elseif ($returnerror == true) {

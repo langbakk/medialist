@@ -1,6 +1,6 @@
 <?php
 require_once('conf/config.php');
-$username = (isset($_POST['username'])) ? $_POST['username'] : '';
+$username = (isset($_POST['username'])) ? strtolower($_POST['username']) : '';
 $password = (isset($_POST['password'])) ? $_POST['password'] : '';
 $directories = [1 => '/pictures', 2 => '/pictures/thumbs', 3 => '/video', 4 => '/video/thumbs', 5 => '/audio', 6 => '/documents', 7 => '/applications'];
 echo '<div class="container">';

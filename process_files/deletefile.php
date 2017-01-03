@@ -18,10 +18,14 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/conf/config.php');
 	if ((file_exists($document_root.'/'.$userpath.$username.$deletefile)) || (file_exists($document_root.'/'.$userpath.$username.$tmpfn[0].'/thumbs/'.$tmpfn[1])) || (is_link($document_root.'/'.$userpath.$username.$deletefile))) {
 		if (!empty($deletefile)) {
 			$checkthumbs = explode('/',$deletefile);
+			$animation = ($checkthumbs[0] == 'video') ? $checkthumbs[1].'.gif' : '';
 			$checkthumbs[1] = ($checkthumbs[0] == 'video') ? $checkthumbs[1].'.jpg' : $checkthumbs[1];
 			if ($checkthumbs[0] == 'pictures' || $checkthumbs[0] == 'video') {
 				if (file_exists($document_root.'/'.$userpath.$username.$checkthumbs[0].'/thumbs/'.$checkthumbs[1])) {
 					unlink($document_root.'/'.$userpath.$username.$checkthumbs[0].'/thumbs/'.$checkthumbs[1]);
+					if (!empty($animation)) {
+						unlink($document_root.'/'.$userpath.$username.$checkthumbs[0].'/thumbs/'.$animation);
+					}
 				}
 			}
 			if (file_exists($document_root.'/'.$userpath.$username.$deletefile)) {
@@ -30,9 +34,16 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/conf/config.php');
 			if (is_link($document_root.'/'.$userpath.'public/'.$deletefile)) {
 				unlink($document_root.'/'.$userpath.'public/'.$deletefile);
 				unlink($document_root.'/'.$userpath.'public/'.$checkthumbs[0].'/thumbs/'.$checkthumbs[1]);
+				if (!empty($animation)) {
+					unlink($document_root.'/'.$userpath.'public/'.$checkthumbs[0].'/thumbs/'.$animation);
+				}
 			} elseif (is_link($document_root.'/'.$userpath.'public/'.$delete_sharedfile)) {
 				unlink($document_root.'/'.$userpath.'public/'.$delete_sharedfile);
-				unlink($document_root.'/'.$userpath.'public/'.$checkthumbs[0].'/thumbs/'.(($checkthumbs[0] == 'video') ? $tmpfn[1].'.jpg' : $tmpfn[1]));
+				unlink($document_root.'/'.$userpath.'public/'.$checkthumbs[0].'/thumbs/'.(($checkthumbs[0] == 'video') ? $tmpfn[1].'.jpg' : $tmpfn[1]
+					));
+				if (!empty($animation)) {
+					unlink($document_root.'/'.$userpath.'public/'.$checkthumbs[0].'/thumbs/'.$animation);
+				}
 			}
 			if((isset($_POST['deletepublic']) == true) && !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 				$returnmessage = json_encode(["content"=>"File removed from public","infotype"=>"success"]);

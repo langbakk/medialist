@@ -181,7 +181,7 @@ body {
   left: -2em;
   padding: .4em 1em;
   position: absolute;
-  z-index: 100;
+  z-index: 500;
   max-width: 20em;
   min-width: 5em;
   line-height: 1em;
@@ -203,13 +203,21 @@ body {
   content: '';
   left: -1em;
   position: absolute;
-  z-index: 100; }
+  z-index: 500; }
 
 #user_filelist .tooltiphover:hover [data-tooltip]::before, #user_filelist .tooltiphover:focus [data-tooltip]::before {
   border-color: #000 transparent; }
 
 #user_management_container [data-tooltip]:hover::before, #user_management_container [data-tooltip]:focus::before {
   bottom: 2.25em; }
+
+[id$='_list'] .tooltiphover:hover [data-tooltip]::after, [id$='_list'] .tooltiphover:focus [data-tooltip]::after {
+  left: 0em;
+  min-width: 10em;
+  max-width: 15em; }
+
+[id$='_list'] .tooltiphover:hover [data-tooltip]::before, [id$='_list'] .tooltiphover:focus [data-tooltip]::before {
+  left: 2em; }
 
 .grid-sizer, .grid-item {
   box-sizing: border-box;
@@ -353,18 +361,32 @@ li .usercontrols form {
   li .usercontrols form .makepublic.fa-check-square, li .usercontrols form .makeprivate.fa-check-square {
     color: #BDE5F8; }
 
+[id$='_list'], [id$='_list'] li {
+  overflow: visible; }
+
 [id$='_list'] li .usercontrols, #user_filelist li .usercontrols {
   display: none; }
 
 [id$='_list'] li:hover .usercontrols, #user_filelist li:hover .usercontrols, [id$='_list'] li:focus .usercontrols, #user_filelist li:focus .usercontrols {
   display: block;
-  z-index: 1000; }
+  z-index: 200; }
 
 [id$='_list'] a {
   text-decoration: none; }
 
-[id$='_list'] a span {
+[id$='_list'] a span:not(.private_cover) {
   text-decoration: underline; }
+
+[id$='_list'] a .private_cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(250, 100, 100, 0.5); }
+
+#video_list a .private_cover {
+  z-index: 200; }
 
 #filetypelist li {
   display: flex; }
@@ -383,7 +405,7 @@ li .usercontrols form {
 #pictures_list li, #video_list li {
   min-width: 8em; }
 
-#pictures_list li:hover .public_sharename, #pictures_list li:focus .public_sharename {
+#pictures_list li:hover .public_sharename, #pictures_list li:focus .public_sharename, #video_list li:hover .public_sharename, #video_list li:focus .public_sharename {
   display: block;
   position: absolute;
   bottom: 0;
@@ -393,8 +415,17 @@ li .usercontrols form {
   background: rgba(0, 0, 0, 0.875);
   padding: .3em 0; }
 
+#video_list li .public_sharename {
+  word-wrap: break-word; }
+
+#video_list li:hover .public_sharename {
+  z-index: 400; }
+
 #video_list .public_sharename {
   min-width: 12.5em; }
+
+[id$='_list'] li .public_sharename.private_file, [id$='_list'] li:hover .public_sharename.private_file {
+  color: #fa4444 !important; }
 
 #documents_list li, #audio_list li, #applications_list li {
   line-height: 1.6em; }
@@ -435,7 +466,7 @@ li .usercontrols form {
 .admincontainer {
   display: none; }
 
-[id$=_container]:target {
+[id$='_container']:target {
   display: block; }
 
 .admincontainer h2::before {
@@ -455,7 +486,6 @@ li .usercontrols form {
 .imagecontainer {
   max-width: 12.5em;
   margin: 0 auto;
-  overflow: hidden;
   position: relative; }
 
 .diskspaceinfo {
@@ -894,29 +924,25 @@ label {
 .tech-slideshow {
   height: 7.5em;
   max-width: 12.5em;
-  margin: .75em auto;
-  position: relative;
-  overflow: hidden;
-  transform: translate3d(0, 0, 0); }
+  min-width: 12.5em;
+  position: relative; }
 
 .tech-slideshow > a > div, .tech-slideshow > div:not(.usercontrols) {
-  height: 10em;
-  width: 25000px;
+  height: 100%;
   position: absolute;
   top: 0;
   left: 0;
-  height: 100%;
-  transform: translate3d(0, 0, 0); }
+  right: 0;
+  bottom: 0; }
 
-.tech-slideshow .mover-2 {
-  opacity: 0;
-  transition: opacity .5s ease-out;
-  background-position: 0 -10em;
-  animation: moveSlideshow 15s linear infinite; }
+.tech-slideshow .stillimage {
+  z-index: 200; }
 
-.tech-slideshow:hover .mover-2, .tech-slideshow:focus .mover-2 {
-  opacity: 1;
-  animation-duration: 50s; }
+.tech-slideshow .animationimage {
+  z-index: 100; }
+
+.tech-slideshow .stillimage:hover ~ .animationimage, .tech-slideshow .animationimage:hover {
+  z-index: 300; }
 
 .alternate li, .alternate tr {
   overflow: hidden;
@@ -1138,9 +1164,6 @@ label {
   text-align: justify;
   text-align-last: center; }
 
-.content .messagebox {
-  margin: 15% auto 0 auto; }
-
 .admincontainer .messagebox {
   margin: 0 auto; }
 
@@ -1316,6 +1339,9 @@ label {
   display: block;
   width: 54px;
   height: 54px; }
+
+.dz-success-mark svg {
+  color: #508c14 !important; }
 
 .dropzone .dz-preview.dz-processing .dz-progress {
   opacity: 1;

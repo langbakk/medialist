@@ -11,7 +11,7 @@ if (isset($_POST['submit_registration'])) {
 			}
 		}
 		$registerpassword = valueCrypt::vC_pwHash($_POST['password']);
-		$content = "\r\n".$_POST['username'].' // '.$registerpassword.' // user';
+		$content = "\r\n".strtolower($_POST['username']).' // '.$registerpassword.' // user // 0 // 536870912 // gallery';
 		if ($register == true) {
 			file_put_contents($userlistfile,$content,FILE_APPEND | LOCK_EX);
 			echo '<p class="messagebox success visible">User registered</p>';

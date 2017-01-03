@@ -109,23 +109,28 @@ if ((isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) || $allow_pu
 								$extension = (($fileext == 'txt') ? 'text-o' : (($fileext == 'xls' || $fileext == 'xlsx') ? 'excel-o' : (($fileext == 'doc' || $fileext == 'docx') ? 'word-o' : (($fileext == 'mp3' || $fileext == 'webm') ? 'audio-o' : (($fileext == 'dmg') ? 'o' : $fileext.'-o')))));
 								$fileicon = '<i class="dark-background fa fa-file-'.$extension.'"></i>';
 							}
-							$document_name = ((is_array($document_name) && $folder == 'documents') ? '<span class="public_sharename">(Uploaded by '.$document_name[0].') - '.$document_name[1].'</span>' : (is_array($document_name) ? '<span class="public_sharename">(Uploaded by '.$document_name[0].') '.$document_name[1].'</span>' : '<span class="public_sharename">'.rtrim(trim($document_name),'_-').'</span>'));
+
+							$document_name_result = ((is_array($document_name) && strtolower($document_name[0]) != 'private') ? '<span class="public_sharename">(Uploaded by '.$document_name[0].') - '.$document_name[1].'</span>' : ((is_array($document_name) && strtolower($document_name[0]) == 'private') ? '<span class="public_sharename tooltiphover private_file"><span data-tooltip="Go to your profile to change privacy settings"></span>(Set as private) '.$document_name[1].'</span>' : (is_array($document_name) ? '<span class="public_sharename">(Uploaded by '.$document_name[0].') '.$document_name[1].'</span>' : '<span class="public_sharename">'.rtrim(trim($document_name),'_-').'</span>')));
 							if ($folder == 'video') {
 								$getvidfile = 'showfile.php?vidfile='.$val.'';
 							}
 							$linkdisplay = (($folder == 'pictures') ?
 								'<div class="imagecontainer"><a class="lightbox" href="showfile?imgfile='.$val.(isset($_GET['user']) ? '&user='.$_GET['user'].'' : '').'">
-									<img src="showfile.php?imgfile='.$val.'&thumbs=true'.(isset($_GET['user']) ? '&user='.$_GET['user'].'' : '').'" alt="Thumbnail for '.$val.'">
-								</a>'.$usercontrols.$document_name.'</div>' : 
+									<img src="showfile.php?imgfile='.$val.'&thumbs=true'.(isset($_GET['user']) ? '&user='.$_GET['user'].'' : '').'" alt="Thumbnail for '.$val.'">'.((is_array($document_name) && strtolower($document_name[0]) == 'private') ? '<span class="private_cover"></span>' : '').'
+								</a>'.$usercontrols.$document_name_result.'</div>' : 
 								(($folder == 'video') ? 
 								'<div class="tech-slideshow">
 									<a class="lightbox" href="'.$getvidfile.(isset($_GET['user']) ? '&user='.$_GET['user'].'' : '').'">
-										<div class="mover-1" style="background: url('.$getvidfile.'.jpg&thumbs=true'.(isset($_GET['user']) ? '&user='.$_GET['user'].'' : '').');"></div>
-										<div class="mover-2" style="background: url('.$getvidfile.'.jpg&thumbs=true'.(isset($_GET['user']) ? '&user='.$_GET['user'].'' : '').');"></div>
-									</a>'.$usercontrols.$document_name.
+										<div class="stillimage" style="background: url('.$getvidfile.'.jpg&thumbs=true'.(isset($_GET['user']) ? '&user='.$_GET['user'].'' : '').');"></div>
+										<div class="animationimage" style="background: url('.$getvidfile.'.gif&thumbs=true'.(isset($_GET['user']) ? '&user='.$_GET['user'].'' : '').');"></div>'.((is_array($document_name) && strtolower($document_name[0]) == 'private') ? '<span class="private_cover"></span>' : '').'
+									</a>'.$usercontrols.$document_name_result.
 								'</div>' : 
-								(($folder == 'documents' || $folder == 'audio' || $folder == 'applications') ? 
-								'<a href="showfile.php?docfile='.$val.'">'.$fileicon.' '.$document_name.'</a>'.$usercontrols : '')));
+								(($folder == 'documents') ? 
+								'<a href="showfile.php?docfile='.$val.'">'.$fileicon.' '.$document_name_result.'</a>'.$usercontrols : 
+								(($folder == 'audio') ?
+								'<a href="showfile.php?audiofile='.$val.'">'.$fileicon.' '.$document_name_result.'</a>'.$usercontrols : 
+								(($folder == 'applications') ?
+								'<a href="showfile.php?application='.$val.'">'.$fileicon.' '.$document_name_result.'</a>'.$usercontrols : '')))));
 							$floatleft = (($folder == 'pictures' && !empty($shared_content)) ? 'class="grid-item pictures shared"' : (($folder == 'pictures' && empty($shared_folder)) ? 'class="grid-item pictures"' : (($folder == 'video') ? 'class="grid-item video"' : '')));
 							echo '<li '.$floatleft.'>'.$linkdisplay.'</li>';
 						}
